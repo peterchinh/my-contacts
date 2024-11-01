@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import ContactCard from './component/contact-card';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const sampleContacts = [
+    {
+      name: "John Smith",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
+    },
+
+    {
+      name: "Lebron James",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
+    }
+  ];
+  
+
+    return (
+      <div className="App">
+        {sampleContacts.map((contact, index) => (
+          <ContactCard
+            key={index}
+            name={contact.name}
+            image={contact.image}
+            // onClick= do something later
+            />
+        ))}
+      </div>
+  ); 
 }
 
 export default App;
