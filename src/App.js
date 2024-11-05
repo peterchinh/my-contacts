@@ -15,7 +15,7 @@ const sampleContacts = [
     }
   ];
 
-function App() {
+export default function App() {
     return (
       <div className="container">
         <NavBar />
@@ -30,6 +30,5 @@ function App() {
             ))}
         </div>
       </div>
-  ); 
-
-export default App;
+      );
+    } 
