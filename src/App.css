@@ -37,27 +37,3 @@
   }
 }
 
-.SearchBar {
-  height: 100%;
-  width: 100%;
-  float: right;
-  border-radius: 0px;
-  border: 0px;
-  background-color: #acacac;
-  font-size: 40px;
-  color: #FFFFFF;
-  padding: 10px;
-  text-indent: 50px;
-  outline: none;
-  outline-width: 0px;
-
-}
-.SearchBar::placeholder{
-  color: #FFFFFF;
-
-}
-
-.Container {
-  height: 75px;
-  width: 100%;
-}
