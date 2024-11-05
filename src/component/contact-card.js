@@ -1,14 +1,13 @@
 import React from 'react';
-import '../style/contact-card.css';
+import styles from './contact-card.module.css';
 
 
-function ContactCard({name, image})
-{
+function ContactCard({ name, image }) {
     return (
-        <div className="contact-card">
+        <div className={styles.card}>
             <img src={image} alt={`$(name)'s profilepic`}
-                className="contact-image"/>
-            <span className="contact-name">{name}</span>
+                className={styles.image}/>
+            <span className={styles.name}>{name}</span>
         </div>
     );
 }

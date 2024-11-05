@@ -1,4 +1,4 @@
-.contact-card {
+.card {
     background-color: #DEDEDE;
     width: 745px;
     height: 200px;
@@ -8,13 +8,13 @@
 }
 
 
-.contact-name {
+.name {
     font-size: 48px;
     color: black;
 
 }
 
-.contact-image {
+.image {
     width: 140px;
     height: 140px;
     border-radius: 50%;
