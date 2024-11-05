@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './contact-info.css';
+
+// Sample data
+const contactInfo = {
+    firstName: 'John',
+    lastName: 'Doe',
+    phoneNumber: '(123) 456-7890',
+    email: 'JohnDoe@gmail.com',
+}
+
+
 
 function ContactInfo() {
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
 
-/* The functions below require a functioning DB/Backend first.
-   AddToGroup will likely have shared functionality with the
-   initial creation of contacts.
-*/
+
+
   function AddToGroup(){
     // To Be Added
     return;
@@ -22,64 +35,42 @@ function ContactInfo() {
   }
 
   return (
-    <div style={styles.card}>
+    <div className="card">
       <img
+        className="image"
         src = "https://via.placeholder.com/150"
         alt = "profile"
-        style = {styles.image}
       />
-      <div style = {styles.body}>
-        <h2 style = {styles.name}> John Doe </h2>
-        <p style = {styles.info}> Email: john.doe@example.com </p>
-        <p style = {styles.info}> Phone: (123) 456-7890 </p>
-        <p style = {styles.info}> Location: New York, NY </p>
+      <div className="body">
+        {isEditing ?
+        <>
+        <input type="text" placeholder="first name"/>
+        <input type="text" placeholder="last name"/>
+        <input type="text" placeholder="email"/>
+        <input type="text" placeholder="phone number"/>
+        </>
+        :
+        <>
+        <h2 className="name" > {contactInfo.firstName + ' ' + contactInfo.lastName} </h2>
+        <p className="info"> {'Email: ' +  contactInfo.email } </p>
+        <p className="info"> {'Phone: ' + contactInfo.phoneNumber} </p>
+        </>
+        }
       </div>
 
-      <input style = {styles.group} type = "button" value = "Add to Group" onClick={AddToGroup} />
-      <div style = {styles.buttons}>
-        <input type = "button" value = "Edit" onClick={EditContact} />
+      <input className="group" type = "button" value = "Add to Group" onClick={AddToGroup} />
+      <div className="buttons">
+        {isEditing ?
+        <input type = "submit" value = "Submit" onClick={toggleEdit} />
+        :
+        <input type = "button" value = "Edit" onClick={toggleEdit} />
+        }
+
         <input type = "button" value = "Delete" onClick={DeleteContact} />
       </div>
     </div>
   );
 }
 
-const styles = {
-  card: {
-    width: '336px',
-    height: '540px',
-    padding: '20px 10px',
-    borderRadius: '10px',
-    boxShadow: '0 0px 8px rgba(0,0,0,0.2)',
-    textAlign: 'center',
-    backgroundColor: '#ffffff',
-    margin: 'auto'
-  },
-  image: {
-    width: '175px',
-    height: '175px',
-    borderRadius: '50%', // Makes the image circular
-    objectFit: 'cover',
-  },
-  body: {
-    marginTop: '20px',
-  },
-  name: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    margin: '10px 0',
-  },
-  info: {
-    fontSize: '20px',
-    color: '#555555',
-    margin: '20px 0',
-  },
-  group: {
-    padding: '10px 20px',
-  },
-  buttons: {
-    padding: '40px 20px',
-  },
-};
 
 export default ContactInfo;
