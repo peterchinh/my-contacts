@@ -23,3 +23,8 @@ Figma prototype: https://www.figma.com/proto/CayfsuohC3qHYzCc9tb31n/Untitled?nod
 4. Link pr to corresponding issue
 5. request reviewer to check code
 6. Merge code if approved
+
+## STyle Guides
+- Before Committing:
+  - Run "npm run format"
+  - Run "npm run lint"

@@ -21,7 +21,6 @@
     "eject": "react-scripts eject",
     "format": "npx prettier . --write",
     "lint": "npx eslint .",
-    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
