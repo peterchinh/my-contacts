@@ -28,6 +28,7 @@ export default function App() {
 
 
 
+
             name={contact.name}
             image={contact.image}
             // onClick= do something later
