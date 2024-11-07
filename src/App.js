@@ -25,8 +25,6 @@ export default function App() {
         {sampleContacts.map((contact, index) => (
           <ContactCard
             key={index}
-
-
             name={contact.name}
             image={contact.image}
             // onClick= do something later
