@@ -20,7 +20,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "npx prettier . --write",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +42,11 @@
     ]
   },
   "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "prettier": "3.3.3"
+  },
+  "lint-staged": {
+    "*.--write": "prettier --write"
   }
 }
