@@ -27,7 +27,6 @@ export default function App() {
             key={index}
 
 
-
             name={contact.name}
             image={contact.image}
             // onClick= do something later
