@@ -1,0 +1,108 @@
+.card {
+    width: 336px;
+    height: full;
+    padding: 20px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0px 8px rgba(0,0,0,0.2);
+    text-align: center;
+    background-color: #ffffff;
+    margin: auto;
+ }
+.image {
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.body {
+    margin-top: 20px;
+  }
+.name {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+.info {
+    font-size: 20px;
+    color: #555555;
+    margin: 20px 0;
+  }
+.group {
+    border: 2px solid #04AA6D; /* Green */
+    border-radius: 10px;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    transition-duration: 0.4s;
+    margin-bottom: 10px;
+ }
+.group:hover {
+   background-color: #04AA6D;
+   color: white;
+ }
+.edit {
+    border: 2px solid #0000FF; /* Blue */
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-right: 20px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
+}
+.edit:hover{
+    background-color: #0000FF;
+    color: white;
+}
+.deleteButton{ /* delete is a reserved keyword */
+    border: 2px solid #FF0000; /* Red */
+    border-radius: 10px;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 20px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
+}
+.deleteButton:hover{
+    background-color: #FF0000;
+    color: white;
+}
+.submit{
+    border: 2px solid #24a0ed; /* Light Blue */
+    background-color: #24a0ed;
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-top: 20px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
+}
+.submit:hover{
+    border: 2px solid #0000FF;
+    background-color: #0000FF;
+    color: white;
+}
+
+.inputName{
+    font-size: 18px;
+    float: left;
+    margin-left: 20px;
+}
+
+.inputField{
+    type: text;
+    border-weight: 5px;
+    width: 80%;
+    padding: 8px 14px;
+    margin: 8px 0;
+    font-size: 18px;
+}
