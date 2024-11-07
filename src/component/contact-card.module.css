@@ -1,22 +1,20 @@
 .card {
-    background-color: #DEDEDE;
-    width: 745px;
-    height: 200px;
-    margin: 25px 25%;
-    display: flex;
-    align-items: center;
+  background-color: #dedede;
+  width: 745px;
+  height: 200px;
+  margin: 25px 25%;
+  display: flex;
+  align-items: center;
 }
 
-
 .name {
-    font-size: 48px;
-    color: black;
-
+  font-size: 48px;
+  color: black;
 }
 
 .image {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    margin: 30px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 30px;
 }

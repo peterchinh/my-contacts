@@ -43,7 +43,9 @@
   margin-right: 20px;
   white-space: nowrap; /* Prevent text from wrapping */
   overflow: hidden; /* Hide overflow */
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transitions */
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease; /* Smooth transitions */
   opacity: 0; /* Initially hidden */
   cursor: default;
 }
@@ -89,7 +91,9 @@
 .subMenuOpen {
   max-height: 200px;
   opacity: 1;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .subMenuItem {
