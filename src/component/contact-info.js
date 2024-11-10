@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styles from './contact-info.module.css';
+import axios from "axios";
 
 // Sample data for testing
 const contactInfo = {
     firstName: 'John',
     lastName: 'Doe',
-    phoneNumber: '(123) 456-7890',
+    phone: '(333) 333-3333',
     email: 'JohnDoe@gmail.com',
 }
 
@@ -21,18 +22,64 @@ function ContactInfo() {
   const [contact, setContact] = useState({
     firstName: contactInfo.firstName,
     lastName: contactInfo.lastName,
-    phoneNumber: contactInfo.phoneNumber,
+    phone: contactInfo.phone,
     email: contactInfo.email,
   });
 
   function handleChange(event){
-    /* to be added */
+    const { name, value } = event.target;
+    if(name === "firstName"){
+        setContact({
+            ...contact,
+            firstName: value,
+        });
+    }
+    else if(name === "lastName"){
+        setContact({
+            ...contact,
+            lastName: value,
+        });
+    }
+    else if(name === "phone"){
+        setContact({
+            ...contact,
+            phone: value,
+        });
+    }
+    else{
+        setContact({
+           ...contact,
+           email: value,
+        });
+    }
     return;
   }
 
-  function EditContact(){
-    toggleEdit();
-    return;
+  async function AddContact(){
+    try {
+        const response = await axios.post("http://localhost:8000/contact", contact);
+        toggleEdit();
+        return response;
+    } catch (error) {
+        console.log(error);
+        // Not handling errors at the moment
+        toggleEdit();
+        return false;
+    }
+  }
+
+  async function EditContact(){
+    try{
+        const initResponse = await axios.get("http://localhost:8000/contact", contact);
+        const response = axios.put('http://localhost:8000/contact/${initResponse._id}', contact);
+        toggleEdit();
+        return response;
+    } catch (error) {
+        console.log(error);
+        // Not handling errors at the moment
+        toggleEdit();
+        return false;
+    }
   }
 
   function AddToGroup(){
@@ -65,8 +112,8 @@ function ContactInfo() {
                id="lastName" value={contact.lastName} onChange={handleChange}/>
 
         <div className={styles.inputName}> Phone Number... </div>
-        <input className={styles.inputField} placeholder="phone number" name="phoneNumber"
-               id="phoneNumber" value={contact.phoneNumber} onChange={handleChange}/>
+        <input className={styles.inputField} placeholder="phone number" name="phone"
+               id="phone" value={contact.phone} onChange={handleChange}/>
 
         <div className={styles.inputName}> Email... </div>
         <input className={styles.inputField} placeholder="email" name="email"
@@ -77,7 +124,7 @@ function ContactInfo() {
         <>
         <h2 className={styles.name} > {contactInfo.firstName + ' ' + contactInfo.lastName} </h2>
         <p className={styles.info}> {'Email: ' +  contactInfo.email } </p>
-        <p className={styles.info}> {'Phone: ' + contactInfo.phoneNumber} </p>
+        <p className={styles.info}> {'Phone: ' + contactInfo.phone} </p>
         </>
         }
       </div>
@@ -85,7 +132,7 @@ function ContactInfo() {
 
       <div>
         {isEditing ?
-        <input className={styles.submit} type = "submit" value = "Submit" onClick={EditContact} />
+        <input className={styles.submit} type = "submit" value = "Submit" onClick={AddContact} />
         :
         <>
         <input className={styles.group} type = "button" value = "Add to Group" onClick={AddToGroup} />
