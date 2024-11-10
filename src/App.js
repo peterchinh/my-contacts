@@ -1,7 +1,8 @@
 import React from 'react';
-import ContactCard from './component/contact-card';
 import "./style/App.css";
-import NavBar from "./component/navbar";
+import Contacts from "./pages/contacts"
+import "./style/contacts.css"
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const sampleContacts = [
     {
@@ -16,19 +17,25 @@ const sampleContacts = [
   ];
 
 export default function App() {
-    return (
-      <div className="container">
-        <NavBar />
+  return (
+      
+    <div className="container">
+      <BrowserRouter>
+        <Routes><Route path='/contacts' element={<Contacts sampleContacts={sampleContacts} />}></Route></Routes>
+      </BrowserRouter>
+        {/* <NavBar /> */}
+        {/* <div className="contacts">
+          <Contacts />
+        </div>
         <div className="content">
           {sampleContacts.map((contact, index) => (
               <ContactCard
                 key={index}
                 name={contact.name}
                 image={contact.image}
-                // onClick= do something later
                 />
-            ))}
-        </div>
+            ))} */}
+        {/* </div> */}
       </div>
       );
-    } 
+} 
