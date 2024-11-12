@@ -39,7 +39,33 @@ export default function ContactInfo() {
   }
 
   function EditContact(contact, didSubmit){
-    return;
+    if(!didSubmit){
+            toggleEdit();
+            return;
+        }
+        try{
+            /* BUG NOTE: there is currently a bug where if you change the phone number
+               in the form, then the axios call below will not be able to find
+               the correct contact by phone number since you just changed it.
+
+               Will be fixed once we correctly map contact cards to their corresponding
+               contact info. We will have access to the original phone number and can
+               reference that instead by passing the info down in props.
+            */
+            const initResponse = await axios.get("http://localhost:8000/contact", {
+                params: {
+                    phone: contact.phone
+                }
+            });
+            const response = axios.put(`http://localhost:8000/contact/${initResponse._id}`, contact);
+            toggleEdit();
+            return response;
+        } catch (error) {
+            console.log(error);
+            // Not handling errors at the moment
+            toggleEdit();
+            return false;
+        }
   }
 
   function AddToGroup(){
