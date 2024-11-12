@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import ContactCard from './component/contact-card';
+import React from 'react';
 import "./style/App.css";
-import NavBar from "./component/navbar";
-import ContactInfo from './component/contact-info';
+import Contacts from "./pages/contacts"
+import "./style/contacts.css"
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const sampleContacts = [
     {
@@ -16,32 +16,25 @@ const sampleContacts = [
 ];
 
 export default function App() {
-    const [selectedContact, setSelectedContact] = useState(null);
-
-    const cardClick = (contact) => {
-        setSelectedContact(contact);
-    };
-
-    return (
-      <div className="container">
-        <NavBar />
-        <div className="content">
-          <div className="contact-list">
-            {sampleContacts.map((contact, index) => (
-              <div key={index} className="contactCard" onClick={() => cardClick(contact)}>
-                <ContactCard
-                  name={contact.name}
-                  image={contact.image}
-                />
-              </div>
-            ))}
-          </div>
-          {selectedContact && (
-            <div className="contact-info">
-              <ContactInfo/>
-            </div>
-          )}
+  return (
+      
+    <div className="container">
+      <BrowserRouter>
+        <Routes><Route path='/contacts' element={<Contacts sampleContacts={sampleContacts} />}></Route></Routes>
+      </BrowserRouter>
+        {/* <NavBar /> */}
+        {/* <div className="contacts">
+          <Contacts />
         </div>
+        <div className="content">
+          {sampleContacts.map((contact, index) => (
+              <ContactCard
+                key={index}
+                name={contact.name}
+                image={contact.image}
+                />
+            ))} */}
+        {/* </div> */}
       </div>
-    );
-}
+      );
+} 
