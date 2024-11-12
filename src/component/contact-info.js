@@ -88,7 +88,7 @@ export default function ContactInfo() {
       <div className={styles.body}>
         {isEditing ?
         // Edit contact form
-        <ContactForm handleSubmit={AddContact} contact={contactInfo}/>
+        <ContactForm handleSubmit={editContact} contact={contactInfo}/>
         :
         // Display
         <>
