@@ -132,7 +132,10 @@ function ContactInfo() {
 
       <div>
         {isEditing ?
+        <>
         <input className={styles.submit} type = "submit" value = "Submit" onClick={AddContact} />
+        <input className={styles.cancel} type = "button" value = "Cancel" onClick={toggleEdit} />
+        </>
         :
         <>
         <input className={styles.group} type = "button" value = "Add to Group" onClick={AddToGroup} />
