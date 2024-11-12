@@ -38,11 +38,11 @@ export default function ContactInfo() {
     }
   }
 
-  function EditContact(contact, didSubmit){
+  async function EditContact(contact, didSubmit){
     if(!didSubmit){
             toggleEdit();
             return;
-        }
+    }
         try{
             /* BUG NOTE: there is currently a bug where if you change the phone number
                in the form, then the axios call below will not be able to find
@@ -88,7 +88,7 @@ export default function ContactInfo() {
       <div className={styles.body}>
         {isEditing ?
         // Edit contact form
-        <ContactForm handleSubmit={editContact} contact={contactInfo}/>
+        <ContactForm handleSubmit={EditContact} contact={contactInfo}/>
         :
         // Display
         <>
