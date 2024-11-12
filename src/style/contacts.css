@@ -1,0 +1,23 @@
+.contactpage {
+    background-color: lightgray;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+}
+
+
+.contactcontainer {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+
