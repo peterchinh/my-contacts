@@ -23,10 +23,23 @@ export default function ContactForm(props){
                 lastName: value,
             });
         }
-        else if(name === "phone"){
+        else if(name === "phone"){ // We want this formatted properly
+            const input = value.replace(/\D/g, ""); // Remove non-numeric chars
+            let formatted = "";
+            // Add correct formatting, & remove excess chars
+            if (input.length > 0) {
+                formatted = `(${input.slice(0, 3)}`;
+            }
+            if (input.length >= 4) {
+                formatted += `) ${input.slice(3, 6)}`;
+            }
+            if (input.length >= 7) {
+                formatted += `-${input.slice(6, 10)}`;
+            }
+
             setContact({
                 ...contact,
-                phone: value,
+                phone: formatted,
             });
         }
         else{

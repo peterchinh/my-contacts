@@ -20,25 +20,8 @@ export default function ContactInfo() {
     setIsEditing(!isEditing);
   };
 
-  // This function might need to be refactored.
-  async function AddContact(contact, didSubmit){
-    if(!didSubmit){
-        toggleEdit();
-        return;
-    }
-    try {
-        const response = await axios.post("http://localhost:8000/contact", contact);
-        toggleEdit();
-        return response;
-    } catch (error) {
-        console.log(error);
-        // Not handling errors at the moment
-        toggleEdit();
-        return false;
-    }
-  }
-
   function EditContact(contact, didSubmit){
+    toggleEdit();
     return;
   }
 
@@ -62,7 +45,7 @@ export default function ContactInfo() {
       <div className={styles.body}>
         {isEditing ?
         // Edit contact form
-        <ContactForm handleSubmit={AddContact} contact={contactInfo}/>
+        <ContactForm handleSubmit={EditContact} contact={contactInfo}/>
         :
         // Display
         <>
