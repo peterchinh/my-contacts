@@ -21,7 +21,6 @@ function Contacts({ sampleContacts }) {
   const [showContactForm, setShowContactForm] = useState(null);
   const [contacts, setContacts] = useState(sampleContacts);
 
-
   const cardClick = (contact) => {
     if (selectedContact === contact) {
       return;
@@ -37,7 +36,7 @@ function Contacts({ sampleContacts }) {
   };
 
   const handleSearchResults = (matches) => {
-    console.log(matches)
+    console.log(matches);
     setContacts(matches);
   };
 
@@ -68,9 +67,9 @@ function Contacts({ sampleContacts }) {
         <div className="contactcontainer">
           <div className="contact-controls">
             <div className="search-bar">
-                <SearchBar onSearchResults={handleSearchResults}/>
+              <SearchBar onSearchResults={handleSearchResults} />
             </div>
-            
+
             <button className="addcontact" onClick={toggleContactForm}>
               Add Contact
             </button>
@@ -83,10 +82,11 @@ function Contacts({ sampleContacts }) {
                 className="contactCard"
                 onClick={() => cardClick(contact)}
               >
-              <ContactCard name={contact.firstName + " " + contact.lastName} image={noImage} />         
-
+                <ContactCard
+                  name={contact.firstName + " " + contact.lastName}
+                  image={noImage}
+                />
               </div>
-
             ))}
           </div>
         </div>
