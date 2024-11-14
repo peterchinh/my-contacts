@@ -36,9 +36,13 @@ const SearchBar = ({onSearchResults}) => {
 
   }
 
+  useEffect(() => {
+    search("")
+  }, [])
   useEffect(() => { 
     const input = document.getElementById("input"); 
-    
+    // search("") 
+
     const handleKeyPress = (event) => { 
     if (event.key === "Enter") { 
       event.preventDefault(); 
@@ -60,14 +64,14 @@ const SearchBar = ({onSearchResults}) => {
 }, [searchTerm]); 
 
 const handleChange = (e) => { 
+  if (e.target.value === ""){ //when user deletes input, show all
+      search("");
+    }
   setSearchTerm(e.target.value); 
 }; 
 
 
-// const SearchBar = () => {
-  // const [searchTerm, setSearchTerm] = useState('');  
   return (
-
     <div className="Container">
       <input
         className={styles.SearchBar}
