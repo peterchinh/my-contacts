@@ -75,6 +75,31 @@ app.get("/contact", async (req, res) => {
   }
 });
 
+app.put("/contact/:id", async (req, res) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedContact) {
+      return res.status(404).json({ error: "Contact not found" });
+    }
+    res.status(200).json(updatedContact);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete("/contact/:id", async (req, res) => {
+  try {
+    const deletedContact = await Contact.findByIdAndDelete(req.params.id);
+    if (!deletedContact) {
+      return res.status(404).json({ error: "Contact not found" });
+    }
+    res.status(200).json({ message: "Contact deleted successfully" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, async () => {
   await connectDB();

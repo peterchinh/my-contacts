@@ -1,0 +1,55 @@
+.contactpage {
+    background-color: lightgray;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+}
+
+
+.contactcontainer {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+.addcontact {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1; /* Ensures it sits in front of other elements */
+    padding: 20px 40px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 24px;
+}
+
+.addcontact:hover{
+    background-color: #0000FF;
+    color: white;
+}
+
+.modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 336px;
+    height: full;
+    padding: 20px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0px 8px rgba(0,0,0,0.2);
+    text-align: center;
+    background-color: #ffffff;
+    margin: auto;
+}
