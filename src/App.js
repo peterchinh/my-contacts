@@ -1,33 +1,19 @@
 import React from 'react';
-import ContactCard from './component/contact-card';
 import "./style/App.css";
-import NavBar from "./component/navbar";
-
-const sampleContacts = [
-    {
-      name: "John Smith",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-    },
-
-    {
-      name: "Lebron James",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-    }
-  ];
+import Login from  "./pages/login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Signup from './pages/signup';
 
 export default function App() {
     return (
       <div className="container">
-        <NavBar />
         <div className="content">
-          {sampleContacts.map((contact, index) => (
-              <ContactCard
-                key={index}
-                name={contact.name}
-                image={contact.image}
-                // onClick= do something later
-                />
-            ))}
+          <BrowserRouter>
+            <Routes>
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
+            </Routes>
+          </BrowserRouter>
         </div>
       </div>
       );
