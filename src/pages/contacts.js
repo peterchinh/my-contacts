@@ -6,6 +6,7 @@ import NavBar from "../component/navbar";
 import SearchBar from "../component/SearchBar";
 import "../style/contacts.css";
 import axios from "axios";
+import noImage from "../assets/no_image.jpg";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -18,6 +19,8 @@ const defaultContact = {
 function Contacts({ sampleContacts }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
+  const [contacts, setContacts] = useState(sampleContacts);
+
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -31,6 +34,11 @@ function Contacts({ sampleContacts }) {
 
   const toggleContactForm = () => {
     setShowContactForm(!showContactForm);
+  };
+
+  const handleSearchResults = (matches) => {
+    console.log(matches)
+    setContacts(matches);
   };
 
   async function AddContact(contact, didSubmit) {
@@ -60,7 +68,7 @@ function Contacts({ sampleContacts }) {
         <div className="contactcontainer">
           <div className="contact-controls">
             <div className="search-bar">
-                <SearchBar />
+                <SearchBar onSearchResults={handleSearchResults}/>
             </div>
             
             <button className="addcontact" onClick={toggleContactForm}>
@@ -69,14 +77,16 @@ function Contacts({ sampleContacts }) {
           </div>
 
           <div className="contactlist">
-            {sampleContacts.map((contact, index) => (
+            {contacts.map((contact, index) => (
               <div
                 key={index}
                 className="contactCard"
                 onClick={() => cardClick(contact)}
               >
-                <ContactCard name={contact.name} image={contact.image} />
+              <ContactCard name={contact.firstName + " " + contact.lastName} image={noImage} />         
+
               </div>
+
             ))}
           </div>
         </div>
