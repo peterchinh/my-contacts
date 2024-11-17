@@ -49,6 +49,11 @@
   color: white;
 }
 
+.contactlist {
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
 .contact-info {
   width: 0; /* Hidden by default */
   background-color: white;
