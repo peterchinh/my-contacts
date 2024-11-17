@@ -60,6 +60,19 @@ function Contacts({ sampleContacts }) {
     }
   }
 
+  async function updateSite(newContact) {
+    try{
+        const response = await axios.get("http://localhost:8000/contact");
+        setContacts(response.data);
+        setSelectedContact(newContact);
+        return;
+    } catch(err) {
+        console.log(err);
+        // Note: Update error handling
+        return;
+    }
+  }
+
   return (
     <div className="contactpage">
       <NavBar />
@@ -92,7 +105,11 @@ function Contacts({ sampleContacts }) {
         </div>
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-        <ContactInfo contact={selectedContact} defaultContact={defaultContact} />
+        <ContactInfo
+            contact={selectedContact}
+            defaultContact={defaultContact}
+            updateSite={updateSite}
+        />
       </div>
       {showContactForm && (
         <div className="modal">

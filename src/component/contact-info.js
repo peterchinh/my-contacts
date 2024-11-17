@@ -22,6 +22,7 @@ export default function ContactInfo(props) {
     }
     try{
         const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, contact);
+        props.updateSite(response.data); // Render edits on site.
         toggleEdit();
         return response;
     } catch (err) {
