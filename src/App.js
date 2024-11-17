@@ -6,16 +6,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Signup from './pages/signup';
 import "./style/contacts.css"
 
-const sampleContacts = [
-    {
-      name: "John Smith",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-    },
-    {
-      name: "Lebron James",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-    }
-];
+// const sampleContacts = [
+//     {
+//       name: "John Smith",
+//       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
+//     },
+//     {
+//       name: "Lebron James",
+//       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
+//     }
+// ];
+const sampleContacts = []
 
 export default function App() {
     return (
