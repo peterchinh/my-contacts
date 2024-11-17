@@ -1,10 +1,10 @@
 import React from 'react';
 import "./style/App.css";
-import Contacts from "./pages/contacts"
-import Login from  "./pages/login";
+import Contacts from "./pages/contacts";
+import Login from "./pages/login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Signup from './pages/signup';
-import "./style/contacts.css"
+import "./style/contacts.css";
 
 const sampleContacts = [
     {
@@ -23,12 +23,13 @@ export default function App() {
         <div className="content">
           <BrowserRouter>
             <Routes>
-              <Route path='/contacts' element={<Contacts sampleContacts={sampleContacts} />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/signup' element={<Signup />} />
+              <Route path="/contacts" element={<Contacts sampleContacts={sampleContacts} />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="*" element={<h1>404: Page Not Found</h1>} />
             </Routes>
           </BrowserRouter>
         </div>
       </div>
-      );
-} 
+    );
+}
