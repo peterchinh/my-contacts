@@ -2,12 +2,7 @@ import React, {useState} from 'react';
 import styles from './contact-form.module.css';
 
 export default function ContactForm(props){
-    const [contact, setContact] = useState({
-        firstName: props.contact.firstName,
-        lastName: props.contact.lastName,
-        phone: props.contact.phone,
-        email: props.contact.email,
-    });
+    const [contact, setContact] = useState(props.contact);
 
     function handleChange(event){
         const { name, value } = event.target;
@@ -53,6 +48,7 @@ export default function ContactForm(props){
 
     function submitForm(didSubmit){
         props.handleSubmit(contact, didSubmit);
+        return;
     }
 
     return(
