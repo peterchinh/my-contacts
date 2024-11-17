@@ -50,6 +50,7 @@ function Contacts({ sampleContacts }) {
         "http://localhost:8000/contact",
         contact,
       );
+      updateSite(contact); // Render new contact on page
       toggleContactForm();
       return response;
     } catch (error) {
@@ -60,14 +61,15 @@ function Contacts({ sampleContacts }) {
     }
   }
 
+  // Refactor this into useEffect later?
   async function updateSite(newContact) {
     try{
         const response = await axios.get("http://localhost:8000/contact");
         setContacts(response.data);
         setSelectedContact(newContact);
         return;
-    } catch(err) {
-        console.log(err);
+    } catch(error) {
+        console.log(error);
         // Note: Update error handling
         return;
     }
