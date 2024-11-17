@@ -80,8 +80,4 @@ export default function ContactForm(props){
         </div>
         </>
     );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

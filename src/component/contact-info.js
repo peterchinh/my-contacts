@@ -3,16 +3,12 @@ import ContactForm from './contact-form.js';
 import styles from './contact-info.module.css';
 import axios from "axios";
 
-// Sample data for testing
-const contactInfo = {
-    firstName: 'John',
-    lastName: 'Doe',
-    phone: '(333) 333-3333',
-    email: 'JohnDoe@gmail.com',
-}
 
 
-export default function ContactInfo() {
+export default function ContactInfo(props) {
+
+
+  const contact = props.contact || props.defaultContact;
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -70,13 +66,13 @@ export default function ContactInfo() {
       <div className={styles.body}>
         {isEditing ?
         // Edit contact form
-        <ContactForm handleSubmit={EditContact} contact={contactInfo}/>
+        <ContactForm handleSubmit={EditContact} contact={contact}/>
         :
         // Display
         <>
-            <h2 className={styles.name} > {contactInfo.firstName + ' ' + contactInfo.lastName} </h2>
-            <p className={styles.info}> {'Email: ' +  contactInfo.email } </p>
-            <p className={styles.info}> {'Phone: ' + contactInfo.phone} </p>
+            <h2 className={styles.name} > {contact.firstName + ' ' + contact.lastName} </h2>
+            <p className={styles.info}> {'Email: ' +  contact.email } </p>
+            <p className={styles.info}> {'Phone: ' + contact.phone} </p>
             <input className={styles.group} type = "button" value = "Add to Group" onClick={AddToGroup} />
             <div>
                 <input className={styles.edit} type = "button" value = "Edit" onClick={toggleEdit} />

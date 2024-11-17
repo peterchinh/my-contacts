@@ -92,7 +92,7 @@ function Contacts({ sampleContacts }) {
         </div>
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-        <ContactInfo />
+        <ContactInfo contact={selectedContact} defaultContact={defaultContact}/>
       </div>
       {showContactForm && (
         <div className="modal">
