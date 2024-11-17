@@ -20,24 +20,6 @@ export default function ContactInfo() {
     setIsEditing(!isEditing);
   };
 
-  // This function might need to be refactored.
-  async function AddContact(contact, didSubmit){
-    if(!didSubmit){
-        toggleEdit();
-        return;
-    }
-    try {
-        const response = await axios.post("http://localhost:8000/contact", contact);
-        toggleEdit();
-        return response;
-    } catch (error) {
-        console.log(error);
-        // Not handling errors at the moment
-        toggleEdit();
-        return false;
-    }
-  }
-
   async function EditContact(contact, didSubmit){
     if(!didSubmit){
             toggleEdit();
@@ -66,7 +48,7 @@ export default function ContactInfo() {
             toggleEdit();
             return false;
         }
-  }
+    }
 
   function AddToGroup(){
     // To Be Added

@@ -1,47 +1,35 @@
-import React, { useState } from 'react';
-import ContactCard from './component/contact-card';
+import React from 'react';
 import "./style/App.css";
-import NavBar from "./component/navbar";
-import ContactInfo from './component/contact-info';
+import Contacts from "./pages/contacts"
+import Login from  "./pages/login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Signup from './pages/signup';
+import "./style/contacts.css"
 
-const sampleContacts = [
-    {
-      name: "John Smith",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-    },
-    {
-      name: "Lebron James",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-    }
-];
+// const sampleContacts = [
+//     {
+//       name: "John Smith",
+//       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
+//     },
+//     {
+//       name: "Lebron James",
+//       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
+//     }
+// ];
+const sampleContacts = []
 
 export default function App() {
-    const [selectedContact, setSelectedContact] = useState(null);
-
-    const cardClick = (contact) => {
-        setSelectedContact(contact);
-    };
-
     return (
       <div className="container">
-        <NavBar />
         <div className="content">
-          <div className="contact-list">
-            {sampleContacts.map((contact, index) => (
-              <div key={index} className="contactCard" onClick={() => cardClick(contact)}>
-                <ContactCard
-                  name={contact.name}
-                  image={contact.image}
-                />
-              </div>
-            ))}
-          </div>
-          {selectedContact && (
-            <div className="contact-info">
-              <ContactInfo/>
-            </div>
-          )}
+          <BrowserRouter>
+            <Routes>
+              <Route path='/contacts' element={<Contacts sampleContacts={sampleContacts} />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
+            </Routes>
+          </BrowserRouter>
         </div>
       </div>
-    );
-}
+      );
+} 
