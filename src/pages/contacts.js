@@ -15,9 +15,30 @@ const defaultContact = {
   email: "",
 };
 
-function Contacts({ sampleContacts }) {
+// Sample contacts for initial display
+const sampleContactsData = [
+  {
+    id: 1,
+    firstName: "John",
+    lastName: "Smith",
+    email: "johnsmith@example.com",
+    phone: "(123) 456-7890",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png",
+  },
+  {
+    id: 2,
+    firstName: "Lebron",
+    lastName: "James",
+    email: "lebron@example.com",
+    phone: "(987) 654-3210",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png",
+  },
+];
+
+function Contacts() {
+  const [contacts, setContacts] = useState(sampleContactsData); // Use sample contacts as initial state
   const [selectedContact, setSelectedContact] = useState(null);
-  const [showContactForm, setShowContactForm] = useState(null);
+  const [showContactForm, setShowContactForm] = useState(false);
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -53,6 +74,13 @@ function Contacts({ sampleContacts }) {
     }
   }
 
+  const deleteContact = (contactToDelete) => {
+    setContacts((prevContacts) =>
+      prevContacts.filter((contact) => contact !== contactToDelete)
+    );
+    setSelectedContact(null); // Clear selected contact if it was deleted
+  };
+
   return (
     <div className="contactpage">
       <NavBar />
@@ -60,7 +88,7 @@ function Contacts({ sampleContacts }) {
         <div className="contactcontainer">
           <div className="contact-controls">
             <div className="search-bar">
-                <SearchBar />
+              <SearchBar />
             </div>
             
             <button className="addcontact" onClick={toggleContactForm}>
@@ -69,20 +97,28 @@ function Contacts({ sampleContacts }) {
           </div>
 
           <div className="contactlist">
-            {sampleContacts.map((contact, index) => (
+            {contacts.map((contact) => (
               <div
-                key={index}
+                key={contact.id} // Use unique ID for key
                 className="contactCard"
                 onClick={() => cardClick(contact)}
               >
-                <ContactCard name={contact.name} image={contact.image} />
+                <ContactCard
+                  name={`${contact.firstName} ${contact.lastName}`}
+                  image={contact.image}
+                />
               </div>
             ))}
           </div>
         </div>
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-        <ContactInfo />
+        {selectedContact && (
+          <ContactInfo
+            contact={selectedContact}
+            onDelete={() => deleteContact(selectedContact)}
+          />
+        )}
       </div>
       {showContactForm && (
         <div className="modal">
