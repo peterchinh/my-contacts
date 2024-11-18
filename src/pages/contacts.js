@@ -50,6 +50,7 @@ function Contacts({ sampleContacts }) {
         "http://localhost:8000/contact",
         contact,
       );
+      updateSite(contact); // Render new contact on page
       toggleContactForm();
       return response;
     } catch (error) {
@@ -57,6 +58,20 @@ function Contacts({ sampleContacts }) {
       // Not handling errors at the moment
       toggleContactForm();
       return false;
+    }
+  }
+
+  // Refactor this into useEffect later?
+  async function updateSite(newContact) {
+    try{
+        const response = await axios.get("http://localhost:8000/contact");
+        setContacts(response.data);
+        setSelectedContact(newContact);
+        return;
+    } catch(error) {
+        console.log(error);
+        // Note: Update error handling
+        return;
     }
   }
 
@@ -92,7 +107,11 @@ function Contacts({ sampleContacts }) {
         </div>
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-        <ContactInfo />
+        <ContactInfo
+            contact={selectedContact}
+            defaultContact={defaultContact}
+            updateSite={updateSite}
+        />
       </div>
       {showContactForm && (
         <div className="modal">
