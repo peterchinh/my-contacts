@@ -67,7 +67,7 @@ function Contacts({ sampleContacts }) {
         const response = await axios.get("http://localhost:8000/contact");
         setContacts(response.data);
 
-        if (editedContact) {
+        if (newContact) {
             setSelectedContact(newContact);
         } else {
             setSelectedContact(null); 
