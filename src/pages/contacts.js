@@ -36,7 +36,7 @@ function Contacts({ setAccessToken }) {
   };
 
   const handleSearchResults = (matches) => {
-    console.log(matches);
+    // console.log(matches);
     setContacts(matches);
   };
 
