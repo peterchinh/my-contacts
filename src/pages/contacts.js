@@ -64,16 +64,18 @@ function Contacts({ setAccessToken }) {
   // Refactor this into useEffect later?
   async function updateSite(newContact) {
     try {
-      const response = await axios.get("http://localhost:8000/contact");
-      setContacts(response.data);
-      setSelectedContact(newContact);
-      return;
+        const response = await axios.get("http://localhost:8000/contact");
+        setContacts(response.data);
+
+        if (newContact) {
+            setSelectedContact(newContact);
+        } else {
+            setSelectedContact(null); 
+        }
     } catch (error) {
-      console.log(error);
-      // Note: Update error handling
-      return;
+        console.error("Error updating contacts:", error);
     }
-  }
+}
 
   return (
     <div className="contactpage">

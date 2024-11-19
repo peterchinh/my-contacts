@@ -38,9 +38,18 @@ export default function ContactInfo(props) {
     return;
   }
 
-  function DeleteContact(){
-    // To Be Added
-    return;
+  async function DeleteContact() {
+    if (!contact || !contact._id) {
+      console.error("No contact selected to delete.");
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:8000/contact/${contact._id}`);
+      props.updateSite(); 
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
