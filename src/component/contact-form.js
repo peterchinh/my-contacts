@@ -5,8 +5,16 @@ export default function ContactForm(props){
     const [contact, setContact] = useState(props.contact);
 
     function handleChange(event){
-        const { name, value } = event.target;
-        if(name === "firstName"){
+        const { name, value, files, type } = event.target;
+
+        if (type === "file") {
+            setContact({
+                ...contact,
+                image: files[0],
+            });
+        }
+
+        else if(name === "firstName"){
             setContact({
                 ...contact,
                 firstName: value,
@@ -67,7 +75,10 @@ export default function ContactForm(props){
 
         <div className={styles.inputName}> Email... </div>
         <input className={styles.inputField} placeholder="email" name="email"
-               id="email" value={contact.email} onChange={handleChange}/>
+                id="email" value={contact.email} onChange={handleChange} />
+        <div className={styles.inputName}> Upload Image (Optional) </div>
+        <input type="file" accept="image/*" name="image" onChange={handleChange}
+                className={styles.inputField} />
         <div>
             <input className={styles.submit} type = "submit" value = "Submit"
                    onClick={() => submitForm(true)} />
