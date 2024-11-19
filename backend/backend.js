@@ -56,7 +56,7 @@ app.post("/users/login", async (req, res) => {
       res.status(404).json({ error: "Email does not have an account" });
     } else {
       if (await bcrypt.compare(password, user.password)) {
-        const accessToken = generateAccessToken(user);
+        const accessToken = generateAccessToken({ id: user.id });
         const refreshToken = generateRefreshToken(user);
 
         res.cookie("refreshToken", refreshToken, {
