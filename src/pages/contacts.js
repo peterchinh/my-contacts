@@ -63,15 +63,15 @@ function Contacts({ sampleContacts }) {
 
   // Refactor this into useEffect later?
   async function updateSite(newContact) {
-    try{
-        const response = await axios.get("http://localhost:8000/contact");
-        setContacts(response.data);
-        setSelectedContact(newContact);
-        return;
-    } catch(error) {
-        console.log(error);
-        // Note: Update error handling
-        return;
+    try {
+      const response = await axios.get("http://localhost:8000/contact");
+      setContacts(response.data);
+      setSelectedContact(newContact);
+      return;
+    } catch (error) {
+      console.log(error);
+      // Note: Update error handling
+      return;
     }
   }
 
@@ -108,9 +108,9 @@ function Contacts({ sampleContacts }) {
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
         <ContactInfo
-            contact={selectedContact}
-            defaultContact={defaultContact}
-            updateSite={updateSite}
+          contact={selectedContact}
+          defaultContact={defaultContact}
+          updateSite={updateSite}
         />
       </div>
       {showContactForm && (

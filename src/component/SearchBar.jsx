@@ -30,19 +30,17 @@ async function fetchAll() {
 //   return (a.length < b.length);
 // }
 
-function compare(a, b){
-  if (a.lastName.toLowerCase() < b.lastName.toLowerCase()){
+function compare(a, b) {
+  if (a.lastName.toLowerCase() < b.lastName.toLowerCase()) {
     return -1;
-  }
-  else if (a.lastName.toLowerCase() > b.lastName.toLowerCase()){
+  } else if (a.lastName.toLowerCase() > b.lastName.toLowerCase()) {
     return 1;
-  }
-  else { // Equal last names, check first names
-      
-    if (a.firstName.toLowerCase() < b.firstName.toLowerCase()){
+  } else {
+    // Equal last names, check first names
+
+    if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) {
       return -1;
-    }
-    else{
+    } else {
       return 1;
     }
   }
@@ -65,7 +63,7 @@ const SearchBar = ({ onSearchResults }) => {
           matches.push(names[i]);
         }
       }
-      matches.sort(compare)
+      matches.sort(compare);
       onSearchResults(matches);
     });
   }
