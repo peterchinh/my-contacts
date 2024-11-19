@@ -10,7 +10,6 @@ import ProtectedRoute from "./component/protected-route";
 
 export default function App() {
   const { accessToken, loading, setAccessToken } = useAuth();
-  console.log(accessToken);
 
   // If still loading, don't render the routes
   if (loading) {
