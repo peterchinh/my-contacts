@@ -8,6 +8,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import Group from "./group.js";
 
 const app = express();
 app.use(
@@ -122,7 +123,7 @@ app.get("/contact", async (req, res) => {
   }
 });
 
-app.put("/contact/:id", async (req, res) => {
+app.get("/group", async (req, res) => {
   try {
     const updatedContact = await Contact.findByIdAndUpdate(
       req.params.id,
@@ -133,22 +134,51 @@ app.put("/contact/:id", async (req, res) => {
       return res.status(404).json({ error: "Contact not found" });
     }
     res.status(200).json(updatedContact);
+    const { user } = req.body;
+    const groups = await Group.find({user: user});
+    res.json(groups);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-app.delete("/contact/:id", async (req, res) => {
+app.post("/group", async (req, res) => {
   try {
-    const deletedContact = await Contact.findByIdAndDelete(req.params.id);
-    if (!deletedContact) {
-      return res.status(404).json({ error: "Contact not found" });
-    }
-    res.status(200).json({ message: "Contact deleted successfully" });
+    const newGroup = new Group(req.body);
+    await newGroup.save();
+    res.status(200).json(newGroup);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
-});
+})
+
+app.put("/group/:id", async (req, res) => {
+  try {
+    const groupId = req.params.id;
+    const { groupName, newContact } = req.body;
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      return res.status(404).json({error: "Group not found"})
+    }
+
+
+    if (groupName) {
+      group.groupName = groupName;
+    }
+    if (newContact) {
+      if (!group.contacts.includes(newContact)) {
+        group.contacts.push(newContact);
+      } else {
+        return res.status(400).json({error: "Contact already in group"});
+      }
+    }
+    const updatedGroup = await group.save();
+    res.status(200).json(updatedGroup);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+})
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, async () => {
@@ -156,4 +186,3 @@ app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// skeleton
