@@ -12,6 +12,42 @@ async function fetchAll() {
   }
 }
 
+// function nameComp(a, b){
+//   let i = 0;
+//   let j = 0;
+
+//   while ( i < a.length && j < b.length ){
+//     if (a[i] < b[j]){
+//       return True
+//     }
+//     else if (a[i] > b[j]){
+//       return False
+//     }
+//     i++;
+//     j++;
+
+//   }
+//   return (a.length < b.length);
+// }
+
+function compare(a, b){
+  if (a.lastName.toLowerCase() < b.lastName.toLowerCase()){
+    return -1;
+  }
+  else if (a.lastName.toLowerCase() > b.lastName.toLowerCase()){
+    return 1;
+  }
+  else { // Equal last names, check first names
+      
+    if (a.firstName.toLowerCase() < b.firstName.toLowerCase()){
+      return -1;
+    }
+    else{
+      return 1;
+    }
+  }
+}
+
 const SearchBar = ({ onSearchResults }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -29,7 +65,7 @@ const SearchBar = ({ onSearchResults }) => {
           matches.push(names[i]);
         }
       }
-      // return matches
+      matches.sort(compare)
       onSearchResults(matches);
     });
   }

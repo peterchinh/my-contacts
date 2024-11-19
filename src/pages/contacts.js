@@ -36,7 +36,7 @@ function Contacts({ sampleContacts }) {
   };
 
   const handleSearchResults = (matches) => {
-    console.log(matches);
+    // console.log(matches);
     setContacts(matches);
   };
 
