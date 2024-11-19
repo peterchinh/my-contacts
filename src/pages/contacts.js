@@ -49,6 +49,7 @@ function Contacts({ setAccessToken }) {
       const response = await axios.post(
         "http://localhost:8000/contact",
         contact,
+        { withCredentials: true },
       );
       updateSite(contact); // Render new contact on page
       toggleContactForm();
