@@ -56,8 +56,8 @@ app.post("/users/login", async (req, res) => {
       res.status(404).json({ error: "Email does not have an account" });
     } else {
       if (await bcrypt.compare(password, user.password)) {
-        const accessToken = generateAccessToken({ id: user.id });
-        const refreshToken = generateRefreshToken(user);
+        const accessToken = generateAccessToken({ id: user._id });
+        const refreshToken = generateRefreshToken({id: user._id });
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -85,6 +85,7 @@ function generateAccessToken(user) {
 }
 
 function generateRefreshToken(user) {
+  console.log(user);
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" }); // Long-lived refresh token
 }
 
