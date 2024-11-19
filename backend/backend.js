@@ -4,11 +4,11 @@ import cors from "cors";
 import connectDB from "./database.js";
 import User from "./user.js";
 import Contact from "./contact.js";
+import Group from "./group.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import Group from "./group.js";
 
 const app = express();
 app.use(
@@ -86,7 +86,6 @@ function generateAccessToken(user) {
 }
 
 function generateRefreshToken(user) {
-  console.log(user);
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" }); // Long-lived refresh token
 }
 
@@ -106,9 +105,16 @@ app.post("/refresh", (req, res) => {
 
 app.post("/contact", async (req, res) => {
   try {
-    const newContact = new Contact(req.body);
-    await newContact.save();
-    res.status(200).json(newContact);
+    const refreshToken = req.cookies.refreshToken;
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+      req.body.user = user.id;
+      const newContact = new Contact(req.body);
+      await newContact.save();
+      res.status(200).json(newContact);
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -116,8 +122,43 @@ app.post("/contact", async (req, res) => {
 
 app.get("/contact", async (req, res) => {
   try {
-    const contacts = await Contact.find();
-    res.json(contacts);
+    const refreshToken = req.cookies.refreshToken;
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+      const contacts = await Contact.find({ user: user.id });
+      res.json(contacts);
+    });
+    
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.put("/contact/:id", async (req, res) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
+    if (!updatedContact) {
+      return res.status(404).json({ error: "Contact not found" });
+    }
+    res.status(200).json(updatedContact);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete("/contact/:id", async (req, res) => {
+  try {
+    const deletedContact = await Contact.findByIdAndDelete(req.params.id);
+    if (!deletedContact) {
+      return res.status(404).json({ error: "Contact not found" });
+    }
+    res.status(200).json({ message: "Contact deleted successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -185,4 +226,3 @@ app.listen(PORT, async () => {
   await connectDB();
   console.log(`Server is running on port ${PORT}`);
 });
-

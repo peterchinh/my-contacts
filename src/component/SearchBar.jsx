@@ -4,7 +4,7 @@ import axios from "axios";
 
 async function fetchAll() {
   try {
-    const response = await axios.get("http://localhost:8000/contact");
+    const response = await axios.get("http://localhost:8000/contact", { withCredentials: true });
     return response.data;
   } catch (error) {
     console.log(error);
