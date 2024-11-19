@@ -82,10 +82,10 @@
   opacity: 0;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: 100%;
-  left: 50%;
+  position: relative; /* Change from absolute to relative */
   width: 100%;
+  margin-top: 1rem; /* Add margin-top to create space between groups and submenu */
+  margin-left: 4rem;
 }
 
 .subMenuOpen {
@@ -103,7 +103,6 @@
   opacity: 0; /* Start with hidden items */
   animation: slideIn 0.3s forwards;
   width: 100%;
-  /* The actual delay is set inline in React */
 }
 
 .subMenuClosed {

@@ -16,6 +16,16 @@ const contactSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  groups: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Group',
+    required: true,
+  }],
 });
 
 const Contact = mongoose.model("Contact", contactSchema);

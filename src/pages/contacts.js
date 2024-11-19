@@ -16,10 +16,10 @@ const defaultContact = {
   email: "",
 };
 
-function Contacts({ sampleContacts }) {
+function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
-  const [contacts, setContacts] = useState(sampleContacts);
+  const [contacts, setContacts] = useState([]);
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -79,7 +79,7 @@ function Contacts({ sampleContacts }) {
 
   return (
     <div className="contactpage">
-      <NavBar />
+      <NavBar setAccessToken={setAccessToken} />
       <div className="main">
         <div className="contactcontainer">
           <div className="contact-controls">
@@ -110,9 +110,9 @@ function Contacts({ sampleContacts }) {
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
         <ContactInfo
-            contact={selectedContact}
-            defaultContact={defaultContact}
-            updateSite={updateSite}
+          contact={selectedContact}
+          defaultContact={defaultContact}
+          updateSite={updateSite}
         />
       </div>
       {showContactForm && (
