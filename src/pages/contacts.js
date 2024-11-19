@@ -16,10 +16,10 @@ const defaultContact = {
   email: "",
 };
 
-function Contacts({ sampleContacts }) {
+function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
-  const [contacts, setContacts] = useState(sampleContacts);
+  const [contacts, setContacts] = useState([]);
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -63,21 +63,21 @@ function Contacts({ sampleContacts }) {
 
   // Refactor this into useEffect later?
   async function updateSite(newContact) {
-    try{
-        const response = await axios.get("http://localhost:8000/contact");
-        setContacts(response.data);
-        setSelectedContact(newContact);
-        return;
-    } catch(error) {
-        console.log(error);
-        // Note: Update error handling
-        return;
+    try {
+      const response = await axios.get("http://localhost:8000/contact");
+      setContacts(response.data);
+      setSelectedContact(newContact);
+      return;
+    } catch (error) {
+      console.log(error);
+      // Note: Update error handling
+      return;
     }
   }
 
   return (
     <div className="contactpage">
-      <NavBar />
+      <NavBar setAccessToken={setAccessToken} />
       <div className="main">
         <div className="contactcontainer">
           <div className="contact-controls">
@@ -108,9 +108,9 @@ function Contacts({ sampleContacts }) {
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
         <ContactInfo
-            contact={selectedContact}
-            defaultContact={defaultContact}
-            updateSite={updateSite}
+          contact={selectedContact}
+          defaultContact={defaultContact}
+          updateSite={updateSite}
         />
       </div>
       {showContactForm && (
