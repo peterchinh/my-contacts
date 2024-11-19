@@ -1,35 +1,59 @@
-import React from 'react';
+import React from "react";
 import "./style/App.css";
-import Contacts from "./pages/contacts"
-import Login from  "./pages/login";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Signup from './pages/signup';
-import "./style/contacts.css"
-
-// const sampleContacts = [
-//     {
-//       name: "John Smith",
-//       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-//     },
-//     {
-//       name: "Lebron James",
-//       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-//     }
-// ];
-const sampleContacts = []
+import Contacts from "./pages/contacts";
+import Login from "./pages/login";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import Signup from "./pages/signup";
+import "./style/contacts.css";
+import { useAuth } from "./hooks/useAuth";
+import ProtectedRoute from "./component/protected-route";
 
 export default function App() {
-    return (
-      <div className="container">
-        <div className="content">
-          <BrowserRouter>
-            <Routes>
-              <Route path='/contacts' element={<Contacts sampleContacts={sampleContacts} />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/signup' element={<Signup />} />
-            </Routes>
-          </BrowserRouter>
-        </div>
-      </div>
-      );
-} 
+  const { accessToken, loading, setAccessToken } = useAuth();
+  console.log(accessToken);
+
+  // If still loading, don't render the routes
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route
+          path="/login"
+          element={
+            accessToken ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Login setAccessToken={setAccessToken} />
+            )
+          }
+        />
+        <Route
+          path="/signup"
+          element={accessToken ? <Navigate to="/" replace /> : <Signup />}
+        />
+
+        {/* Protected Routes */}
+        <Route
+          path="/contacts"
+          element={<ProtectedRoute element={<Contacts setAccessToken={setAccessToken}/>} />}
+        />
+
+        {/* Redirect all other routes */}
+        <Route
+          path="*"
+          element={
+            accessToken ? (
+              <Navigate to="/contacts" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
