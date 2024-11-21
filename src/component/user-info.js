@@ -7,9 +7,10 @@ export default function UserInfo(props){
     <div className={styles.profileContainer}>
       <div className={styles.profileCard}>
         <div className={styles.profileInfo}>
-          <h1> {user.name} </h1>
-          <h2> {user.email} </h2>
-          <h2> {user.phone} </h2>
+          <h1> Profile Info: </h1>
+          <hr className={styles.hrLine} />
+          <h2 className={styles.profileName}> {user.name} </h2>
+          <h3> {user.email} </h3>
         </div>
       </div>
     </div>

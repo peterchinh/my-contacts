@@ -19,6 +19,18 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.profile-info {
+.profileInfo {
   text-align: center;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+}
+.hrLine{
+  border: 0;
+  height: 2px;
+  margin: 10px auto;
+  background-color: #0000FF;
+}
+.profileName{
+    margin: 20px 0;
+    font-size: 30px;
 }
