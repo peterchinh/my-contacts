@@ -14,7 +14,10 @@ function Profile({setAccessToken}){
   }
   const {data, error, isLoading, mutate} = useSWR('http://localhost:8000/users', fetcher);
 
-
+  /* TODO: Add phone #, separate name into first and last in User Schema.
+           This is so you can have personal contact info.
+     TODO: After completing above item, add functionality to edit & send info.
+  */
   return(
     <div className="profilepage">
       <NavBar setAccessToken={setAccessToken} />

@@ -41,13 +41,23 @@ app.post("/users", async (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+  const refreshToken = req.cookies.refreshToken;
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+    if(err) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+    try{
+      const userData = await User.findById(user.id);
+      if(!userData){
+        return res.status(404).json({ message: "User not found"});
+      }
+      res.json(userData);
+    } catch (err) {
+      res.status(500).json({ error: err.message});
+    }
+  });
 });
+
 
 app.post("/users/login", async (req, res) => {
   try {
