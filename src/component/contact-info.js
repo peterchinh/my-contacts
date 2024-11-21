@@ -7,7 +7,6 @@ import axios from "axios";
 
 export default function ContactInfo(props) {
 
-
   const contact = props.contact || props.defaultContact;
   const [isEditing, setIsEditing] = useState(false);
 
@@ -22,7 +21,7 @@ export default function ContactInfo(props) {
     }
     try{
         const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, contact);
-        props.updateSite(response.data); // Render edits on site.
+        props.updateSite(contact); // Render edits on site.
         toggleEdit();
         return response;
     } catch (err) {
@@ -46,7 +45,7 @@ export default function ContactInfo(props) {
 
     try {
       await axios.delete(`http://localhost:8000/contact/${contact._id}`);
-      props.updateSite(); 
+      props.updateSite(null);
     } catch (err) {
       console.error(err);
     }
