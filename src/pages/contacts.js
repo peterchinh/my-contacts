@@ -102,7 +102,7 @@ function Contacts({ setAccessToken }) {
               >
                 <ContactCard
                   name={contact.firstName + " " + contact.lastName}
-                  image={noImage}
+                  image={contact.image || noImage}
                 />
               </div>
             ))}

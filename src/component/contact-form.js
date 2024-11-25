@@ -3,6 +3,8 @@ import styles from './contact-form.module.css';
 
 export default function ContactForm(props){
     const [contact, setContact] = useState(props.contact);
+    const defaultImage = "../assets/no_image.jpg"
+    const [loading, setLoading] = useState(false);
 
     function handleChange(event){
         const { name, value, files, type } = event.target;
@@ -13,7 +15,6 @@ export default function ContactForm(props){
                 image: files[0],
             });
         }
-
         else if(name === "firstName"){
             setContact({
                 ...contact,
@@ -54,9 +55,58 @@ export default function ContactForm(props){
     return;
     }
 
-    function submitForm(didSubmit){
-        props.handleSubmit(contact, didSubmit);
-        return;
+    async function submitForm(didSubmit) {
+        if (contact.image) {
+            setLoading(true);
+            try {
+
+                
+                const response = await fetch('http://localhost:8000/s3-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        filename: contact.image.name,
+                        filetype: contact.image.type,
+                    }),
+                });
+
+
+                const { signedUrl } = await response.json();
+
+                console.log('Signed URL:', signedUrl);
+                const uploadResponse = await fetch(signedUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': contact.image.type,
+                    },
+                    body: contact.image,
+                });
+                
+                console.log('Upload response:', uploadResponse)
+                if (uploadResponse.ok) {
+                    console.log('File uploaded successfully');
+                    const imageUrl = `https://308-mycontacts1.s3.us-west-1.amazonaws.com/${contact.image.name}`;
+                    const contactData = {
+                        ...contact,
+                        image: imageUrl,
+                    };
+
+                    props.handleSubmit(contactData, didSubmit);
+                } else {
+                    console.log('Upload failed:', uploadResponse.statusText)
+                    throw new Error('Error uploading file to S3');
+                }
+            } catch (error) {
+                console.error('Upload failed:', error.message);
+                alert('Upload failed: ' + error.message);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            props.handleSubmit(contact, didSubmit);
+        }
     }
 
     return(

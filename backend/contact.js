@@ -26,6 +26,10 @@ const contactSchema = new mongoose.Schema({
     ref: 'Group',
     required: true,
   }],
+  image: {
+    type: String,
+    default: '',
+  }
 });
 
 const Contact = mongoose.model("Contact", contactSchema);
