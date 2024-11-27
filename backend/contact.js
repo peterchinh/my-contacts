@@ -28,7 +28,6 @@ const contactSchema = new mongoose.Schema({
   }],
   image: {
     type: String,
-    default: '',
   }
 });
 

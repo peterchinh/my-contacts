@@ -3,7 +3,6 @@ import styles from './contact-form.module.css';
 
 export default function ContactForm(props){
     const [contact, setContact] = useState(props.contact);
-    const defaultImage = "../assets/no_image.jpg"
     const [loading, setLoading] = useState(false);
 
     function handleChange(event){
@@ -73,7 +72,7 @@ export default function ContactForm(props){
                 });
 
 
-                const { signedUrl } = await response.json();
+                const { signedUrl, fileKey } = await response.json();
 
                 console.log('Signed URL:', signedUrl);
                 const uploadResponse = await fetch(signedUrl, {
@@ -87,7 +86,7 @@ export default function ContactForm(props){
                 console.log('Upload response:', uploadResponse)
                 if (uploadResponse.ok) {
                     console.log('File uploaded successfully');
-                    const imageUrl = `https://308-mycontacts1.s3.us-west-1.amazonaws.com/${contact.image.name}`;
+                    const imageUrl = `https://308-mycontacts1.s3.us-west-1.amazonaws.com/${fileKey}`;
                     const contactData = {
                         ...contact,
                         image: imageUrl,

@@ -235,7 +235,9 @@ app.post("/s3-url", async (req, res) => {
     };
     const signedUrl = await s3.getSignedUrlPromise("putObject", s3Params);
     res.status(200).json({
-      signedUrl, fileUrl: 'https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}'
+      signedUrl,
+      fileUrl: 'https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}',
+      fileKey,
     });
   } catch (err) {
     console.error("Error generating signed URL:", err);
