@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ContactForm from './contact-form.js';
 import styles from './contact-info.module.css';
 import axios from "axios";
+import defaultimage from "../assets/no_image.jpg"
 
 
 
@@ -56,7 +57,7 @@ export default function ContactInfo(props) {
     <div className={styles.card}>
       <img
         className={styles.image}
-        src = "https://placehold.co/150x150"
+        src = {contact.image || defaultimage}
         alt = "profile"
       />
       <div className={styles.body}>
