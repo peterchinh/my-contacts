@@ -55,11 +55,15 @@ export default function ContactForm(props){
     }
 
     async function submitForm(didSubmit) {
-        if (contact.image) {
-            setLoading(true);
-            try {
+        if (!didSubmit) {
+            props.handleSubmit(contact, didSubmit);
+            return;
+        }
 
-                
+        let imageUrl = contact.image;
+        if (contact.image instanceof File) {
+            setLoading(true);
+            try {  
                 const response = await fetch('http://localhost:8000/s3-url', {
                     method: 'POST',
                     headers: {
@@ -104,7 +108,8 @@ export default function ContactForm(props){
                 setLoading(false);
             }
         } else {
-            props.handleSubmit(contact, didSubmit);
+            const contactData = { ...contact, image: imageUrl };
+            props.handleSubmit(contactData, didSubmit);
         }
     }
 

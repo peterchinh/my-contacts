@@ -16,13 +16,20 @@ export default function ContactInfo(props) {
     setIsEditing(!isEditing);
   };
 
-  async function EditContact(contact, didSubmit){
+  async function EditContact(updatedContact, didSubmit){
     if(!didSubmit){
             toggleEdit();
             return;
     }
+
+    const updatedTheContact = {
+      ...contact,
+      ...updatedContact,
+      image: updatedContact.image || contact.image,
+    }
+
     try{
-        const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, contact);
+        const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, updatedTheContact);
         props.updateSite(response.data); // Render edits on site.
         toggleEdit();
         return response;
