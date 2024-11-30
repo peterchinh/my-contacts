@@ -12,6 +12,7 @@ import cookieParser from "cookie-parser";
 import s3 from "./amazons3.js";
 import { v4 as uuidv4 } from "uuid";
 
+
 const app = express();
 app.use(
   cors({
@@ -262,6 +263,23 @@ app.get("/s3-url", async (req, res) => {
     res.status(500).json({ error: 'Error fetching files from S3', details: err.message });
   }
 });
+
+app.delete('/delete-image/:fileKey', async (req, res) => {
+  const { fileKey } = req.params;
+  const s3Params = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: fileKey,
+  };
+
+  try {
+    await s3.deleteObject(s3Params).promise();
+    res.status(200).json({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting image', error);
+    res.status(500).json({ error: "Error deleting image" });
+  }
+});
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, async () => {

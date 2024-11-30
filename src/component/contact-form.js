@@ -1,9 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './contact-form.module.css';
+import defaultimage from "../assets/no_image.jpg";
+import axios from 'axios';
 
 export default function ContactForm(props){
     const [contact, setContact] = useState(props.contact);
     const [loading, setLoading] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false); 
+    const [hasImageChanged, setHasImageChanged] = useState(false);
+
+    useEffect(() => {
+        if (props.contact && props.contact._id) { 
+            setIsEditMode(true);
+            setHasImageChanged(false);
+        } else {
+            setIsEditMode(false);
+            setHasImageChanged(false);
+        }
+    }, [props.contact]);
 
     function handleChange(event){
         const { name, value, files, type } = event.target;
@@ -13,6 +27,7 @@ export default function ContactForm(props){
                 ...contact,
                 image: files[0],
             });
+            setHasImageChanged(true); 
         }
         else if(name === "firstName"){
             setContact({
@@ -63,6 +78,17 @@ export default function ContactForm(props){
         let imageUrl = contact.image;
         if (contact.image instanceof File) {
             setLoading(true);
+
+            if (contact._id) {
+                const oldKey = props.contact.image.split('/').pop();
+                try {
+                    await axios.delete(`http://localhost:8000/delete-image/${oldKey}`);
+                    console.log('Old image deleted from S3');
+                } catch (error) {
+                    console.error('Error deleting old image from S3,', error);
+                }
+            }
+
             try {  
                 const response = await fetch('http://localhost:8000/s3-url', {
                     method: 'POST',
@@ -113,6 +139,29 @@ export default function ContactForm(props){
         }
     }
 
+    async function handleDeleteImage() {
+        setLoading(true);
+        try {
+            const fileKey = contact.image.split('/').pop();
+            const response = await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
+            console.log('Image deleted successfully:', response.data);
+            console.log('imagekey', fileKey);
+
+            setContact({
+                ...contact,
+                image: defaultimage,
+            });
+
+        } catch (error) {
+            console.error("Error deleting image:", error);
+            alert("Error deleting the image");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
     return(
         <>
         <div className={styles.inputName}> First Name... </div>
@@ -130,14 +179,20 @@ export default function ContactForm(props){
         <div className={styles.inputName}> Email... </div>
         <input className={styles.inputField} placeholder="email" name="email"
                 id="email" value={contact.email} onChange={handleChange} />
+            
         <div className={styles.inputName}> Upload Image (Optional) </div>
         <input type="file" accept="image/*" name="image" onChange={handleChange}
                 className={styles.inputField} />
+            <div>
+            {isEditMode && contact.image && contact.image !== defaultimage && !hasImageChanged && (
+            <button onClick={handleDeleteImage}>Delete Image</button>
+            )}
+            </div>
         <div>
             <input className={styles.submit} type = "submit" value = "Submit"
                    onClick={() => submitForm(true)} />
             <input className={styles.cancel} type = "button" value = "Cancel"
-                   onClick={() => submitForm(false)} />
+                    onClick={() => submitForm(false)} />
         </div>
         </>
     );
