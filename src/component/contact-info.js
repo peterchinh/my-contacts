@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ContactForm from './contact-form.js';
 import styles from './contact-info.module.css';
 import axios from "axios";
+import defaultimage from "../assets/no_image.jpg"
 
 
 
@@ -14,14 +15,21 @@ export default function ContactInfo(props) {
     setIsEditing(!isEditing);
   };
 
-  async function EditContact(contact, didSubmit){
+  async function EditContact(updatedContact, didSubmit){
     if(!didSubmit){
             toggleEdit();
             return;
     }
+
+    const updatedTheContact = {
+      ...contact,
+      ...updatedContact,
+      image: updatedContact.image || contact.image,
+    }
+
     try{
-        const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, contact);
-        props.updateSite(contact); // Render edits on site.
+        const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, updatedTheContact);
+        props.updateSite(response.data); // Render edits on site.
         toggleEdit();
         return response;
     } catch (err) {
@@ -38,6 +46,7 @@ export default function ContactInfo(props) {
   }
 
   async function DeleteContact() {
+    const fileKey = contact.image.split('/').pop();
     if (!contact || !contact._id) {
       console.error("No contact selected to delete.");
       return;
@@ -45,7 +54,8 @@ export default function ContactInfo(props) {
 
     try {
       await axios.delete(`http://localhost:8000/contact/${contact._id}`);
-      props.updateSite(null);
+      await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
+      props.updateSite(); 
     } catch (err) {
       console.error(err);
     }
@@ -55,7 +65,7 @@ export default function ContactInfo(props) {
     <div className={styles.card}>
       <img
         className={styles.image}
-        src = "https://placehold.co/150x150"
+        src = {contact.image || defaultimage}
         alt = "profile"
       />
       <div className={styles.body}>
