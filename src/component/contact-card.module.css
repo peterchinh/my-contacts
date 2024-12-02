@@ -17,4 +17,5 @@
   height: 140px;
   border-radius: 50%;
   margin: 30px;
+  object-fit: cover;
 }
