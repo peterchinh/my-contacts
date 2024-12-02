@@ -79,7 +79,9 @@ export default function ContactForm(props){
         if (contact.image instanceof File) {
             setLoading(true);
 
-            if (contact._id) {
+            if (contact._id && props.contact.image) {
+                // BUG: Contacts edited without contact pictures will fail because this
+                // line of code will read it as UNDEFINED
                 const oldKey = props.contact.image.split('/').pop();
                 try {
                     await axios.delete(`http://localhost:8000/delete-image/${oldKey}`);
