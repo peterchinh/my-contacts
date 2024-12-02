@@ -7,6 +7,7 @@ import SearchBar from "../component/SearchBar";
 import "../style/contacts.css";
 import axios from "axios";
 import noImage from "../assets/no_image.jpg";
+import useSWR, { useSWRConfig } from "swr";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -20,6 +21,13 @@ function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
   const [contacts, setContacts] = useState([]);
+
+  const fetchContacts = async (url) => {
+      const response = await axios.get(url, { withCredentials: true });
+      return response.data;
+  }
+  const {data, error, isLoading, mutate} = useSWR('http://localhost:8000/contact', fetchContacts);
+
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -40,6 +48,7 @@ function Contacts({ setAccessToken }) {
     setContacts(matches);
   };
 
+
   async function AddContact(contact, didSubmit) {
     if (!didSubmit) {
       toggleContactForm();
@@ -51,8 +60,8 @@ function Contacts({ setAccessToken }) {
         contact,
         { withCredentials: true },
       );
-      updateSite(contact); // Render new contact on page
       toggleContactForm();
+      mutate();
       return response;
     } catch (error) {
       console.log(error);
@@ -62,21 +71,11 @@ function Contacts({ setAccessToken }) {
     }
   }
 
-  // Refactor this into useEffect later?
-  async function updateSite(newContact) {
-    try {
-        const response = await axios.get("http://localhost:8000/contact");
-        setContacts(response.data);
-
-        if (newContact) {
-            setSelectedContact(newContact);
-        } else {
-            setSelectedContact(null); 
-        }
-    } catch (error) {
-        console.error("Error updating contacts:", error);
-    }
-}
+// Updates site when Editing and Deleting.
+  function updateSite(contact){
+    mutate();
+    setSelectedContact(contact);
+  }
 
   return (
     <div className="contactpage">
@@ -94,7 +93,7 @@ function Contacts({ setAccessToken }) {
           </div>
 
           <div className="contactlist">
-            {contacts.map((contact, index) => (
+            {data && data.map((contact, index) => (
               <div
                 key={index}
                 className="contactCard"

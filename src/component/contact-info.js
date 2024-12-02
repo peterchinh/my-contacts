@@ -8,7 +8,6 @@ import defaultimage from "../assets/no_image.jpg"
 
 export default function ContactInfo(props) {
 
-
   const contact = props.contact || props.defaultContact;
   const [isEditing, setIsEditing] = useState(false);
 
