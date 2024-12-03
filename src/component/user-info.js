@@ -34,14 +34,14 @@ export default function UserInfo(props){
     }
 
     return(
-    <>
+    <div className={styles.profileContainer}>
+      <div className={styles.profileCard}>
     {isEditing ?
     // Edit contact form
     <ContactForm handleSubmit={EditContact} contact={user}/>
     :
     // Display
-    <div className={styles.profileContainer}>
-      <div className={styles.profileCard}>
+        <>
         <img
                 className={styles.image}
                 src = {user.image || defaultimage}
@@ -55,9 +55,9 @@ export default function UserInfo(props){
           {user.phone && <h3> {user.phone} </h3>}
           <input className={styles.edit} type = "button" value = "Edit" onClick={toggleEdit} />
         </div>
+        </>
+    }
       </div>
     </div>
-    }
-    </>
     );
 }
