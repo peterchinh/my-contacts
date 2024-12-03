@@ -187,7 +187,7 @@ export default function ContactForm(props){
                 className={styles.inputField} />
             <div>
             {isEditMode && contact.image && contact.image !== defaultimage && !hasImageChanged && (
-            <button onClick={handleDeleteImage}>Delete Image</button>
+            <button className={styles.deleteImage} onClick={handleDeleteImage}>Delete Image</button>
             )}
             </div>
         <div>

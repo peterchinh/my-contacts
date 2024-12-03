@@ -57,7 +57,8 @@
 .contact-info {
   width: 0; /* Hidden by default */
   background-color: white;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: width 0.3s ease; /* Slide in effect */
 }
 

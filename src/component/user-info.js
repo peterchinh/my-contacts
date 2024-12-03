@@ -36,7 +36,7 @@ export default function UserInfo(props){
     return(
     <div className={styles.profileContainer}>
       <div className={styles.profileCard}>
-    {isEditing ?
+        {isEditing ?
     // Edit contact form
     <ContactForm handleSubmit={EditContact} contact={user}/>
     :
