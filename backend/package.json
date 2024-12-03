@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon backend.js",
-    "start": "node bacnpm kend.js"
+    "start": "node backend.js"
   },
   "author": "",
   "license": "ISC",

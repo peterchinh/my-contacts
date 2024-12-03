@@ -46,15 +46,17 @@ export default function ContactInfo(props) {
   }
 
   async function DeleteContact() {
-    const fileKey = contact.image.split('/').pop();
     if (!contact || !contact._id) {
       console.error("No contact selected to delete.");
       return;
     }
 
     try {
+      if (contact.image != undefined) {
+        const fileKey = contact.image.split('/').pop();
+        await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
+      }
       await axios.delete(`http://localhost:8000/contact/${contact._id}`);
-      await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
       props.updateSite(); 
     } catch (err) {
       console.error(err);
