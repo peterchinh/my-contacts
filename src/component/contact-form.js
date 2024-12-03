@@ -8,6 +8,7 @@ export default function ContactForm(props){
     const [loading, setLoading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false); 
     const [hasImageChanged, setHasImageChanged] = useState(false);
+    const [formFilled, setFormFilled] = useState(false);
 
     useEffect(() => {
         if (props.contact && props.contact._id) { 
@@ -21,6 +22,11 @@ export default function ContactForm(props){
 
     function handleChange(event){
         const { name, value, files, type } = event.target;
+        if(contact.firstName && contact.phone){
+            setFormFilled(true);
+        } else{
+            setFormFilled(false);
+        }
 
         if (type === "file") {
             setContact({
@@ -72,6 +78,10 @@ export default function ContactForm(props){
     async function submitForm(didSubmit) {
         if (!didSubmit) {
             props.handleSubmit(contact, didSubmit);
+            return;
+        }
+        // Checking form is filled in properly
+        if(!formFilled){
             return;
         }
 
@@ -181,7 +191,7 @@ export default function ContactForm(props){
         <div className={styles.inputName}> Email... </div>
         <input className={styles.inputField} placeholder="email" name="email"
                 id="email" value={contact.email} onChange={handleChange} />
-            
+        {!formFilled && <p className={styles.requirements}> First Name & Phone Number Required </p>}
         <div className={styles.inputName}> Upload Image (Optional) </div>
         <input type="file" accept="image/*" name="image" onChange={handleChange}
                 className={styles.inputField} />
