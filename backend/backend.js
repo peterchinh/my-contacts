@@ -185,9 +185,17 @@ app.get("/group", async (req, res) => {
 
 app.post("/group", async (req, res) => {
   try {
-    const newGroup = new Group(req.body);
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Forbidden" });
+      }  
+    req.body.user = user.id;
+    const newGroup = new Group(req.body); 
     await newGroup.save();
     res.status(200).json(newGroup);
+
+    });
+
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

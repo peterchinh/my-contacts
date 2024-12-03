@@ -9,6 +9,7 @@ import { MdPerson, MdGroups, MdLogout } from "react-icons/md";
 import styles from "./navbar.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import GroupForm from "./group-form";
 
 // Placeholder for API data
 const groups = [
@@ -56,6 +57,7 @@ export default function NavBar({ setAccessToken }) {
     }
   };
 
+  
   return (
     <nav className={`${styles.navbar} ${isOpen ? styles.expanded : ""}`}>
       <button className={styles.button} onClick={toggleNav}>
@@ -97,7 +99,7 @@ export default function NavBar({ setAccessToken }) {
             className={`${styles.navText} ${
               isOpen ? styles.slideIn : styles.slideOut
             }`}
-            onClick={toggleGroup}
+            onClick={toggleGroup} 
           >
             Groups
           </span>
@@ -124,7 +126,16 @@ export default function NavBar({ setAccessToken }) {
                 style={{
                   animationDelay: `${index * 0.1}s`,
                 }}
-                onClick={(e) => e.stopPropagation()} // Prevent click from bubbling
+                onClick={(e) => { e.stopPropagation() 
+                if (group.name === "+ Add Group"){
+                    console.log("added");
+                    <GroupForm />
+                  }
+
+                }
+
+                } // Prevent click from bubbling
+
               >
                 {group.name}
               </div>
