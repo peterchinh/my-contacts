@@ -61,6 +61,22 @@ app.get("/users", async (req, res) => {
   });
 });
 
+app.put("/users/:id", async (req, res) => {
+  try {
+    console.log(req.body);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 app.post("/users/login", async (req, res) => {
   try {
