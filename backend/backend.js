@@ -133,9 +133,9 @@ app.post("/refresh", (req, res) => {
 });
 
 app.post("/contact", async (req, res) => {
-  try {
     const refreshToken = req.cookies.refreshToken;
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+      try {
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
       }
@@ -143,10 +143,10 @@ app.post("/contact", async (req, res) => {
       const newContact = new Contact(req.body);
       await newContact.save();
       res.status(200).json(newContact);
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
     });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
 });
 
 app.get("/contact", async (req, res) => {

@@ -22,11 +22,6 @@ export default function ContactForm(props){
 
     function handleChange(event){
         const { name, value, files, type } = event.target;
-        if(contact.firstName && contact.phone){
-            setFormFilled(true);
-        } else{
-            setFormFilled(false);
-        }
 
         if (type === "file") {
             setContact({
@@ -72,6 +67,11 @@ export default function ContactForm(props){
                 email: value,
             });
         }
+        if(contact.firstName && contact.phone){
+            setFormFilled(true);
+        } else {
+            setFormFilled(false);
+        }
     return;
     }
 
@@ -81,7 +81,7 @@ export default function ContactForm(props){
             return;
         }
         // Checking form is filled in properly
-        if(!formFilled){
+        if(!formFilled && contact.phone.length < 14){
             return;
         }
 
