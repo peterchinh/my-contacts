@@ -130,7 +130,26 @@ app.get("/contact", async (req, res) => {
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
       }
-      const contacts = await Contact.find({ user: user.id });
+      const filter = req.query.filter;
+      console.log(filter);
+
+      let contacts;
+      if (filter) {
+        contacts = await Contact.find ({ user: user.id, $or: 
+        [{ firstName: { $regex: `^${filter}`, $options: 'i' } },
+          {lastName: { $regex: `^${filter}`, $options: 'i' }},
+            { 
+        $expr: {  // Combine firstName and lastName into a single field for matching
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: `^${filter}`,
+            options: 'i'
+          }
+        }
+      }
+        ]})
+        }
+      else contacts = await Contact.find({ user: user.id });
       res.json(contacts);
     });
     

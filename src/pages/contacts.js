@@ -21,13 +21,13 @@ function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
   const [contacts, setContacts] = useState([]);
+  const [filter , setFilter] = useState("");
 
   const fetchContacts = async (url) => {
-      const response = await axios.get(url, { withCredentials: true });
+      const response = await axios.get(url, { params : { filter: filter }, withCredentials: true });
       return response.data;
   }
   const {data, error, isLoading, mutate} = useSWR('http://localhost:8000/contact', fetchContacts);
-
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -45,7 +45,11 @@ function Contacts({ setAccessToken }) {
 
   const handleSearchResults = (matches) => {
     // console.log(matches);
-    setContacts(matches);
+    setFilter(matches);
+    console.log(filter);
+
+    // setContacts(matches);
+    mutate();
   };
 
 
