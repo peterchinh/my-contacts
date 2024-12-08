@@ -7,6 +7,20 @@
 }
 .main {
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+.contact-info {
+  width: auto;
+  height: auto;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

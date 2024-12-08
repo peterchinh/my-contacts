@@ -9,14 +9,16 @@ import useSWR, { useSWRConfig } from "swr";
 
 function Profile({setAccessToken}){
   const fetcher = async (url) => {
-    const response = await axios.get(url, {withCredentials: true});
-    return response.data;
-  }
-  const {data, error, isLoading, mutate} = useSWR('http://localhost:8000/users', fetcher);
-  /* TODO: Add phone #, separate name into first and last in User Schema.
-           This is so you can have personal contact info.
-     TODO: After completing above item, add functionality to edit & send info.
-  */
+    const [userResponse, contactsResponse] = await Promise.all([
+      axios.get('http://localhost:8000/users', { withCredentials: true }),
+      axios.get('http://localhost:8000/contact', { withCredentials: true })
+    ]);
+    return {
+      user: userResponse.data,
+      contacts: contactsResponse.data
+    };
+  };
+  const { data, error, isLoading, mutate } = useSWR('fetch-data', fetcher);
 
   function updateSite(){
     mutate();
@@ -26,7 +28,14 @@ function Profile({setAccessToken}){
     <div className="profilepage">
       <NavBar setAccessToken={setAccessToken} />
       <div className="main">
-        {data ? <UserInfo user={data} updateSite={updateSite} /> : <p> loading... </p>}
+        {data ?
+        <>
+          <UserInfo user={data.user} updateSite={updateSite} />
+          <div className="contact-info">
+            <h2> Number of Contacts : {data.contacts.length} </h2>
+          </div>
+        </>
+        : <p> loading... </p>}
       </div>
     </div>
   );

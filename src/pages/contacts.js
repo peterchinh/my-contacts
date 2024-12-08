@@ -113,11 +113,11 @@ function Contacts({ setAccessToken }) {
         </div>
       </div>
       <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-        <ContactInfo
+          <ContactInfo
           contact={selectedContact}
           defaultContact={defaultContact}
           updateSite={updateSite}
-        />
+          />
       </div>
       {showContactForm && (
         <div className="modal">

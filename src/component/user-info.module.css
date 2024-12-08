@@ -1,16 +1,16 @@
 .profileContainer {
-  width: 100%;
-  max-width: 1200px;
+  width: 60%;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 15px;
+  box-sizing: border-box;
 }
 .profileCard {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 100%;
+  width: 50%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
