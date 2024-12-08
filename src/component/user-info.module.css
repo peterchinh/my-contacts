@@ -1,0 +1,56 @@
+.profileContainer {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  box-sizing: border-box;
+}
+.profileCard {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 50%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+.profileInfo {
+  text-align: center;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+}
+.hrLine{
+  border: 0;
+  height: 2px;
+  margin: 10px auto;
+  background-color: #0000FF;
+}
+.profileName{
+    margin: 20px 0;
+    font-size: 30px;
+}
+.image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.edit {
+  border: 2px solid #0000ff; /* Blue */
+  border-radius: 10px;
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin-right: 20px;
+  padding: 15px 15px;
+  transition-duration: 0.4s;
+}
+.edit:hover {
+  background-color: #0000ff;
+  color: white;
+}

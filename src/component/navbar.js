@@ -8,7 +8,7 @@ import {
 import { MdPerson, MdGroups, MdLogout } from "react-icons/md";
 import styles from "./navbar.module.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 // Placeholder for API data
 const groups = [
@@ -34,6 +34,7 @@ export default function NavBar({ setAccessToken }) {
     setIsOpen(true);
     setIsGroupOpen(true);
   };
+
 
   const handleLogout = async () => {
     try {
@@ -62,7 +63,7 @@ export default function NavBar({ setAccessToken }) {
         <FaBars />
       </button>
       <div className={`${styles.navMenu}`}>
-        <div className={styles.navItem}>
+        <Link to="/profile" className={styles.navItem}>
           <button className={styles.button}>
             <MdPerson />
           </button>
@@ -73,8 +74,8 @@ export default function NavBar({ setAccessToken }) {
           >
             Profile
           </span>
-        </div>
-        <div className={styles.navItem}>
+        </Link>
+        <Link to="/contacts" className={styles.navItem}>
           <button className={styles.button}>
             <FaAddressBook />
           </button>
@@ -85,7 +86,7 @@ export default function NavBar({ setAccessToken }) {
           >
             All Contacts
           </span>
-        </div>
+        </Link>
         <div className={styles.navItem}>
           <button
             className={styles.button}

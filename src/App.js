@@ -2,6 +2,7 @@ import React from "react";
 import "./style/App.css";
 import Contacts from "./pages/contacts";
 import Login from "./pages/login";
+import Profile from "./pages/profile";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Signup from "./pages/signup";
 import "./style/contacts.css";
@@ -39,6 +40,11 @@ export default function App() {
         <Route
           path="/contacts"
           element={<ProtectedRoute element={<Contacts setAccessToken={setAccessToken}/>} />}
+        />
+
+        <Route
+          path="/profile"
+          element={<ProtectedRoute element={<Profile setAccesstoken={setAccessToken}/>} />}
         />
 
         {/* Redirect all other routes */}

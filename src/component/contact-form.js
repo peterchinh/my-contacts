@@ -8,6 +8,8 @@ export default function ContactForm(props){
     const [loading, setLoading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false); 
     const [hasImageChanged, setHasImageChanged] = useState(false);
+    const isFormFilled = (contact.phone.length == 14) &&
+                         ((!props.isUser && contact.firstName) || (contact.name));
 
     useEffect(() => {
         if (props.contact && props.contact._id) { 
@@ -28,6 +30,12 @@ export default function ContactForm(props){
                 image: files[0],
             });
             setHasImageChanged(true); 
+        }
+        else if(name === "name"){
+            setContact({
+                ...contact,
+                name: value,
+            });
         }
         else if(name === "firstName"){
             setContact({
@@ -72,6 +80,10 @@ export default function ContactForm(props){
     async function submitForm(didSubmit) {
         if (!didSubmit) {
             props.handleSubmit(contact, didSubmit);
+            return;
+        }
+        // Do not allow submission if form is not filled in properly
+        if(!isFormFilled){
             return;
         }
 
@@ -165,6 +177,15 @@ export default function ContactForm(props){
 
 
     return(
+        // Dynamic form depending on if User or if Contact
+        <>
+        {props.isUser ?
+        <>
+        <div className={styles.inputName}> Name... </div>
+        <input className={styles.inputField} placeholder="name" name="name"
+               id="name" value={contact.name} onChange={handleChange}/>
+        </>
+        :
         <>
         <div className={styles.inputName}> First Name... </div>
         <input className={styles.inputField} placeholder="first name" name="firstName"
@@ -173,7 +194,8 @@ export default function ContactForm(props){
         <div className={styles.inputName}> Last Name... </div>
         <input className={styles.inputField} placeholder="last name" name="lastName"
                id="lastName" value={contact.lastName} onChange={handleChange}/>
-
+        </>
+        }
         <div className={styles.inputName}> Phone Number... </div>
         <input className={styles.inputField} placeholder="phone number" name="phone"
                id="phone" value={contact.phone} onChange={handleChange}/>
@@ -181,13 +203,13 @@ export default function ContactForm(props){
         <div className={styles.inputName}> Email... </div>
         <input className={styles.inputField} placeholder="email" name="email"
                 id="email" value={contact.email} onChange={handleChange} />
-            
+        {isFormFilled ? null : <p className={styles.requirements}> First Name & Full Phone Number Required </p>}
         <div className={styles.inputName}> Upload Image (Optional) </div>
         <input type="file" accept="image/*" name="image" onChange={handleChange}
                 className={styles.inputField} />
             <div>
             {isEditMode && contact.image && contact.image !== defaultimage && !hasImageChanged && (
-            <button onClick={handleDeleteImage}>Delete Image</button>
+            <button className={styles.deleteImage} onClick={handleDeleteImage}>Delete Image</button>
             )}
             </div>
         <div>

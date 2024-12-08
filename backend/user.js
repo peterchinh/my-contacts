@@ -13,6 +13,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  phone: {
+    type: String,
+  },
+  image: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
