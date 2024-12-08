@@ -8,7 +8,8 @@ export default function ContactForm(props){
     const [loading, setLoading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false); 
     const [hasImageChanged, setHasImageChanged] = useState(false);
-    const [formFilled, setFormFilled] = useState(false);
+    const isFormFilled = (contact.phone.length == 14) &&
+                         ((!props.isUser && contact.firstName) || (contact.name));
 
     useEffect(() => {
         if (props.contact && props.contact._id) { 
@@ -29,6 +30,12 @@ export default function ContactForm(props){
                 image: files[0],
             });
             setHasImageChanged(true); 
+        }
+        else if(name === "name"){
+            setContact({
+                ...contact,
+                name: value,
+            });
         }
         else if(name === "firstName"){
             setContact({
@@ -67,11 +74,6 @@ export default function ContactForm(props){
                 email: value,
             });
         }
-        if(contact.firstName && contact.phone){
-            setFormFilled(true);
-        } else {
-            setFormFilled(false);
-        }
     return;
     }
 
@@ -80,8 +82,8 @@ export default function ContactForm(props){
             props.handleSubmit(contact, didSubmit);
             return;
         }
-        // Checking form is filled in properly
-        if(!formFilled && contact.phone.length < 14){
+        // Do not allow submission if form is not filled in properly
+        if(!isFormFilled){
             return;
         }
 
@@ -176,6 +178,7 @@ export default function ContactForm(props){
 
     return(
         // Dynamic form depending on if User or if Contact
+        <>
         {props.isUser ?
         <>
         <div className={styles.inputName}> Name... </div>
@@ -200,7 +203,7 @@ export default function ContactForm(props){
         <div className={styles.inputName}> Email... </div>
         <input className={styles.inputField} placeholder="email" name="email"
                 id="email" value={contact.email} onChange={handleChange} />
-        {!formFilled && <p className={styles.requirements}> First Name & Phone Number Required </p>}
+        {isFormFilled ? null : <p className={styles.requirements}> First Name & Full Phone Number Required </p>}
         <div className={styles.inputName}> Upload Image (Optional) </div>
         <input type="file" accept="image/*" name="image" onChange={handleChange}
                 className={styles.inputField} />
