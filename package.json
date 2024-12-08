@@ -20,7 +20,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
+    "jtest": "jest",
     "eject": "react-scripts eject",
     "format": "npx prettier . --write",
     "lint": "npx eslint .",
@@ -45,7 +46,9 @@
     ]
   },
   "devDependencies": {
+    "babel-core": "^7.0.0-bridge.0",
     "husky": "^9.1.6",
+    "jest": "^27.5.1",
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3"
   },
