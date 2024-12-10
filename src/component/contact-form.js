@@ -8,7 +8,7 @@ export default function ContactForm(props){
     const [loading, setLoading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false); 
     const [hasImageChanged, setHasImageChanged] = useState(false);
-    const isFormFilled = (contact.phone.length == 14) &&
+    const isFormFilled = (contact.phone && contact.phone.length == 14) &&
                          ((!props.isUser && contact.firstName) || (contact.name));
 
     useEffect(() => {
