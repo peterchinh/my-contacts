@@ -33,10 +33,7 @@ function Contacts({ setAccessToken }) {
     if (selectedContact === contact) {
       return;
     }
-    setSelectedContact(null); // Temporarily reset the selected contact
-    setTimeout(() => {
-      setSelectedContact(contact); // Set the new contact after a brief delay
-    }, 350);
+    setSelectedContact(contact);
   };
 
   const toggleContactForm = () => {
@@ -84,7 +81,6 @@ function Contacts({ setAccessToken }) {
   return (
     <div className="contactpage">
       <NavBar setAccessToken={setAccessToken} />
-      <div className="main">
         <div className="contactcontainer">
           <div className="contact-controls">
             <div className="search-bar">
@@ -111,14 +107,15 @@ function Contacts({ setAccessToken }) {
             ))}
           </div>
         </div>
-      </div>
-      <div className={`contact-info ${selectedContact ? "active" : ""}`}>
+      {selectedContact && (
+        <div className={`contact-info ${selectedContact ? "active" : ""}`}>
           <ContactInfo
           contact={selectedContact}
           defaultContact={defaultContact}
           updateSite={updateSite}
           />
       </div>
+      )}
       {showContactForm && (
         <div className="modal">
           <ContactForm handleSubmit={AddContact} contact={defaultContact} />
