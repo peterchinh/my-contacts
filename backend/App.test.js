@@ -2,7 +2,6 @@ import Contact from "./contact.js";
 import mongoose from "mongoose";
 import Group from "./group.js";
 import User from "./user.js";
-import axios from "axios";
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -78,7 +77,6 @@ test('create a group will all fields', async () => {
       email: 'jack@example.com',
       phone: '0987654321',
       user: user._id,
-      // groups: [group._id]
     }; 
 
     const contact = new Contact(validContact)
