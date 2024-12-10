@@ -21,17 +21,17 @@
 .profileInfo {
   text-align: center;
   font-size: 20px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
-.hrLine{
+.hrLine {
   border: 0;
   height: 2px;
   margin: 10px auto;
-  background-color: #0000FF;
+  background-color: #0000ff;
 }
-.profileName{
-    margin: 20px 0;
-    font-size: 30px;
+.profileName {
+  margin: 20px 0;
+  font-size: 30px;
 }
 .image {
   width: 140px;

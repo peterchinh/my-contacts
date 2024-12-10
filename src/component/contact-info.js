@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
-import ContactForm from './contact-form.js';
-import styles from './contact-info.module.css';
+import React, { useState } from "react";
+import ContactForm from "./contact-form.js";
+import styles from "./contact-info.module.css";
 import axios from "axios";
-import defaultimage from "../assets/no_image.jpg"
-
-
+import defaultimage from "../assets/no_image.jpg";
 
 export default function ContactInfo(props) {
-
   const contact = props.contact || props.defaultContact;
   const [isEditing, setIsEditing] = useState(false);
 
@@ -15,32 +12,35 @@ export default function ContactInfo(props) {
     setIsEditing(!isEditing);
   };
 
-  async function EditContact(updatedContact, didSubmit){
-    if(!didSubmit){
-            toggleEdit();
-            return;
+  async function EditContact(updatedContact, didSubmit) {
+    if (!didSubmit) {
+      toggleEdit();
+      return;
     }
 
     const updatedTheContact = {
       ...contact,
       ...updatedContact,
       image: updatedContact.image || contact.image,
-    }
+    };
 
-    try{
-        const response = await axios.put(`http://localhost:8000/contact/${contact._id}`, updatedTheContact);
-        props.updateSite(response.data); // Render edits on site.
-        toggleEdit();
-        return response;
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/contact/${contact._id}`,
+        updatedTheContact,
+      );
+      props.updateSite(response.data); // Render edits on site.
+      toggleEdit();
+      return response;
     } catch (err) {
-        console.log(err);
-        // Not handling errors at the moment
-        toggleEdit();
-        return false;
+      console.log(err);
+      // Not handling errors at the moment
+      toggleEdit();
+      return false;
     }
   }
 
-  function AddToGroup(){
+  function AddToGroup() {
     // To Be Added
     return;
   }
@@ -52,12 +52,12 @@ export default function ContactInfo(props) {
     }
 
     try {
-      if (contact.image != undefined) {
-        const fileKey = contact.image.split('/').pop();
+      if (contact.image !== undefined) {
+        const fileKey = contact.image.split("/").pop();
         await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
       }
       await axios.delete(`http://localhost:8000/contact/${contact._id}`);
-      props.updateSite(); 
+      props.updateSite();
     } catch (err) {
       console.error(err);
     }
@@ -67,26 +67,44 @@ export default function ContactInfo(props) {
     <div className={styles.card}>
       <img
         className={styles.image}
-        src = {contact.image || defaultimage}
-        alt = "profile"
+        src={contact.image || defaultimage}
+        alt="profile"
       />
       <div className={styles.body}>
-        {isEditing ?
-        // Edit contact form
-        <ContactForm handleSubmit={EditContact} contact={contact}/>
-        :
-        // Display
-        <>
-            <h2 className={styles.name} > {contact.firstName + ' ' + contact.lastName} </h2>
-            <p className={styles.info}> {'Email: ' +  contact.email } </p>
-            <p className={styles.info}> {'Phone: ' + contact.phone} </p>
-            <input className={styles.group} type = "button" value = "Add to Group" onClick={AddToGroup} />
+        {isEditing ? (
+          // Edit contact form
+          <ContactForm handleSubmit={EditContact} contact={contact} />
+        ) : (
+          // Display
+          <>
+            <h2 className={styles.name}>
+              {" "}
+              {contact.firstName + " " + contact.lastName}{" "}
+            </h2>
+            <p className={styles.info}> {"Email: " + contact.email} </p>
+            <p className={styles.info}> {"Phone: " + contact.phone} </p>
+            <input
+              className={styles.group}
+              type="button"
+              value="Add to Group"
+              onClick={AddToGroup}
+            />
             <div>
-                <input className={styles.edit} type = "button" value = "Edit" onClick={toggleEdit} />
-                <input className={styles.deleteButton} type = "button" value = "Delete" onClick={DeleteContact} />
+              <input
+                className={styles.edit}
+                type="button"
+                value="Edit"
+                onClick={toggleEdit}
+              />
+              <input
+                className={styles.deleteButton}
+                type="button"
+                value="Delete"
+                onClick={DeleteContact}
+              />
             </div>
-        </>
-        }
+          </>
+        )}
       </div>
     </div>
   );

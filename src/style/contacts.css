@@ -4,7 +4,7 @@
   height: 100vh;
   width: 100vw;
   flex-direction: row;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .main {
@@ -51,8 +51,8 @@
 }
 
 .contactlist {
-    max-height: 85vh;
-    overflow-y: auto;
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .contact-info {

@@ -7,7 +7,7 @@ import SearchBar from "../component/SearchBar";
 import "../style/contacts.css";
 import axios from "axios";
 import noImage from "../assets/no_image.jpg";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -20,14 +20,19 @@ const defaultContact = {
 function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
-  const [contacts, setContacts] = useState([]);
-  const [filter , setFilter] = useState("");
+  const [filter, setFilter] = useState("");
 
   const fetchContacts = async (url) => {
-      const response = await axios.get(url, { params : { filter: filter }, withCredentials: true });
-      return response.data;
-  }
-  const {data, error, isLoading, mutate} = useSWR('http://localhost:8000/contact', fetchContacts);
+    const response = await axios.get(url, {
+      params: { filter: filter },
+      withCredentials: true,
+    });
+    return response.data;
+  };
+  const { data, error, isLoading, mutate } = useSWR(
+    "http://localhost:8000/contact",
+    fetchContacts,
+  );
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -41,14 +46,9 @@ function Contacts({ setAccessToken }) {
   };
 
   const handleSearchResults = (matches) => {
-    // console.log(matches);
     setFilter(matches);
-    console.log(filter);
-
-    // setContacts(matches);
     mutate();
   };
-
 
   async function AddContact(contact, didSubmit) {
     if (!didSubmit) {
@@ -72,8 +72,8 @@ function Contacts({ setAccessToken }) {
     }
   }
 
-// Updates site when Editing and Deleting.
-  function updateSite(contact){
+  // Updates site when Editing and Deleting.
+  function updateSite(contact) {
     mutate();
     setSelectedContact(contact);
   }
@@ -81,19 +81,20 @@ function Contacts({ setAccessToken }) {
   return (
     <div className="contactpage">
       <NavBar setAccessToken={setAccessToken} />
-        <div className="contactcontainer">
-          <div className="contact-controls">
-            <div className="search-bar">
-              <SearchBar onSearchResults={handleSearchResults} />
-            </div>
-
-            <button className="addcontact" onClick={toggleContactForm}>
-              Add Contact
-            </button>
+      <div className="contactcontainer">
+        <div className="contact-controls">
+          <div className="search-bar">
+            <SearchBar onSearchResults={handleSearchResults} />
           </div>
 
-          <div className="contactlist">
-            {data && data.map((contact, index) => (
+          <button className="addcontact" onClick={toggleContactForm}>
+            Add Contact
+          </button>
+        </div>
+
+        <div className="contactlist">
+          {data &&
+            data.map((contact, index) => (
               <div
                 key={index}
                 className="contactCard"
@@ -105,16 +106,16 @@ function Contacts({ setAccessToken }) {
                 />
               </div>
             ))}
-          </div>
         </div>
+      </div>
       {selectedContact && (
         <div className={`contact-info ${selectedContact ? "active" : ""}`}>
           <ContactInfo
-          contact={selectedContact}
-          defaultContact={defaultContact}
-          updateSite={updateSite}
+            contact={selectedContact}
+            defaultContact={defaultContact}
+            updateSite={updateSite}
           />
-      </div>
+        </div>
       )}
       {showContactForm && (
         <div className="modal">
