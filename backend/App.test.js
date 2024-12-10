@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 import Contact from "./contact.js";
-<<<<<<< HEAD
-import User from "./user.js"
-import { MongoMemoryServer } from "mongodb-memory-server";
-=======
-import mongoose from "mongoose";
 import Group from "./group.js";
 import User from "./user.js";
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -31,22 +26,9 @@ test('should validate required fields', async () => {
 
     await expect(contactWithoutRequired.validate()).rejects.toThrow();
   });
->>>>>>> 960f070f7dfdd1dac8435f7ee756f3d1c03293b2
 
 describe("Contact Schema Tests", () => {
   let mongoServer;
-
-<<<<<<< HEAD
-  beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUri();
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  });
-
-  afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-  });
 
   afterEach(async () => {
     await Contact.deleteMany({});
@@ -155,7 +137,6 @@ describe("Contact Schema Tests", () => {
 
 });
 
-=======
  test('should create contact with all required fields', async () => {
     const user = await User.create({
       username: 'testuser',
@@ -236,4 +217,3 @@ test('create a user with all fields', async () => {
   expect(savedUser.password).toBe(user.password)
 
 });
->>>>>>> 960f070f7dfdd1dac8435f7ee756f3d1c03293b2
