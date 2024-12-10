@@ -44,9 +44,35 @@ app.post("/users", async (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+    if(err) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+    try{
+      const userData = await User.findById(user.id);
+      if(!userData){
+        return res.status(404).json({ message: "User not found"});
+      }
+      res.json(userData);
+    } catch (err) {
+      res.status(500).json({ error: err.message});
+    }
+  });
+});
+
+app.put("/users/:id", async (req, res) => {
   try {
-    const users = await User.find();
-    res.json(users);
+    console.log(req.body);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -107,9 +133,9 @@ app.post("/refresh", (req, res) => {
 });
 
 app.post("/contact", async (req, res) => {
-  try {
     const refreshToken = req.cookies.refreshToken;
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+      try {
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
       }
@@ -117,10 +143,10 @@ app.post("/contact", async (req, res) => {
       const newContact = new Contact(req.body);
       await newContact.save();
       res.status(200).json(newContact);
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
     });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
 });
 
 app.get("/contact", async (req, res) => {
@@ -130,7 +156,26 @@ app.get("/contact", async (req, res) => {
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
       }
-      const contacts = await Contact.find({ user: user.id });
+      const filter = req.query.filter;
+      console.log(filter);
+
+      let contacts;
+      if (filter) {
+        contacts = await Contact.find ({ user: user.id, $or: 
+        [{ firstName: { $regex: `^${filter}`, $options: 'i' } },
+          {lastName: { $regex: `^${filter}`, $options: 'i' }},
+            { 
+        $expr: {  // Combine firstName and lastName into a single field for matching
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: `^${filter}`,
+            options: 'i'
+          }
+        }
+      }
+        ]})
+        }
+      else contacts = await Contact.find({ user: user.id });
       res.json(contacts);
     });
     
