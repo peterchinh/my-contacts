@@ -21,22 +21,19 @@ function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
   const [contacts, setContacts] = useState([]);
+  const [filter , setFilter] = useState("");
 
   const fetchContacts = async (url) => {
-      const response = await axios.get(url, { withCredentials: true });
+      const response = await axios.get(url, { params : { filter: filter }, withCredentials: true });
       return response.data;
   }
   const {data, error, isLoading, mutate} = useSWR('http://localhost:8000/contact', fetchContacts);
-
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
       return;
     }
-    setSelectedContact(null); // Temporarily reset the selected contact
-    setTimeout(() => {
-      setSelectedContact(contact); // Set the new contact after a brief delay
-    }, 350);
+    setSelectedContact(contact);
   };
 
   const toggleContactForm = () => {
@@ -45,7 +42,11 @@ function Contacts({ setAccessToken }) {
 
   const handleSearchResults = (matches) => {
     // console.log(matches);
-    setContacts(matches);
+    setFilter(matches);
+    console.log(filter);
+
+    // setContacts(matches);
+    mutate();
   };
 
 
@@ -80,7 +81,6 @@ function Contacts({ setAccessToken }) {
   return (
     <div className="contactpage">
       <NavBar setAccessToken={setAccessToken} />
-      <div className="main">
         <div className="contactcontainer">
           <div className="contact-controls">
             <div className="search-bar">
@@ -107,14 +107,15 @@ function Contacts({ setAccessToken }) {
             ))}
           </div>
         </div>
-      </div>
-      <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-        <ContactInfo
+      {selectedContact && (
+        <div className={`contact-info ${selectedContact ? "active" : ""}`}>
+          <ContactInfo
           contact={selectedContact}
           defaultContact={defaultContact}
           updateSite={updateSite}
-        />
+          />
       </div>
+      )}
       {showContactForm && (
         <div className="modal">
           <ContactForm handleSubmit={AddContact} contact={defaultContact} />

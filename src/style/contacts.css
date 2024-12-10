@@ -4,6 +4,7 @@
   height: 100vh;
   width: 100vw;
   flex-direction: row;
+  overflow:hidden;
 }
 
 .main {
@@ -55,10 +56,12 @@
 }
 
 .contact-info {
-  width: 0; /* Hidden by default */
+  width: 0%; /* Hidden by default */
   background-color: white;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: width 0.3s ease; /* Slide in effect */
+  display: none;
 }
 
 .contact-info.active {
