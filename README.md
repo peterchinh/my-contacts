@@ -30,3 +30,5 @@ Product/Tech Spec: https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gU
 - Before Committing:
   - Run "npm run format"
   - Run "npm run lint"
+## Coverage Report
+![image](https://github.com/user-attachments/assets/2faa98d1-b4d7-4d9c-9a16-a5a990907a9c)
