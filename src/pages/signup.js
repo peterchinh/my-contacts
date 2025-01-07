@@ -6,7 +6,8 @@ import axios from "axios";
 
 export default function Signup() {
 
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -53,7 +54,8 @@ export default function Signup() {
             return; // Don't submit if passwords don't match or password is invalid
         }
         addUser({
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             password: password
         }).then( result => {
@@ -79,10 +81,17 @@ export default function Signup() {
                     <MdPerson className="icon" />
                     <input 
                         type="text" 
-                        placeholder="Name"  
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        placeholder="First Name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                         required 
+                    />
+                    <input
+                        type="text"
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="input-container">

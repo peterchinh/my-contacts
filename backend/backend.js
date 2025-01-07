@@ -26,11 +26,12 @@ app.use(cookieParser());
 
 app.post("/users", async (req, res) => {
   try {
-    const { name, email, password: plainTextPassword } = req.body;
+    const { firstName, lastName, email, password: plainTextPassword } = req.body;
     const salt = 10;
     const password = await bcrypt.hash(plainTextPassword, salt);
     const response = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
       password,
     });
