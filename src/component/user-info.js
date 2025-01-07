@@ -57,7 +57,7 @@ export default function UserInfo(props) {
             <div className={styles.profileInfo}>
               <h1> Profile Info: </h1>
               <hr className={styles.hrLine} />
-              <h2 className={styles.profileName}> {user.name} </h2>
+              <h2 className={styles.profileName}> {user.firstName} {user.lastName} </h2>
               <h3> {user.email} </h3>
               {user.phone && <h3> {user.phone} </h3>}
               <input
