@@ -174,8 +174,6 @@ export default function ContactForm(props) {
 
   return (
     // Dynamic form depending on if User or if Contact
-
-    // DELETE THIS PORTION
     <>
         <>
           <div className={styles.inputName}> First Name... </div>
