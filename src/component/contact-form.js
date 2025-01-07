@@ -11,7 +11,7 @@ export default function ContactForm(props) {
   const isFormFilled =
     contact.phone &&
     contact.phone.length === 14 &&
-    ((!props.isUser && contact.firstName) || contact.name);
+    contact.firstName;
 
   useEffect(() => {
     if (props.contact && props.contact._id) {
@@ -174,20 +174,9 @@ export default function ContactForm(props) {
 
   return (
     // Dynamic form depending on if User or if Contact
+
+    // DELETE THIS PORTION
     <>
-      {props.isUser ? (
-        <>
-          <div className={styles.inputName}> Name... </div>
-          <input
-            className={styles.inputField}
-            placeholder="name"
-            name="name"
-            id="name"
-            value={contact.name}
-            onChange={handleChange}
-          />
-        </>
-      ) : (
         <>
           <div className={styles.inputName}> First Name... </div>
           <input
@@ -209,7 +198,6 @@ export default function ContactForm(props) {
             onChange={handleChange}
           />
         </>
-      )}
       <div className={styles.inputName}> Phone Number... </div>
       <input
         className={styles.inputField}

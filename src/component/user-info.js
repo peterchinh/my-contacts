@@ -44,7 +44,6 @@ export default function UserInfo(props) {
           <ContactForm
             handleSubmit={EditContact}
             contact={user}
-            isUser={true}
           />
         ) : (
           // Display
