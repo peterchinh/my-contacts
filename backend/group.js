@@ -10,10 +10,12 @@ const groupSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  contacts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Contact'
-  }]
+  contacts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contact",
+    },
+  ],
 });
 
 const Group = mongoose.model("Group", groupSchema);

@@ -12,7 +12,6 @@ import cookieParser from "cookie-parser";
 import s3 from "./amazons3.js";
 import { v4 as uuidv4 } from "uuid";
 
-
 const app = express();
 app.use(
   cors({
@@ -46,30 +45,31 @@ app.post("/users", async (req, res) => {
 
 app.get("/users", async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-    if(err) {
-      return res.status(403).json({ message: "Forbidden" });
-    }
-    try{
-      const userData = await User.findById(user.id);
-      if(!userData){
-        return res.status(404).json({ message: "User not found"});
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    async (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Forbidden" });
       }
-      res.json(userData);
-    } catch (err) {
-      res.status(500).json({ error: err.message});
-    }
-  });
+      try {
+        const userData = await User.findById(user.id);
+        if (!userData) {
+          return res.status(404).json({ message: "User not found" });
+        }
+        res.json(userData);
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    },
+  );
 });
 
 app.put("/users/:id", async (req, res) => {
   try {
-    console.log(req.body);
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true },
-    );
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -88,7 +88,7 @@ app.post("/users/login", async (req, res) => {
     } else {
       if (await bcrypt.compare(password, user.password)) {
         const accessToken = generateAccessToken({ id: user._id });
-        const refreshToken = generateRefreshToken({id: user._id });
+        const refreshToken = generateRefreshToken({ id: user._id });
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -134,52 +134,61 @@ app.post("/refresh", (req, res) => {
 });
 
 app.post("/contact", async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+  const refreshToken = req.cookies.refreshToken;
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    async (err, user) => {
       try {
-      if (err) {
-        return res.status(403).json({ message: "Forbidden" });
-      }
-      req.body.user = user.id;
-      const newContact = new Contact(req.body);
-      await newContact.save();
-      res.status(200).json(newContact);
+        if (err) {
+          return res.status(403).json({ message: "Forbidden" });
+        }
+        req.body.user = user.id;
+        const newContact = new Contact(req.body);
+        await newContact.save();
+        res.status(200).json(newContact);
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
-    });
+    },
+  );
 });
 
 app.get("/contact", async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-      if (err) {
-        return res.status(403).json({ message: "Forbidden" });
-      }
-      const filter = req.query.filter;
-      console.log(filter);
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, user) => {
+        if (err) {
+          return res.status(403).json({ message: "Forbidden" });
+        }
+        const filter = req.query.filter;
 
-      let contacts;
-      if (filter) {
-        contacts = await Contact.find ({ user: user.id, $or: 
-        [{ firstName: { $regex: `^${filter}`, $options: 'i' } },
-          {lastName: { $regex: `^${filter}`, $options: 'i' }},
-            { 
-        $expr: {  // Combine firstName and lastName into a single field for matching
-          $regexMatch: {
-            input: { $concat: ["$firstName", " ", "$lastName"] },
-            regex: `^${filter}`,
-            options: 'i'
-          }
-        }
-      }
-        ]})
-        }
-      else contacts = await Contact.find({ user: user.id });
-      res.json(contacts);
-    });
-    
+        let contacts;
+        if (filter) {
+          contacts = await Contact.find({
+            user: user.id,
+            $or: [
+              { firstName: { $regex: `^${filter}`, $options: "i" } },
+              { lastName: { $regex: `^${filter}`, $options: "i" } },
+              {
+                $expr: {
+                  // Combine firstName and lastName into a single field for matching
+                  $regexMatch: {
+                    input: { $concat: ["$firstName", " ", "$lastName"] },
+                    regex: `^${filter}`,
+                    options: "i",
+                  },
+                },
+              },
+            ],
+          });
+        } else contacts = await Contact.find({ user: user.id });
+        res.json(contacts);
+      },
+    );
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -225,7 +234,7 @@ app.get("/group", async (req, res) => {
     }
     res.status(200).json(updatedContact);
     const { user } = req.body;
-    const groups = await Group.find({user: user});
+    const groups = await Group.find({ user: user });
     res.json(groups);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -240,7 +249,7 @@ app.post("/group", async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
-})
+});
 
 app.put("/group/:id", async (req, res) => {
   try {
@@ -249,9 +258,8 @@ app.put("/group/:id", async (req, res) => {
     const group = await Group.findById(groupId);
 
     if (!group) {
-      return res.status(404).json({error: "Group not found"})
+      return res.status(404).json({ error: "Group not found" });
     }
-
 
     if (groupName) {
       group.groupName = groupName;
@@ -260,7 +268,7 @@ app.put("/group/:id", async (req, res) => {
       if (!group.contacts.includes(newContact)) {
         group.contacts.push(newContact);
       } else {
-        return res.status(400).json({error: "Contact already in group"});
+        return res.status(400).json({ error: "Contact already in group" });
       }
     }
     const updatedGroup = await group.save();
@@ -268,7 +276,7 @@ app.put("/group/:id", async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
-})
+});
 
 app.post("/s3-url", async (req, res) => {
   try {
@@ -283,7 +291,8 @@ app.post("/s3-url", async (req, res) => {
     const signedUrl = await s3.getSignedUrlPromise("putObject", s3Params);
     res.status(200).json({
       signedUrl,
-      fileUrl: 'https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}',
+      fileUrl:
+        "https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}",
       fileKey,
     });
   } catch (err) {
@@ -294,23 +303,30 @@ app.post("/s3-url", async (req, res) => {
 
 app.get("/s3-url", async (req, res) => {
   const params = {
-    Bucket: '308-mycontacts1',
+    Bucket: "308-mycontacts1",
   };
 
   try {
     s3.listObjectsV2(params, (err, data) => {
       if (err) {
-        return res.status(500).json({ error: 'Error fetching files from S3', details: err.message});
+        return res
+          .status(500)
+          .json({
+            error: "Error fetching files from S3",
+            details: err.message,
+          });
       }
-      const files = data.Contents.map(file => file.Key);
+      const files = data.Contents.map((file) => file.Key);
       res.json({ files });
     });
   } catch (err) {
-    res.status(500).json({ error: 'Error fetching files from S3', details: err.message });
+    res
+      .status(500)
+      .json({ error: "Error fetching files from S3", details: err.message });
   }
 });
 
-app.delete('/delete-image/:fileKey', async (req, res) => {
+app.delete("/delete-image/:fileKey", async (req, res) => {
   const { fileKey } = req.params;
   const s3Params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -319,13 +335,12 @@ app.delete('/delete-image/:fileKey', async (req, res) => {
 
   try {
     await s3.deleteObject(s3Params).promise();
-    res.status(200).json({ message: 'Image deleted successfully' });
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (error) {
-    console.error('Error deleting image', error);
+    console.error("Error deleting image", error);
     res.status(500).json({ error: "Error deleting image" });
   }
 });
-
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, async () => {

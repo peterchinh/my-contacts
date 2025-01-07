@@ -39,12 +39,20 @@ export default function App() {
         {/* Protected Routes */}
         <Route
           path="/contacts"
-          element={<ProtectedRoute element={<Contacts setAccessToken={setAccessToken}/>} />}
+          element={
+            <ProtectedRoute
+              element={<Contacts setAccessToken={setAccessToken} />}
+            />
+          }
         />
 
         <Route
           path="/profile"
-          element={<ProtectedRoute element={<Profile setAccesstoken={setAccessToken}/>} />}
+          element={
+            <ProtectedRoute
+              element={<Profile setAccesstoken={setAccessToken} />}
+            />
+          }
         />
 
         {/* Redirect all other routes */}

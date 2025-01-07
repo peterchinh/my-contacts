@@ -9,7 +9,8 @@
     "start": "node backend.js"
   },
   "jest": {
-    "transform": {}
+    "transform": {},
+    "collectCoverage": true
   },
   "author": "",
   "license": "ISC",

@@ -14,21 +14,22 @@ const contactSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-    unique: true,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  groups: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
-    required: true,
-  }],
+  groups: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
+      required: true,
+    },
+  ],
   image: {
     type: String,
-  }
+  },
 });
 
 const Contact = mongoose.model("Contact", contactSchema);

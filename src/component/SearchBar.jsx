@@ -6,8 +6,7 @@ const SearchBar = ({ onSearchResults }) => {
 
   useEffect(() => {
     onSearchResults(searchTerm);
-
-   }, [searchTerm, onSearchResults]);
+  }, [searchTerm, onSearchResults]);
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);

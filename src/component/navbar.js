@@ -35,7 +35,6 @@ export default function NavBar({ setAccessToken }) {
     setIsGroupOpen(true);
   };
 
-
   const handleLogout = async () => {
     try {
       const response = await axios.post(
