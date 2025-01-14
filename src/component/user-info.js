@@ -64,6 +64,18 @@ export default function UserInfo(props) {
                 type="button"
                 value="Edit"
                 onClick={toggleEdit}
+                />
+              <input
+                className={styles.copyShare}
+                type="button"
+                value="Copy Share Code"
+                // onClick={toggleEdit}
+                />
+              <input
+                className={styles.inputShare}
+                type="button"
+                value="Input Share Code"
+                // onClick={toggleEdit}
               />
             </div>
           </>

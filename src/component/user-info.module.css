@@ -54,3 +54,34 @@
   background-color: #0000ff;
   color: white;
 }
+.copyShare {
+  border: 2px solid #3B8132; /* green */
+  border-radius: 10px;
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin-right: 20px;
+  padding: 15px 15px;
+  transition-duration: 0.4s;
+}
+.copyShare:hover {
+  background-color: #3B8132;
+  color: white;
+}
+.inputShare {
+  border: 2px solid #3B8132; /* green */
+  border-radius: 10px;
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  padding: 15px 15px;
+  transition-duration: 0.4s;
+}
+.inputShare:hover {
+  background-color: #3B8132;
+  color: white;
+}
