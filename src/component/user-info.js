@@ -36,6 +36,25 @@ export default function UserInfo(props) {
     }
   }
 
+
+  async function CopyShareCode() {
+    navigator.clipboard.writeText(
+      "firstname:" + user.firstName + "\nlastname:" + user.lastName +
+      "\nphonenumber:" + user.phone + "\nemail:" + user.email +
+      "\nimage:" + user.image);
+    var confirm = document.getElementById("confirmtext");
+    confirm.style.display = "block";
+
+    setTimeout(function() {
+      confirm.style.display = "none";
+    }, 3000);
+  } 
+  
+// possibly need to create a share-contact-form
+  async function InputShareCode() {
+
+  }
+
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profileCard}>
@@ -58,7 +77,8 @@ export default function UserInfo(props) {
               <hr className={styles.hrLine} />
               <h2 className={styles.profileName}> {user.firstName} {user.lastName} </h2>
               <h3> {user.email} </h3>
-              {user.phone && <h3> {user.phone} </h3>}
+                {user.phone && <h3> {user.phone} </h3>}
+                <div id="confirmtext" style={{ display: 'none' }}>Share code copied!</div>
               <input
                 className={styles.edit}
                 type="button"
@@ -69,14 +89,14 @@ export default function UserInfo(props) {
                 className={styles.copyShare}
                 type="button"
                 value="Copy Share Code"
-                // onClick={toggleEdit}
+                onClick={CopyShareCode}
                 />
               <input
                 className={styles.inputShare}
                 type="button"
                 value="Input Share Code"
                 // onClick={toggleEdit}
-              />
+                />
             </div>
           </>
         )}
