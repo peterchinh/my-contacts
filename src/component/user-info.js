@@ -7,6 +7,9 @@ import defaultimage from "../assets/no_image.jpg";
 export default function UserInfo(props) {
   const user = props.user;
   const [isEditing, setIsEditing] = useState(false);
+  const [showInputForm, setShowInputForm] = useState(false);
+  const [shareCode, setShareCode] = useState('');
+  const [contacts, setContacts] = useState(props.contacts || []);
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -39,9 +42,11 @@ export default function UserInfo(props) {
 
   async function CopyShareCode() {
     navigator.clipboard.writeText(
-      "firstname:" + user.firstName + "\nlastname:" + user.lastName +
-      "\nphonenumber:" + user.phone + "\nemail:" + user.email +
-      "\nimage:" + user.image);
+      "firstName=" + user.firstName +
+      "\nlastName=" + user.lastName +
+      "\nphone=" + user.phone +
+      "\nemail=" + user.email +
+      "\nimage=" + user.image);
     var confirm = document.getElementById("confirmtext");
     confirm.style.display = "block";
 
@@ -49,10 +54,74 @@ export default function UserInfo(props) {
       confirm.style.display = "none";
     }, 3000);
   } 
-  
-// possibly need to create a share-contact-form
-  async function InputShareCode() {
 
+  function toggleInputForm() {
+    setShowInputForm(!showInputForm);
+  }
+
+  function parseShareCode(shareCode) {
+    const lines = shareCode.split('\n');
+    const contact = {};
+    lines.forEach(line => {
+      const [key, value] = line.split('=');
+      contact[key.trim()] = value.trim();
+    });
+    if (contact.image === "undefined") {
+      contact.image = defaultimage;
+    }
+    return contact;
+  }
+
+  function validateContact(contact) {
+    const requiredFields = ['firstName', 'lastName', 'phone', 'email', 'image'];
+
+    for (const field of requiredFields) {
+      if (!(field in contact)) {
+        return true;
+      }
+    }
+
+    const phoneFormat = /^\(\d{3}\) \d{3}-\d{4}$/; 
+    if (!contact.firstName || contact.phone == 'undefined') {
+      return true;
+    }
+    if (!phoneFormat.test(contact.phone)) {
+      return 'Phone number format is incorrect.';
+    }
+    return null;
+  }
+
+
+  async function InputShareCode() {
+    try {
+      const newContact = parseShareCode(shareCode);
+      console.log("parsed new contact:", newContact)
+      const validationError = validateContact(newContact);
+      if (validationError) {
+
+        var failShare = document.getElementById("failsharetext");
+        failShare.style.display = "block";
+    
+        setTimeout(function() {
+          failShare.style.display = "none";
+        }, 3000);
+        return;
+      }
+      const response = await axios.post(`http://localhost:8000/contact`, newContact, {withCredentials: true});
+      setContacts([...contacts, response.data]); 
+      setShowInputForm(false);
+      setShareCode('');
+      props.updateSite();
+    } catch (err) {
+      console.error('Invalid share code', err);
+      var failShare = document.getElementById("failsharetext");
+      failShare.style.display = "block";
+  
+      setTimeout(function() {
+        failShare.style.display = "none";
+      }, 3000);
+      return;
+    }
   }
 
   return (
@@ -95,12 +164,36 @@ export default function UserInfo(props) {
                 className={styles.inputShare}
                 type="button"
                 value="Input Share Code"
-                // onClick={toggleEdit}
+                onClick={toggleInputForm}
                 />
             </div>
           </>
         )}
       </div>
+      {showInputForm && (
+        <div className={styles.inputFormContainer}>
+          <div className={styles.inputForm}>
+            <textarea
+              value={shareCode}
+              onChange={(e) => setShareCode(e.target.value)}
+              placeholder="Enter share code here"
+            />
+            <div id="failsharetext" style={{ display: 'none' }}>Incorrect share code format!</div>
+            <input
+              className={styles.submitShareButton}
+              type="button"
+              value="Submit"
+              onClick={InputShareCode}
+            />
+            <input
+              className={styles.cancelShareButton}
+              type="button"
+              value="Cancel"
+              onClick={toggleInputForm}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
