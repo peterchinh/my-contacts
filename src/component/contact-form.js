@@ -8,6 +8,7 @@ export default function ContactForm(props) {
   const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [hasImageChanged, setHasImageChanged] = useState(false);
+  const [imageDeleted, setImageDeleted] = useState(false);
   const isFormFilled =
     contact.phone &&
     contact.phone.length === 14 &&
@@ -81,10 +82,8 @@ export default function ContactForm(props) {
       return;
     }
     // Do not allow submission if form is not filled in properly
-    if (!isFormFilled) {
-      return;
-    }
-
+    if (!isFormFilled){ return; }
+    if(imageDeleted){ handleDeleteImage(); }
     let imageUrl = contact.image;
     if (contact.image instanceof File) {
       setLoading(true);
@@ -247,8 +246,8 @@ export default function ContactForm(props) {
         {isEditMode &&
           contact.image &&
           contact.image !== defaultimage &&
-          !hasImageChanged && (
-            <button className={styles.deleteImage} onClick={handleDeleteImage}>
+          !imageDeleted && (
+            <button className={styles.deleteImage} onClick={setImageDeleted}>
               Delete Image
             </button>
           )}
