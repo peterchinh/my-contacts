@@ -11,7 +11,6 @@ import ProtectedRoute from "./component/protected-route";
 
 export default function App() {
   const { accessToken, loading, setAccessToken } = useAuth();
-
   // If still loading, don't render the routes
   if (loading) {
     return <div>Loading...</div>;
@@ -22,23 +21,19 @@ export default function App() {
       <Routes>
         {/* Public Routes */}
         <Route
-          path="/login"
-          element={
-            accessToken ? (
-              <Navigate to="/" replace />
-            ) : (
-              <Login setAccessToken={setAccessToken} />
-            )
-          }
+          path='/login'
+          element={accessToken
+            ? <Navigate to='/' replace />
+            : <Login setAccessToken={setAccessToken} />}
         />
         <Route
-          path="/signup"
-          element={accessToken ? <Navigate to="/" replace /> : <Signup />}
+          path='/signup'
+          element={accessToken ? <Navigate to='/' replace /> : <Signup />}
         />
 
         {/* Protected Routes */}
         <Route
-          path="/contacts"
+          path='/contacts'
           element={
             <ProtectedRoute
               element={<Contacts setAccessToken={setAccessToken} />}
@@ -57,14 +52,10 @@ export default function App() {
 
         {/* Redirect all other routes */}
         <Route
-          path="*"
-          element={
-            accessToken ? (
-              <Navigate to="/contacts" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
+          path='*'
+          element={accessToken
+            ? <Navigate to='/contacts' replace />
+            : <Navigate to='/login' replace />}
         />
       </Routes>
     </BrowserRouter>

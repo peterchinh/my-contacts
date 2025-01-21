@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const groupSchema = new mongoose.Schema({
   groupName: {
@@ -7,16 +7,14 @@ const groupSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
-  contacts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Contact",
-    },
-  ],
+  contacts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Contact',
+  }],
 });
 
-const Group = mongoose.model("Group", groupSchema);
+const Group = mongoose.model('Group', groupSchema);
 export default Group;
