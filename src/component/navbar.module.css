@@ -11,6 +11,7 @@
   position: relative;
   left: 0;
   top: 0;
+  overflow: hidden; /* ensures hidden items cannot be clicked */
 }
 
 .navbar.expanded {
@@ -24,6 +25,8 @@
 }
 
 .navItem {
+  text-decoration: none;
+  color: inherit;
   display: flex;
   align-items: center; /* Align text and button */
   margin-top: 2rem;

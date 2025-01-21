@@ -4,18 +4,25 @@
   "type": "module",
   "main": "backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "dev": "nodemon backend.js",
-    "start": "node bacnpm kend.js"
+    "start": "node backend.js"
+  },
+  "jest": {
+    "transform": {},
+    "collectCoverage": true
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "aws": "^0.0.3-2",
+    "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
@@ -23,6 +30,7 @@
     "mongoose": "^8.8.0"
   },
   "devDependencies": {
+    "mongodb-memory-server": "^10.1.2",
     "nodemon": "^3.1.7"
   }
 }

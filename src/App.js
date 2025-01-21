@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import './style/App.css';
-import Contacts from './pages/contacts';
-import Login from './pages/login';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Signup from './pages/signup';
-import './style/contacts.css';
-import { useAuth } from './hooks/useAuth';
-import ProtectedRoute from './component/protected-route';
+import React from "react";
+import "./style/App.css";
+import Contacts from "./pages/contacts";
+import Login from "./pages/login";
+import Profile from "./pages/profile";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import Signup from "./pages/signup";
+import "./style/contacts.css";
+import { useAuth } from "./hooks/useAuth";
+import ProtectedRoute from "./component/protected-route";
 
 export default function App() {
   const { accessToken, loading, setAccessToken } = useAuth();
@@ -36,6 +37,15 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<Contacts setAccessToken={setAccessToken} />}
+            />
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute
+              element={<Profile setAccesstoken={setAccessToken} />}
             />
           }
         />

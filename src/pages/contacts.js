@@ -21,7 +21,19 @@ const defaultContact = {
 function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
-  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState("");
+
+  const fetchContacts = async (url) => {
+    const response = await axios.get(url, {
+      params: { filter: filter },
+      withCredentials: true,
+    });
+    return response.data;
+  };
+  const { data, error, isLoading, mutate } = useSWR(
+    "http://localhost:8000/contact",
+    fetchContacts,
+  );
 
   const [groupAdd, setGroupAdd] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -41,32 +53,6 @@ function Contacts({ setAccessToken }) {
     fetchGroups,
   );
 
-  // async function AddGroup(group, didSubmit) {
-  //   // console.log('adding ');
-  //   console.log(didSubmit);
-  //   console.log(group);
-  //   if (!didSubmit) {
-  //     toggleAdd();
-  //     return;
-  //   }
-  //   toggleAdd();
-  //   return;
-  // }
-
-  // async function updateGroups(newGroup) {
-  //   try {
-  //     const response = await axios.get('http://localhost:8000/group');
-  //     setContacts(response.data);
-
-  //     if (newContact) {
-  //       setSelectedContact(newContact);
-  //     } else {
-  //       setSelectedContact(null);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating contacts:', error);
-  //   }
-  // }
   async function AddGroup(group, didSubmit) {
     console.log(group);
     if (!didSubmit) {
@@ -94,10 +80,7 @@ function Contacts({ setAccessToken }) {
     if (selectedContact === contact) {
       return;
     }
-    setSelectedContact(null); // Temporarily reset the selected contact
-    setTimeout(() => {
-      setSelectedContact(contact); // Set the new contact after a brief delay
-    }, 350);
+    setSelectedContact(contact);
   };
 
   const toggleContactForm = () => {
@@ -105,8 +88,8 @@ function Contacts({ setAccessToken }) {
   };
 
   const handleSearchResults = (matches) => {
-    // console.log(matches);
-    setContacts(matches);
+    setFilter(matches);
+    mutate();
   };
 
   async function AddContact(contact, didSubmit) {
@@ -120,8 +103,8 @@ function Contacts({ setAccessToken }) {
         contact,
         { withCredentials: true },
       );
-      updateSite(contact); // Render new contact on page
       toggleContactForm();
+      mutate();
       return response;
     } catch (error) {
       console.log(error);
@@ -131,64 +114,51 @@ function Contacts({ setAccessToken }) {
     }
   }
 
-  // Refactor this into useEffect later?
-  async function updateSite(newContact) {
-    try {
-      const response = await axios.get('http://localhost:8000/contact');
-      setContacts(response.data);
-
-      if (newContact) {
-        setSelectedContact(newContact);
-      } else {
-        setSelectedContact(null);
-      }
-    } catch (error) {
-      console.error('Error updating contacts:', error);
-    }
+  // Updates site when Editing and Deleting.
+  function updateSite(contact) {
+    mutate();
+    setSelectedContact(contact);
   }
 
   return (
-    <div className='contactpage'>
-      <NavBar
-        setAccessToken={setAccessToken}
-        setGroupAdd={setGroupAdd}
-        groups={groupData}
-      />
-      <div className='main'>
-        <div className='contactcontainer'>
-          <div className='contact-controls'>
-            <div className='search-bar'>
-              <SearchBar onSearchResults={handleSearchResults} />
-            </div>
-
-            <button className='addcontact' onClick={toggleContactForm}>
-              Add Contact
-            </button>
+    <div className="contactpage">
+      <NavBar setAccessToken={setAccessToken} />
+      <div className="contactcontainer">
+        <div className="contact-controls">
+          <div className="search-bar">
+            <SearchBar onSearchResults={handleSearchResults} />
           </div>
 
-          <div className='contactlist'>
-            {contacts.map((contact, index) => (
+          <button className="addcontact" onClick={toggleContactForm}>
+            Add Contact
+          </button>
+        </div>
+
+        <div className="contactlist">
+          {data &&
+            data.map((contact, index) => (
               <div
                 key={index}
                 className='contactCard'
                 onClick={() => cardClick(contact)}
               >
                 <ContactCard
-                  name={contact.firstName + ' ' + contact.lastName}
-                  image={noImage}
+                  name={contact.firstName + " " + contact.lastName}
+                  image={contact.image || noImage}
                 />
               </div>
             ))}
-          </div>
         </div>
       </div>
-      <div className={`contact-info ${selectedContact ? 'active' : ''}`}>
-        <ContactInfo
-          contact={selectedContact}
-          defaultContact={defaultContact}
-          updateSite={updateSite}
-        />
-      </div>
+      {selectedContact && (
+        <div className={`contact-info ${selectedContact ? "active" : ""}`}>
+          <ContactInfo
+            contact={selectedContact}
+            defaultContact={defaultContact}
+            updateSite={updateSite}
+          />
+        </div>
+      )}
       {showContactForm && (
         <div className='modal'>
           <ContactForm handleSubmit={AddContact} contact={defaultContact} />
