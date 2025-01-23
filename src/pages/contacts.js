@@ -8,23 +8,25 @@ import "../style/contacts.css";
 import axios from "axios";
 import noImage from "../assets/no_image.jpg";
 import useSWR from "swr";
+import GroupForm from '../component/group-form';
 import { fetchContacts } from "../hooks/fetchContacts";
 import Pins from "../component/contact-pins";
 
-
 // Default contact to send to ContactForm
 const defaultContact = {
-  firstName: "",
-  lastName: "",
-  phone: "",
-  email: "",
+  firstName: '',
+  lastName: '',
+  phone: '',
+  email: '',
 };
 
 function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
   const [filter, setFilter] = useState("");
-
+  const [groupAdd, setGroupAdd] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  
   const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
     `http://localhost:8000/contact?filter=${filter}`,
     fetchContacts,
@@ -33,7 +35,45 @@ function Contacts({ setAccessToken }) {
   const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
     `http://localhost:8000/contact?pin=${true}`,
     fetchContacts,
-);
+  );
+
+  const toggleAdd = () => {
+    setIsAdding(!isAdding);
+  };
+
+  const fetchGroups = async (url) => {
+    const response = await axios.get(url, {
+      withCredentials: true,
+    });
+    return response.data;
+  };
+  const { data: groupData, error: groupError, mutate: groupMutate } = useSWR(
+    `http://localhost:8000/group`,
+    fetchGroups,
+  );
+
+  async function AddGroup(group, didSubmit) {
+    console.log(group);
+    if (!didSubmit) {
+      setGroupAdd(false);
+      return;
+    }
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/group',
+        group,
+        { withCredentials: true },
+      );
+      setGroupAdd(false);
+      groupMutate();
+      return response;
+    } catch (error) {
+      console.log(error);
+      // Not handling errors at the moment
+      // toggleContactForm();
+      return false;
+    }
+  }
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -58,7 +98,7 @@ function Contacts({ setAccessToken }) {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/contact",
+        'http://localhost:8000/contact',
         contact,
         { withCredentials: true },
       );
@@ -82,7 +122,11 @@ function Contacts({ setAccessToken }) {
 
   return (
     <div className="contactpage">
-      <NavBar setAccessToken={setAccessToken} />
+      <NavBar
+        setAccessToken={setAccessToken}
+        setGroupAdd={setGroupAdd}
+        groups={groupData}
+      />
       <div className="contactcontainer">
         <div className="contact-controls">
           <div className="search-bar">
@@ -98,7 +142,7 @@ function Contacts({ setAccessToken }) {
             contactData.map((contact, index) => (
               <div
                 key={index}
-                className="contactCard"
+                className='contactCard'
                 onClick={() => cardClick(contact)}
               >
                 <ContactCard
@@ -119,8 +163,13 @@ function Contacts({ setAccessToken }) {
         </div>
       )}
       {showContactForm && (
-        <div className="modal">
+        <div className='modal'>
           <ContactForm handleSubmit={AddContact} contact={defaultContact} />
+        </div>
+      )}
+      {groupAdd && (
+        <div className='modal'>
+          <GroupForm setGroupAdd={setGroupAdd} handleSubmit={AddGroup} />
         </div>
       )}
     </div>

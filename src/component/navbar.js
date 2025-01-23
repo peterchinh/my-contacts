@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-  FaBars,
   FaAddressBook,
+  FaBars,
   FaChevronDown,
   FaChevronUp,
 } from "react-icons/fa";
@@ -10,14 +10,14 @@ import styles from "./navbar.module.css";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-// Placeholder for API data
-const groups = [
-  { name: "Favorites" },
-  { name: "Emergency Contacts" },
-  { name: "+ Add Group" },
-];
+export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
+  // Functions for adding group
+  const [isAdding, setIsAdding] = useState(false);
 
-export default function NavBar({ setAccessToken }) {
+  const toggleAdd = () => {
+    setIsAdding(!isAdding);
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const navigate = useNavigate();
@@ -38,26 +38,26 @@ export default function NavBar({ setAccessToken }) {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/logout",
+        'http://localhost:8000/logout',
         {},
         { withCredentials: true },
       );
 
       if (response.status === 200) {
-        console.log("Logged out successfully");
+        console.log('Logged out successfully');
         setAccessToken(null);
-        navigate("/");
+        navigate('/');
       } else {
         // Handle error
-        console.error("Logout failed:", response.statusText);
+        console.error('Logout failed:', response.statusText);
       }
     } catch (error) {
-      console.error("Error during logout:", error);
+      console.error('Error during logout:', error);
     }
   };
 
   return (
-    <nav className={`${styles.navbar} ${isOpen ? styles.expanded : ""}`}>
+    <nav className={`${styles.navbar} ${isOpen ? styles.expanded : ''}`}>
       <button className={styles.button} onClick={toggleNav}>
         <FaBars />
       </button>
@@ -117,16 +117,26 @@ export default function NavBar({ setAccessToken }) {
               isGroupOpen ? styles.subMenuOpen : styles.subMenuClosed
             }`}
           >
-            {groups.map((group, index) => (
+            {[...groups, { groupName: '+ Add Group' }].map((group, index) => (
               <div
                 key={index}
                 className={styles.subMenuItem}
                 style={{
                   animationDelay: `${index * 0.1}s`,
                 }}
-                onClick={(e) => e.stopPropagation()} // Prevent click from bubbling
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // console.log(index);
+                  // console.log(data.length + 1);
+                  if (index === (groups.length)) {
+                    setGroupAdd(true);
+                    toggleAdd();
+
+                    // <GroupForm handleSubmit={AddGroup} />;
+                  }
+                }} // Prevent click from bubbling
               >
-                {group.name}
+                {group.groupName}
               </div>
             ))}
           </div>
