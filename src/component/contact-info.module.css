@@ -44,6 +44,38 @@
   background-color: #04aa6d;
   color: white;
 }
+.pin {
+  border: 2px solid #04aa6d; /* Green */
+  border-radius: 10px;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  transition-duration: 0.4s;
+  margin-bottom: 10px;
+}
+.pin:hover {
+  background-color: #04aa6d;
+  color: white;
+}
+.unpin {
+  border: 2px solid #ff0000; /* Green */
+  border-radius: 10px;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  transition-duration: 0.4s;
+  margin-bottom: 10px;
+}
+.unpin:hover {
+  background-color: #ff0000;
+  color: white;
+}
 .edit {
   border: 2px solid #0000ff; /* Blue */
   border-radius: 10px;

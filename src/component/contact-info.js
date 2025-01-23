@@ -4,8 +4,8 @@ import styles from "./contact-info.module.css";
 import axios from "axios";
 import defaultimage from "../assets/no_image.jpg";
 
-export default function ContactInfo(props) {
-  const contact = props.contact || props.defaultContact;
+export default function ContactInfo({ contact, defaultContact, updateSite }) {
+  contact = contact || defaultContact;
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => {
@@ -29,7 +29,7 @@ export default function ContactInfo(props) {
         `http://localhost:8000/contact/${contact._id}`,
         updatedTheContact,
       );
-      props.updateSite(response.data); // Render edits on site.
+      updateSite(response.data); // Render edits on site.
       toggleEdit();
       return response;
     } catch (err) {
@@ -45,6 +45,20 @@ export default function ContactInfo(props) {
     return;
   }
 
+  async function Pin() {
+    if (!contact || !contact._id) {
+      console.error("No contact selected to pin.");
+      return;
+    }
+
+    try {
+      await axios.put(`http://localhost:8000/contact/${contact._id}`, { pin: !contact.pin});
+      updateSite();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function DeleteContact() {
     if (!contact || !contact._id) {
       console.error("No contact selected to delete.");
@@ -57,7 +71,7 @@ export default function ContactInfo(props) {
         await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
       }
       await axios.delete(`http://localhost:8000/contact/${contact._id}`);
-      props.updateSite();
+      updateSite();
     } catch (err) {
       console.error(err);
     }
@@ -88,6 +102,13 @@ export default function ContactInfo(props) {
               type="button"
               value="Add to Group"
               onClick={AddToGroup}
+            />
+            <input
+              className={contact.pin ? styles.unpin : styles.pin} 
+              
+              type="button"
+              value={contact.pin ? "Unpin Contact" : "Pin Contact"}
+              onClick={Pin}
             />
             <div>
               <input
