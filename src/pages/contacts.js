@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import ContactCard from '../component/contact-card';
-import ContactInfo from '../component/contact-info';
-import ContactForm from '../component/contact-form';
-import NavBar from '../component/navbar';
-import SearchBar from '../component/SearchBar';
-import '../style/contacts.css';
-import axios from 'axios';
-import noImage from '../assets/no_image.jpg';
+import React, { useState } from "react";
+import ContactCard from "../component/contact-card";
+import ContactInfo from "../component/contact-info";
+import ContactForm from "../component/contact-form";
+import NavBar from "../component/navbar";
+import SearchBar from "../component/SearchBar";
+import "../style/contacts.css";
+import axios from "axios";
+import noImage from "../assets/no_image.jpg";
+import useSWR from "swr";
 import GroupForm from '../component/group-form';
-import useSWR from 'swr';
+import { fetchContacts } from "../hooks/fetchContacts";
+import Pins from "../component/contact-pins";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -22,21 +24,18 @@ function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
   const [filter, setFilter] = useState("");
-
-  const fetchContacts = async (url) => {
-    const response = await axios.get(url, {
-      params: { filter: filter },
-      withCredentials: true,
-    });
-    return response.data;
-  };
-  const { data, error, isLoading, mutate } = useSWR(
-    "http://localhost:8000/contact",
+  const [groupAdd, setGroupAdd] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  
+  const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
+    `http://localhost:8000/contact?filter=${filter}`,
     fetchContacts,
   );
 
-  const [groupAdd, setGroupAdd] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
+  const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
+    `http://localhost:8000/contact?pin=${true}`,
+    fetchContacts,
+  );
 
   const toggleAdd = () => {
     setIsAdding(!isAdding);
@@ -89,7 +88,7 @@ function Contacts({ setAccessToken }) {
 
   const handleSearchResults = (matches) => {
     setFilter(matches);
-    mutate();
+    mutateContact();
   };
 
   async function AddContact(contact, didSubmit) {
@@ -104,7 +103,7 @@ function Contacts({ setAccessToken }) {
         { withCredentials: true },
       );
       toggleContactForm();
-      mutate();
+      mutateContact();
       return response;
     } catch (error) {
       console.log(error);
@@ -116,27 +115,31 @@ function Contacts({ setAccessToken }) {
 
   // Updates site when Editing and Deleting.
   function updateSite(contact) {
-    mutate();
+    mutateContact();
+    mutatePin();
     setSelectedContact(contact);
   }
 
   return (
     <div className="contactpage">
-      <NavBar setAccessToken={setAccessToken} />
+      <NavBar
+        setAccessToken={setAccessToken}
+        setGroupAdd={setGroupAdd}
+        groups={groupData}
+      />
       <div className="contactcontainer">
         <div className="contact-controls">
           <div className="search-bar">
             <SearchBar onSearchResults={handleSearchResults} />
           </div>
-
           <button className="addcontact" onClick={toggleContactForm}>
             Add Contact
           </button>
         </div>
-
         <div className="contactlist">
-          {data &&
-            data.map((contact, index) => (
+        <Pins cardClick={cardClick} contacts={pinData} />
+          {contactData &&
+            contactData.map((contact, index) => (
               <div
                 key={index}
                 className='contactCard'

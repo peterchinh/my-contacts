@@ -30,6 +30,10 @@ const contactSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  pin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Contact = mongoose.model("Contact", contactSchema);
