@@ -8,6 +8,9 @@ import "../style/contacts.css";
 import axios from "axios";
 import noImage from "../assets/no_image.jpg";
 import useSWR from "swr";
+import { fetchContacts } from "../hooks/fetchContacts";
+import Pins from "../component/contact-pins";
+
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -22,17 +25,15 @@ function Contacts({ setAccessToken }) {
   const [showContactForm, setShowContactForm] = useState(null);
   const [filter, setFilter] = useState("");
 
-  const fetchContacts = async (url) => {
-    const response = await axios.get(url, {
-      params: { filter: filter },
-      withCredentials: true,
-    });
-    return response.data;
-  };
-  const { data, error, isLoading, mutate } = useSWR(
-    "http://localhost:8000/contact",
+  const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
+    `http://localhost:8000/contact?filter=${filter}`,
     fetchContacts,
   );
+
+  const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
+    `http://localhost:8000/contact?pin=${true}`,
+    fetchContacts,
+);
 
   const cardClick = (contact) => {
     if (selectedContact === contact) {
@@ -47,7 +48,7 @@ function Contacts({ setAccessToken }) {
 
   const handleSearchResults = (matches) => {
     setFilter(matches);
-    mutate();
+    mutateContact();
   };
 
   async function AddContact(contact, didSubmit) {
@@ -62,7 +63,7 @@ function Contacts({ setAccessToken }) {
         { withCredentials: true },
       );
       toggleContactForm();
-      mutate();
+      mutateContact();
       return response;
     } catch (error) {
       console.log(error);
@@ -74,7 +75,8 @@ function Contacts({ setAccessToken }) {
 
   // Updates site when Editing and Deleting.
   function updateSite(contact) {
-    mutate();
+    mutateContact();
+    mutatePin();
     setSelectedContact(contact);
   }
 
@@ -86,15 +88,14 @@ function Contacts({ setAccessToken }) {
           <div className="search-bar">
             <SearchBar onSearchResults={handleSearchResults} />
           </div>
-
           <button className="addcontact" onClick={toggleContactForm}>
             Add Contact
           </button>
         </div>
-
         <div className="contactlist">
-          {data &&
-            data.map((contact, index) => (
+        <Pins cardClick={cardClick} contacts={pinData} />
+          {contactData &&
+            contactData.map((contact, index) => (
               <div
                 key={index}
                 className="contactCard"
