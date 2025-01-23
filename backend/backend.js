@@ -112,7 +112,7 @@ app.post("/logout", (req, res) => {
 });
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "5m" }); // Short-lived JWT
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" }); // Short-lived JWT
 }
 
 function generateRefreshToken(user) {
@@ -165,7 +165,8 @@ app.get("/contact", async (req, res) => {
           return res.status(403).json({ message: "Forbidden" });
         }
         const filter = req.query.filter;
-
+        const pin = req.query.pin;
+        console.log(req.query);
         let contacts;
         if (filter) {
           contacts = await Contact.find({
@@ -185,7 +186,11 @@ app.get("/contact", async (req, res) => {
               },
             ],
           });
-        } else contacts = await Contact.find({ user: user.id });
+        } else {
+          let query = { user: user.id };
+          if (pin) query.pin = true;
+          contacts = await Contact.find(query);
+        }
         res.json(contacts);
       },
     );
