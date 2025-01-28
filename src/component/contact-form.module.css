@@ -45,6 +45,20 @@
   margin: 8px 0;
   font-size: 18px;
 }
+.birthdayField{
+  type: text;
+  border-weight: 5px;
+  width: 10%;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin: 0 5px;
+}
+.slash {
+  font-size: 18px;
+  font-weight: bold;
+}
 .requirements {
   type: text;
   color: red;
