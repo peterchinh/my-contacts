@@ -114,6 +114,12 @@ export default function UserInfo(props) {
         }, 3000);
         return;
       }
+      var confirm = document.getElementById("confirminputtext");
+      confirm.style.display = "block";
+  
+      setTimeout(function() {
+        confirm.style.display = "none";
+      }, 3000);
       const response = await axios.post(`http://localhost:8000/contact`, newContact, {withCredentials: true});
       setContacts([...contacts, response.data]); 
       setShowInputForm(false);
@@ -146,7 +152,10 @@ export default function UserInfo(props) {
               <h3> {user.email} </h3>
               {user.phone && <h3> {user.phone} </h3>}
             </div>
-            <div id="confirmtext" className={styles.confirmText} >Share code copied to clipboard!</div>
+            <div className={styles.textContainer}>
+              <div id="confirmtext" className={styles.confirmText} >Share code copied to clipboard!</div>
+              <div id="confirminputtext" className={styles.confirmText} >Successfully added contact!</div>
+            </div>
             <div className={styles.buttonRow}>
               <input
                 className={styles.edit}
@@ -197,11 +206,14 @@ export default function UserInfo(props) {
                       onChange={(e) => setShareCode(e.target.value)}
                       placeholder="Enter share code here"
                     />
+                    <div className={styles.textContainer}>
+                      <div id="failsharetext" style={{ display: 'none', color: 'red' }}>Share code validation failed!</div>
+                    </div>
                     <div className={styles.buttonRow}>
                       <input
                         type="button"
                         value="Submit"
-                        onClick={InputShareCode}
+                        onClick={() => { InputShareCode(); toggleInputForm(); }}
                         className={styles.submitShareButton}
                       />
                       <input
@@ -218,7 +230,6 @@ export default function UserInfo(props) {
           )}
         </div>
       </div>
-      <div id="failsharetext" style={{ display: 'none', color: 'red' }}>Share code validation failed!</div>
     </div>
   );
 }
