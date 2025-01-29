@@ -1,20 +1,19 @@
 .profileContainer {
-  width: 60%;
+  width: 70%;
+  height: 85%;
   display: flex;
   justify-content: center;
   padding: 15px;
   box-sizing: border-box;
 }
 .profileCard {
-  background-color: white;
   border-radius: 10px;
+  background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 50%;
-  max-width: 400px;
+  width: 90%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 20px;
   transition: transform 0.3s ease-in-out;
 }
@@ -23,15 +22,9 @@
   font-size: 20px;
   font-family: "Open Sans", sans-serif;
 }
-.hrLine {
-  border: 0;
-  height: 2px;
-  margin: 10px auto;
-  background-color: #0000ff;
-}
 .profileName {
   margin: 20px 0;
-  font-size: 30px;
+  font-size: 35px;
 }
 .image {
   width: 140px;
@@ -56,14 +49,11 @@
   cursor: pointer;
 }
 .copyShare {
-  border: 2px solid #3B8132; /* green */
-  border-radius: 10px;
   color: black;
   text-decoration: none;
   display: inline-block;
-  font-size: 20px;
-  margin-right: 20px;
-  padding: 15px 15px;
+  font-size: 16px;
+  padding: 10px 10px;
   transition-duration: 0.4s;
 }
 .copyShare:hover {
@@ -72,15 +62,11 @@
   cursor: pointer;
 }
 .inputShare {
-  border: 2px solid #3B8132; /* green */
-  border-radius: 10px;
   color: black;
   text-decoration: none;
   display: inline-block;
-  font-size: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
-  padding: 15px 15px;
+  font-size: 16px;
+  padding: 10px 10px;
   transition-duration: 0.4s;
 }
 .inputShare:hover {
@@ -91,7 +77,6 @@
 .inputFormContainer {
   margin-top: auto;
   padding: 10px;
-  background-color: white;
   width: 40%;
   height: 100%;
   border-radius: 10px;
@@ -99,35 +84,39 @@
 .inputForm {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 .inputForm textarea {
   margin-bottom: 10px;
   padding: 10px;
+  height: 80%;
   resize: none;
-  width: 90%;
-  height: 150px;
+  font-size: 20px;
 }
 .submitShareButton {
   border: 2px solid #24a0ed; /* Light Blue */
   background-color: #24a0ed;
   border-radius: 10px;
-  color: black;
+  color: white;
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
   margin-top: 20px;
+  margin-right: 25px;
   padding: 15px 15px;
   transition-duration: 0.4s;
 }
 .submitShareButton:hover {
-  border: 2px solid #0000ff;
   background-color: #0000ff;
   color: white;
   cursor: pointer;
 }
 .cancelShareButton {
+  border: 2px solid #ff6865;
+  background-color: #ff6865;
   border-radius: 10px;
-  color: black;
+  color: white;
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
@@ -137,7 +126,7 @@
 }
 .cancelShareButton:hover {
   background-color: #ff0000;
-  color: black;
+  color: white;
   cursor: pointer;
 }
 
@@ -148,14 +137,56 @@
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
   padding: 15px 15px;
   transition-duration: 0.4s;
+  cursor: pointer;
 
 }
-
 .popup {
-  padding: 15px;
+  border-radius: 10px;
   background-color: lightblue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+}
+.profileContent {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+
+}
+.leftSide {
+  flex: 1;
+  display: flex;
+  padding: 25px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff8dc;
+  border-radius: 10px;
+}
+.rightSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+.splitLine {
+  width: 2px;
+  background-color: purple;
+  margin: 0 20px;
+  height: 100%;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.confirmText {
+  display: none;
 }
