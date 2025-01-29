@@ -9,6 +9,7 @@ export default function UserInfo(props) {
   const [isEditing, setIsEditing] = useState(false);
   const [showInputForm, setShowInputForm] = useState(false);
   const [shareCode, setShareCode] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
   const [contacts, setContacts] = useState(props.contacts || []);
 
   const toggleEdit = () => {
@@ -57,6 +58,10 @@ export default function UserInfo(props) {
 
   function toggleInputForm() {
     setShowInputForm(!showInputForm);
+  }
+
+  function togglePopup() {
+    setShowPopup(!showPopup);
   }
 
   function parseShareCode(shareCode) {
@@ -148,24 +153,33 @@ export default function UserInfo(props) {
               <h3> {user.email} </h3>
                 {user.phone && <h3> {user.phone} </h3>}
                 <div id="confirmtext" style={{ display: 'none' }}>Share code copied!</div>
-              <input
-                className={styles.edit}
-                type="button"
-                value="Edit"
-                onClick={toggleEdit}
-                />
-              <input
-                className={styles.copyShare}
-                type="button"
-                value="Copy Share Code"
-                onClick={CopyShareCode}
-                />
-              <input
-                className={styles.inputShare}
-                type="button"
-                value="Input Share Code"
-                onClick={toggleInputForm}
-                />
+                  <input
+                    className={styles.edit}
+                    type="button"
+                    value="Edit"
+                    onClick={toggleEdit}
+                  />
+                  <input
+                      className={styles.shareButton}
+                      type="button"
+                      value="Share"
+                      onClick={togglePopup}
+                  />
+                  {showPopup && (<div className={styles.popup}>
+                    <input
+                    className={styles.copyShare}
+                    type="button"
+                    value="Copy Share Code"
+                    onClick={CopyShareCode}
+                  />
+                  <input
+                    className={styles.inputShare}
+                    type="button"
+                    value="Input Share Code"
+                    onClick={toggleInputForm}
+                      />
+                  </div>
+                  )}
             </div>
           </>
         )}
@@ -178,7 +192,7 @@ export default function UserInfo(props) {
               onChange={(e) => setShareCode(e.target.value)}
               placeholder="Enter share code here"
             />
-            <div id="failsharetext" style={{ display: 'none' }}>Incorrect share code format!</div>
+            <div id="failsharetext" style={{ display: 'none', color: 'red' }}>Invalid share code!</div>
             <input
               className={styles.submitShareButton}
               type="button"
