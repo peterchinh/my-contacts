@@ -87,7 +87,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
       <div className={styles.body}>
         {isEditing ? (
           // Edit contact form
-          <ContactForm handleSubmit={EditContact} contact={contact} />
+          <ContactForm handleSubmit={EditContact} contact={contact} isUser={false}/>
         ) : (
           // Display
           <>
