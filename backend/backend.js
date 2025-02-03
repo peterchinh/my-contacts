@@ -154,6 +154,25 @@ app.post("/contact", async (req, res) => {
   );
 });
 
+app.get('/pins', async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, user) => {
+        if (err) {
+          return res.status(403).json({ message: "Forbidden" });
+        }
+        const contacts = await Contact.find({ user: user.id, pin: true}).sort({firstName: 'asc', lastName: 'asc'});
+        res.json(contacts);
+      },
+    );
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+})
+
 app.get('/contact', async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -165,9 +184,12 @@ app.get('/contact', async (req, res) => {
           return res.status(403).json({ message: "Forbidden" });
         }
         const filter = req.query.filter;
-        const pin = req.query.pin;
+        const firstOrder = req.query.firstName;
+        const lastOrder = req.query.lastName;
+
+        const order = {firstName: firstOrder, lastName: lastOrder}
         let contacts;
-        if (filter) {
+        if (filter && firstOrder && lastOrder) {
           contacts = await Contact.find({
             user: user.id,
             $or: [
@@ -184,11 +206,9 @@ app.get('/contact', async (req, res) => {
                 },
               },
             ],
-          });
-        } else {
-          let query = { user: user.id };
-          if (pin) query.pin = true;
-          contacts = await Contact.find(query);
+          }).sort(order);
+        } else if (firstOrder && lastOrder) {
+          contacts = await Contact.find({ user: user.id }).sort(order);
         }
         res.json(contacts);
       },
