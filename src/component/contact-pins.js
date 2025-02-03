@@ -8,24 +8,28 @@ import noImage from "../assets/no_image.jpg";
 
 export default function Pins ({ cardClick, contacts }) {
     return (
-        <Swiper
-        slidesPerView={3}
-        spaceBetween={30}
-        freeMode={true}
-        modules={[FreeMode]}
-        className={styles.pinSlider}>
-          {contacts &&
-          contacts.map((contact, index) => (
-            <SwiperSlide
-            key={index}
-            onClick={() => cardClick(contact)}
-            >
-              <img src={contact.image || noImage} alt={`$(name)'s profilepic`} className={styles.pinImage}/>
-              <p className={styles.contactName}>
-                {contact.firstName} {contact.lastName}
-                </p>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      <div>
+      {contacts &&
+          <Swiper
+          slidesPerView={contacts.length > 3 ? 3 : contacts.length}
+          spaceBetween={0}
+          freeMode={true}
+          modules={[FreeMode]}
+          className={`${contacts.length ? styles.pinSlider : styles.hidden}`}>
+            {contacts &&
+            contacts.map((contact, index) => (
+              <SwiperSlide
+              key={index}
+              onClick={() => cardClick(contact)}
+              >
+                <img src={contact.image || noImage} alt={`$(name)'s profilepic`} className={styles.pinImage}/>
+                <p className={styles.contactName}>
+                  {contact.firstName} {contact.lastName}
+                  </p>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+      }
+      </div>
     )
 }
