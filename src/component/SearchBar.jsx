@@ -2,14 +2,10 @@ import styles from "./SearchBar.module.css";
 import { useState, useEffect } from "react";
 
 const SearchBar = ({ onSearchResults }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    onSearchResults(searchTerm);
-  }, [searchTerm, onSearchResults]);
 
   const handleChange = (e) => {
-    setSearchTerm(e.target.value);
+    console.log(e.target.value);
+    onSearchResults(e.target.value);
   };
 
   return (
