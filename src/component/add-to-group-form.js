@@ -57,8 +57,20 @@ export default function AddToGroupForm({ handleSubmit, contact, FindGroups }) {
     }
   }
 
-  function removeFromGroup(currentContact, group) {
+  async function removeFromGroup(currentContact, group) {
     // remvoes contact from group
+
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/group/${group}/remove`,
+        { contactId: currentContact },
+        { withCredentials: true },
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
   async function submitForm(didSubmit) {
@@ -69,23 +81,31 @@ export default function AddToGroupForm({ handleSubmit, contact, FindGroups }) {
       const selected = Object.keys(selectedGroups).filter((group) =>
         selectedGroups[group]
       );
-      if (!Array.isArray(selected) || selected.length === 0) {
-        console.log('No groups selected.');
-        handleSubmit(false);
-        return;
-      }
+      // if (!Array.isArray(selected) || selected.length === 0) {
+      //   console.log('No groups selected.');
+      //   handleSubmit(false);
+      //   return;
+      // }
 
       const groupsToAdd = selected.filter((groupId) => {
         const group = groups.find((g) => g._id === groupId);
         return group && !group.contacts.includes(contact._id); // Only add if not already in the group
       });
 
+      const groupsToRemove = groups
+        .filter((group) =>
+          !selectedGroups[group._id] && group.contacts.includes(contact._id)
+        )
+        .map((group) => group._id);
+
       for (const groupId of groupsToAdd) {
         await addToGroup(contact._id, groupId);
       }
-      // selected.forEach(async (groupId) => {
-      //   await addToGroup(contact._id, groupId);
-      // });
+
+      for (const groupId of groupsToRemove) {
+        await removeFromGroup(contact._id, groupId);
+      }
+
       handleSubmit(selected);
     } else {
       handleSubmit(false);
