@@ -75,10 +75,12 @@ export default function ContactForm(props) {
       // Storing Birthday in format "MM/DD/YY"
       const [month = "", day = "", year = ""] = (contact.birthday || "").split("/");
 
+      const input = value.replace(/\D/g, ""); // Remove non-numeric chars
+
       const updatedBirthday = {
-        month: name === "month" ? value : month,
-        day: name === "day" ? value : day,
-        year: name === "year" ? value : year,
+        month: name === "month" ? input : month,
+        day: name === "day" ? input : day,
+        year: name === "year" ? input : year,
       };
       setContact({
         ...contact,
@@ -236,7 +238,7 @@ export default function ContactForm(props) {
           name="day" value={contact.birthday?.split("/")[1] || ""} onChange={handleChange}
         />
         <span className={styles.slash}>/</span>
-        <input className={styles.birthdayField} type="text" maxlength="2" placeholder="YY"
+        <input className={styles.yearField} type="text" maxlength="4" placeholder="YYYY"
           name="year" value={contact.birthday?.split("/")[2] || ""} onChange={handleChange}
         />
 
