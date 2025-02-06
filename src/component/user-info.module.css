@@ -16,6 +16,7 @@
   flex-direction: column;
   padding: 20px;
   transition: transform 0.3s ease-in-out;
+  border: 1px solid black;
 }
 .profileInfo {
   text-align: center;
@@ -31,6 +32,7 @@
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid black;
 }
 .edit {
   border: 2px solid #0000ff; /* Blue */
@@ -174,7 +176,7 @@
 }
 
 .splitLine {
-  width: 2px;
+  width: 7px;
   background-color: purple;
   margin: 0 20px;
   height: 100%;
