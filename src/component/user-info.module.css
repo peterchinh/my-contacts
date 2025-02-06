@@ -165,7 +165,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff8dc;
+  background-color: #fdb927; /* old color: fff8dc, new color: lakers gold */
   border-radius: 10px;
 }
 .rightSide {
