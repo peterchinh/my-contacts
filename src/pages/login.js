@@ -101,14 +101,14 @@ export default function Login({ setAccessToken }) {
         )}
 
         <div className="login-links">
-          <Link to="/forgot-password" className="link">
+          <Link to="/forgot-password" className="link2">
             Forgot password?
           </Link>
-          <Link to="/signup" className="link">
+          <Link to="/signup" className="link2">
             Don’t have an account? Sign up
           </Link>
         </div>
-        <button type="submit" className="btn">
+        <button type="submit" className="btn2">
           Login
         </button>
       </form>

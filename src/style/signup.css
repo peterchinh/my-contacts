@@ -84,7 +84,7 @@
   width: 100%;
   padding: 0.75rem;
   margin-top: 1rem;
-  background-color: black;
+  background-color: #552583;
   color: white;
   border: none;
   border-radius: 5px;
@@ -94,7 +94,7 @@
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: #FDB927;
 }
 
 .login-links {
@@ -104,12 +104,12 @@
 
 .link {
   display: block;
-  color: black;
+  color: #552583;
   text-decoration: none;
   margin-top: 0.5rem;
   transition: color 0.3s;
 }
 
 .link:hover {
-  color: #0056b3;
+  color: #FDB927;
 }
