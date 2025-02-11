@@ -83,3 +83,11 @@
   background-color: #ffffff;
   margin: auto;
 }
+
+.sortButton {
+  background: none;
+  border: 0px;
+  color: black;
+  cursor: pointer;
+  font-size: 2rem;
+}

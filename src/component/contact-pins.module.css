@@ -5,6 +5,9 @@
     max-height: 200px;
     margin: 0 auto;
   }
+.hidden {
+  height: 0;
+}
   .pinImage {
     width: 160px;
     height: 160px;

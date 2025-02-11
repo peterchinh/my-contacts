@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ContactCard from "../component/contact-card";
 import ContactInfo from "../component/contact-info";
 import ContactForm from "../component/contact-form";
@@ -7,10 +7,11 @@ import SearchBar from "../component/SearchBar";
 import "../style/contacts.css";
 import axios from "axios";
 import noImage from "../assets/no_image.jpg";
-import useSWR from "swr";
+import useSWR, { preload } from "swr";
 import GroupForm from '../component/group-form';
 import { fetchContacts } from "../hooks/fetchContacts";
 import Pins from "../component/contact-pins";
+import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -20,20 +21,29 @@ const defaultContact = {
   email: '',
 };
 
+preload([`http://localhost:8000/contact`, {firstName:  'asc', lastName: 'asc'}],
+  ([url, token]) => fetchContacts(url, token),
+)
+preload([`http://localhost:8000/contact`, {firstName:  'desc', lastName: 'asc'}],
+  ([url, token]) => fetchContacts(url, token),
+)
+
 function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
-  const [filter, setFilter] = useState("");
+  const [filtered, setFiltered] = useState(null);
   const [groupAdd, setGroupAdd] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
-  
+  const [order, setOrder] = useState({firstName: 'asc', lastName: 'asc'});
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
-    `http://localhost:8000/contact?filter=${filter}`,
-    fetchContacts,
+    [`http://localhost:8000/contact`, order],
+    ([url, token]) => fetchContacts(url, token),
   );
 
   const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
-    `http://localhost:8000/contact?pin=${true}`,
+    `http://localhost:8000/pins`,
     fetchContacts,
   );
 
@@ -45,7 +55,7 @@ function Contacts({ setAccessToken }) {
     const response = await axios.get(url, {
       withCredentials: true,
     });
-    return response.data;
+    return response.data
   };
   const { data: groupData, error: groupError, mutate: groupMutate } = useSWR(
     `http://localhost:8000/group`,
@@ -86,10 +96,21 @@ function Contacts({ setAccessToken }) {
     setShowContactForm(!showContactForm);
   };
 
-  const handleSearchResults = (matches) => {
-    setFilter(matches);
-    mutateContact();
-  };
+  const toggleSort = () => {
+    if (order.firstName === 'asc') setOrder({firstName: 'desc', lastName: 'asc'});
+    else setOrder({firstName: 'asc', lastName: 'asc'});
+    handleSearchResults(searchTerm);
+  }
+
+  const handleSearchResults = useCallback( (searchInput) => {
+    setSearchTerm(searchInput);
+    if (searchInput === "") {
+      setFiltered(contactData);
+    } else {
+      const search = searchInput.toLowerCase();
+      setFiltered(contactData.filter((contact) => (contact.firstName + " " + contact.lastName).toLowerCase().includes(search)))
+    }
+  }, [contactData]);
 
   async function AddContact(contact, didSubmit) {
     if (!didSubmit) {
@@ -117,6 +138,7 @@ function Contacts({ setAccessToken }) {
   function updateSite(contact) {
     mutateContact();
     mutatePin();
+    console.log(contactData);
     setSelectedContact(contact);
   }
 
@@ -130,16 +152,20 @@ function Contacts({ setAccessToken }) {
       <div className="contactcontainer">
         <div className="contact-controls">
           <div className="search-bar">
-            <SearchBar onSearchResults={handleSearchResults} />
+            <SearchBar handleSearchResults={handleSearchResults}/>
           </div>
+          <button className="sortButton" onClick={toggleSort}>
+            {order.firstName === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaDownAlt />}
+          </button>
           <button className="addcontact" onClick={toggleContactForm}>
             Add Contact
           </button>
         </div>
-        <div className="contactlist">
         <Pins cardClick={cardClick} contacts={pinData} />
+        <div className="contactlist">
+          
           {contactData &&
-            contactData.map((contact, index) => (
+            (filtered ? filtered : contactData).map((contact, index) => (
               <div
                 key={index}
                 className='contactCard'
