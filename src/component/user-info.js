@@ -9,11 +9,14 @@ export default function UserInfo(props) {
   const [isEditing, setIsEditing] = useState(false);
   const [showInputForm, setShowInputForm] = useState(false);
   const [shareCode, setShareCode] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [activeForm, setActiveForm] = useState(null);
   const [contacts, setContacts] = useState(props.contacts || []);
 
-  const toggleEdit = () => {
-    setIsEditing(!isEditing);
-  };
+  function toggleEdit() {
+    setActiveForm(activeForm === 'edit' ? null : 'edit');
+  }
+
   async function EditContact(updatedUser, didSubmit) {
     if (!didSubmit) {
       toggleEdit();
@@ -56,7 +59,11 @@ export default function UserInfo(props) {
   } 
 
   function toggleInputForm() {
-    setShowInputForm(!showInputForm);
+    setActiveForm(activeForm === 'inputShareCode' ? null : 'inputShareCode');
+  }
+
+  function togglePopup() {
+    setShowPopup(!showPopup);
   }
 
   function parseShareCode(shareCode) {
@@ -107,6 +114,12 @@ export default function UserInfo(props) {
         }, 3000);
         return;
       }
+      var confirm = document.getElementById("confirminputtext");
+      confirm.style.display = "block";
+  
+      setTimeout(function() {
+        confirm.style.display = "none";
+      }, 3000);
       const response = await axios.post(`http://localhost:8000/contact`, newContact, {withCredentials: true});
       setContacts([...contacts, response.data]); 
       setShowInputForm(false);
@@ -127,73 +140,96 @@ export default function UserInfo(props) {
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profileCard}>
-        {isEditing ? (
-          // Edit contact form
-          <ContactForm
-            handleSubmit={EditContact}
-            contact={user}
-          />
-        ) : (
-          // Display
-          <>
+        <div className={styles.profileContent}>
+          <div className={styles.leftSide}>
             <img
               className={styles.image}
               src={user.image || defaultimage}
               alt="profile"
             />
             <div className={styles.profileInfo}>
-              <h1> Profile Info: </h1>
-              <hr className={styles.hrLine} />
               <h2 className={styles.profileName}> {user.firstName} {user.lastName} </h2>
               <h3> {user.email} </h3>
-                {user.phone && <h3> {user.phone} </h3>}
-                <div id="confirmtext" style={{ display: 'none' }}>Share code copied!</div>
+              {user.phone && <h3> {user.phone} </h3>}
+            </div>
+            <div className={styles.textContainer}>
+              <div id="confirmtext" className={styles.confirmText} >Share code copied to clipboard!</div>
+              <div id="confirminputtext" className={styles.confirmText} >Successfully added contact!</div>
+            </div>
+            <div className={styles.buttonRow}>
               <input
                 className={styles.edit}
                 type="button"
                 value="Edit"
                 onClick={toggleEdit}
+              />
+              <div className={styles.popupContainer}>
+                <input
+                  className={styles.shareButton}
+                  type="button"
+                  value="Share"
+                  onClick={togglePopup}
                 />
-              <input
-                className={styles.copyShare}
-                type="button"
-                value="Copy Share Code"
-                onClick={CopyShareCode}
-                />
-              <input
-                className={styles.inputShare}
-                type="button"
-                value="Input Share Code"
-                onClick={toggleInputForm}
-                />
+                {showPopup && (
+                  <div className={styles.popup}>
+                    <input
+                      className={styles.copyShare}
+                      type="button"
+                      value="Copy Share Code"
+                      onClick={() => { CopyShareCode(); togglePopup(); }}
+                    />
+                    <input
+                      className={styles.inputShare}
+                      type="button"
+                      value="Input Share Code"
+                      onClick={() => { toggleInputForm(); togglePopup(); }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </>
-        )}
-      </div>
-      {showInputForm && (
-        <div className={styles.inputFormContainer}>
-          <div className={styles.inputForm}>
-            <textarea
-              value={shareCode}
-              onChange={(e) => setShareCode(e.target.value)}
-              placeholder="Enter share code here"
-            />
-            <div id="failsharetext" style={{ display: 'none' }}>Incorrect share code format!</div>
-            <input
-              className={styles.submitShareButton}
-              type="button"
-              value="Submit"
-              onClick={InputShareCode}
-            />
-            <input
-              className={styles.cancelShareButton}
-              type="button"
-              value="Cancel"
-              onClick={toggleInputForm}
-            />
           </div>
+          {activeForm && (
+            <>
+              <div className={styles.splitLine}></div>
+              <div className={styles.rightSide}>
+                {activeForm === 'edit' && (
+                  <ContactForm
+                    handleSubmit={EditContact}
+                    contact={user}
+                  />
+                )}
+                {activeForm === 'inputShareCode' && (
+                  <div className={styles.inputForm}>
+                    <textarea
+                      value={shareCode}
+                      onChange={(e) => setShareCode(e.target.value)}
+                      placeholder="Enter share code here"
+                    />
+                    <div className={styles.textContainer}>
+                      <div id="failsharetext" style={{ display: 'none', color: 'red' }}>Share code validation failed!</div>
+                    </div>
+                    <div className={styles.buttonRow}>
+                      <input
+                        type="button"
+                        value="Submit"
+                        onClick={() => { InputShareCode(); toggleInputForm(); }}
+                        className={styles.submitShareButton}
+                      />
+                      <input
+                        type="button"
+                        value="Cancel"
+                        onClick={toggleInputForm}
+                        className={styles.cancelShareButton}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

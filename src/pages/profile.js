@@ -29,9 +29,9 @@ function Profile({ setAccessToken }) {
         {data ? (
           <>
             <UserInfo user={data.user} updateSite={updateSite} />
-            <div className="contact-info">
+            {/* <div className="contact-info">
               <h2> Number of Contacts : {data.contacts.length} </h2>
-            </div>
+            </div> */}
           </>
         ) : (
           <p> loading... </p>
