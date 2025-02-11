@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styles from './group-form.module.css';
 
 export default function GroupForm({ setGroupAdd, handleSubmit }) {
-  // export default function GroupForm(props) {
   const [group, setGroup] = useState({
     groupName: '',
   });
@@ -26,9 +25,6 @@ export default function GroupForm({ setGroupAdd, handleSubmit }) {
       <input
         className={styles.inputField}
         placeholder='Group Name'
-        // name='firstName'
-        // id='firstName'
-        // value={'Group Name'}
         onChange={handleChange}
       />
       <div>

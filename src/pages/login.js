@@ -1,4 +1,5 @@
-import "../style/signup.css";
+import "../style/login.css";
+import crown from "../assets/crown.png";
 import { MdMail, MdVpnKey } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -59,7 +60,8 @@ export default function Login({ setAccessToken }) {
   return (
     <div className="container">
       <form className="login" onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <h1>Welcome</h1>
+        <img src={crown} alt="Crown" className="crown-image" />
         <div className="input-container">
           <MdMail className="icon" />
           <input

@@ -266,17 +266,17 @@ export default function ContactForm(props) {
         onChange={handleChange}
         className={styles.inputField}
       />
-      <div>
-        {isEditMode &&
-          contact.image &&
-          contact.image !== defaultimage &&
-          !hasImageChanged && (
+      {isEditMode &&
+        contact.image &&
+        contact.image !== defaultimage &&
+        !hasImageChanged && (
+          <div className={styles.buttonRow}>
             <button className={styles.deleteImage} onClick={handleDeleteImage}>
               Delete Image
             </button>
-          )}
-      </div>
-      <div>
+          </div>
+        )}
+      <div className={styles.buttonRow}>
         <input
           className={styles.submit}
           type="submit"

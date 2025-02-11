@@ -1,4 +1,4 @@
-import "../style/login.css";
+import "../style/signup.css";
 import { MdPerson, MdVpnKey, MdMail } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -86,6 +86,7 @@ export default function Signup() {
              onChange={(e) => setFirstName(e.target.value)}
              required 
              />
+          <MdPerson className="icon" />
            <input
               type="text"
               placeholder="Last Name"

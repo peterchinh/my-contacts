@@ -89,3 +89,9 @@
   background-color: #ffc107;
   color: black;
 }
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
