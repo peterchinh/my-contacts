@@ -38,7 +38,7 @@ function Contacts({ setAccessToken }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
-    [`http://localhost:8000/contact`, order],
+    [`http://localhost:8000/contact/sorted`, order],
     ([url, token]) => fetchContacts(url, token),
   );
 
@@ -108,7 +108,7 @@ function Contacts({ setAccessToken }) {
       setFiltered(contactData);
     } else {
       const search = searchInput.toLowerCase();
-      setFiltered(contactData.filter((contact) => (contact.firstName + " " + contact.lastName).toLowerCase().includes(search)))
+      setFiltered((contactData || []).filter((contact) => (contact.firstName + " " + contact.lastName).toLowerCase().includes(search)))
     }
   }, [contactData]);
 
