@@ -66,7 +66,7 @@ export default function ContactForm(props) {
         ...contact,
         phone: formatted,
       });
-    } else {
+    } else if (name === "email") {
       setContact({
         ...contact,
         email: value,
