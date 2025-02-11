@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const fetchContacts = async (url, param) => {
+export const fetchContacts = async (url, order, groupId) => {
     const response = await axios.get(url, {
-      params: param,
+      params: {...order, groupId},
       withCredentials: true,
     });
     return response.data;

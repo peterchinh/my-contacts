@@ -50,6 +50,15 @@ export default function App() {
           }
         />
 
+        <Route
+          path='/group/:groupId'
+          element={
+            <ProtectedRoute
+              element={<Contacts setAccessToken={setAccessToken} />}
+            />
+          }
+        />
+
         {/* Redirect all other routes */}
         <Route
           path='*'

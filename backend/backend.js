@@ -205,10 +205,16 @@ app.get('/contact/sorted', async (req, res) => {
         }
         const firstOrder = req.query.firstName;
         const lastOrder = req.query.lastName;
-
         const order = {firstName: firstOrder, lastName: lastOrder}
+        const groupId = req.query.groupId;
         let contacts;
-        contacts = await Contact.find({ user: user.id }).sort(order);
+        if (groupId) {
+          contacts = await Contact.find({ user: user.id, groups: { "$in" : [groupId]} }).sort(order);
+          console.log(contacts)
+        } else {
+          contacts = await Contact.find({ user: user.id }).sort(order);
+          console.log(contacts)
+        }
         res.json(contacts);
       },
     );

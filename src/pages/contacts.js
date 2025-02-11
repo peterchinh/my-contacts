@@ -12,6 +12,7 @@ import GroupForm from '../component/group-form';
 import { fetchContacts } from "../hooks/fetchContacts";
 import Pins from "../component/contact-pins";
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -37,9 +38,11 @@ function Contacts({ setAccessToken }) {
   const [order, setOrder] = useState({firstName: 'asc', lastName: 'asc'});
   const [searchTerm, setSearchTerm] = useState("");
 
+  const params = useParams();
+
   const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
-    [`http://localhost:8000/contact/sorted`, order],
-    ([url, token]) => fetchContacts(url, token),
+    [`http://localhost:8000/contact/sorted`, order, params.groupId || ""],
+    ([url, order, groupId]) => fetchContacts(url, order, groupId),
   );
 
   const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
