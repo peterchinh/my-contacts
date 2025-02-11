@@ -154,6 +154,26 @@ app.post("/contact", async (req, res) => {
   );
 });
 
+
+app.get('/contact', async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, user) => {
+        if (err) {
+          return res.status(403).json({ message: "Forbidden" });
+        }
+        const contacts = await Contact.find({ user: user.id });
+        res.json(contacts);
+      },
+    );
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.get('/pins', async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -173,7 +193,7 @@ app.get('/pins', async (req, res) => {
   }
 })
 
-app.get('/contact', async (req, res) => {
+app.get('/contact/sorted', async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     jwt.verify(
