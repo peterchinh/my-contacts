@@ -66,10 +66,30 @@ export default function ContactForm(props) {
         ...contact,
         phone: formatted,
       });
-    } else {
+    } else if (name === "email") {
       setContact({
         ...contact,
         email: value,
+      });
+    } else if (name === "month" || name === "day" || name === "year") {
+      // Storing Birthday in format "MM/DD/YY"
+      const [month = "", day = "", year = ""] = (contact.birthday || "").split("/");
+
+      const input = value.replace(/\D/g, ""); // Remove non-numeric chars
+
+      const updatedBirthday = {
+        month: name === "month" ? input : month,
+        day: name === "day" ? input : day,
+        year: name === "year" ? input : year,
+      };
+      setContact({
+        ...contact,
+        birthday: `${updatedBirthday.month}/${updatedBirthday.day}/${updatedBirthday.year}`,
+      });
+    } else {
+      setContact({
+        ...contact,
+        address: value,
       });
     }
     return;
@@ -175,33 +195,25 @@ export default function ContactForm(props) {
   return (
     // Dynamic form depending on if User or if Contact
     <>
-        <>
-          <div className={styles.inputName}> First Name... </div>
-          <input
-            className={styles.inputField}
-            placeholder="first name"
-            name="firstName"
-            id="firstName"
-            value={contact.firstName}
-            onChange={handleChange}
-          />
+      <div className={styles.inputName}> First Name... </div>
+      <input className={styles.inputField} placeholder="first name"
+        name="firstName"
+        value={contact.firstName}
+        onChange={handleChange}
+      />
 
-          <div className={styles.inputName}> Last Name... </div>
-          <input
-            className={styles.inputField}
-            placeholder="last name"
-            name="lastName"
-            id="lastName"
-            value={contact.lastName}
-            onChange={handleChange}
-          />
-        </>
+      <div className={styles.inputName}> Last Name... </div>
+      <input className={styles.inputField} placeholder="last name"
+        name="lastName"
+        value={contact.lastName}
+        onChange={handleChange}
+      />
+
       <div className={styles.inputName}> Phone Number... </div>
       <input
         className={styles.inputField}
         placeholder="phone number"
         name="phone"
-        id="phone"
         value={contact.phone}
         onChange={handleChange}
       />
@@ -211,10 +223,35 @@ export default function ContactForm(props) {
         className={styles.inputField}
         placeholder="email"
         name="email"
-        id="email"
         value={contact.email}
         onChange={handleChange}
       />
+
+      {!props.isUser ?
+      <>
+        <div className={styles.inputName}> Birthday... </div>
+        <input className={styles.birthdayField} type="text" maxlength="2" placeholder="MM"
+          name="month" value={contact.birthday?.split("/")[0] || ""} onChange={handleChange}
+        />
+        <span className={styles.slash}>/</span>
+        <input className={styles.birthdayField} type="text" maxlength="2" placeholder="DD"
+          name="day" value={contact.birthday?.split("/")[1] || ""} onChange={handleChange}
+        />
+        <span className={styles.slash}>/</span>
+        <input className={styles.yearField} type="text" maxlength="4" placeholder="YYYY"
+          name="year" value={contact.birthday?.split("/")[2] || ""} onChange={handleChange}
+        />
+
+        <div className={styles.inputName}> Address... </div>
+        <input
+          className={styles.inputField}
+          placeholder="address"
+          name="address"
+          value={contact.address}
+          onChange={handleChange}
+        />
+      </>
+      : null }
       {isFormFilled ? null : (
         <p className={styles.requirements}>
           {" "}

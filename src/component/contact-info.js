@@ -111,12 +111,33 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
         alt='profile'
       />
       <div className={styles.body}>
-        {isEditing
-          ? (
-            // Edit contact form
-            <ContactForm handleSubmit={EditContact} contact={contact} />
-          )
-          : isAddingToGroup
+        {isEditing ? (
+          // Edit contact form
+          <ContactForm handleSubmit={EditContact} contact={contact} isUser={false}/>
+        ) : (
+          // Display
+          <>
+            <h2 className={styles.name}>
+              {" "}
+              {contact.firstName + " " + contact.lastName}{" "}
+            </h2>
+            <p className={styles.info}> {"Email: " + contact.email} </p>
+            <p className={styles.info}> {"Phone: " + contact.phone} </p>
+            <p className={styles.info}> {contact.birthday ? "Birthday: " + contact.birthday : "Birthday: "} </p>
+            <p className={styles.info}> {contact.address ? "Address: " + contact.address : "Address: "} </p>
+            <input
+              className={styles.group}
+              type="button"
+              value="Add to Group"
+              onClick={AddToGroup}
+            />
+            <input
+              className={contact.pin ? styles.unpin : styles.pin} 
+              
+              type="button"
+              value={contact.pin ? "Unpin Contact" : "Pin Contact"}
+              onClick={Pin}
+         ) : isAddingToGroup
           ? (
             // Add to group form
             <AddToGroupForm
