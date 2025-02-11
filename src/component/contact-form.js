@@ -71,6 +71,26 @@ export default function ContactForm(props) {
         ...contact,
         email: value,
       });
+    } else if (name === "month" || name === "day" || name === "year") {
+      // Storing Birthday in format "MM/DD/YY"
+      const [month = "", day = "", year = ""] = (contact.birthday || "").split("/");
+
+      const input = value.replace(/\D/g, ""); // Remove non-numeric chars
+
+      const updatedBirthday = {
+        month: name === "month" ? input : month,
+        day: name === "day" ? input : day,
+        year: name === "year" ? input : year,
+      };
+      setContact({
+        ...contact,
+        birthday: `${updatedBirthday.month}/${updatedBirthday.day}/${updatedBirthday.year}`,
+      });
+    } else {
+      setContact({
+        ...contact,
+        address: value,
+      });
     }
     return;
   }
@@ -215,6 +235,32 @@ export default function ContactForm(props) {
         value={contact.email}
         onChange={handleChange}
       />
+
+      {!props.isUser ?
+      <>
+        <div className={styles.inputName}> Birthday... </div>
+        <input className={styles.birthdayField} type="text" maxlength="2" placeholder="MM"
+          name="month" value={contact.birthday?.split("/")[0] || ""} onChange={handleChange}
+        />
+        <span className={styles.slash}>/</span>
+        <input className={styles.birthdayField} type="text" maxlength="2" placeholder="DD"
+          name="day" value={contact.birthday?.split("/")[1] || ""} onChange={handleChange}
+        />
+        <span className={styles.slash}>/</span>
+        <input className={styles.yearField} type="text" maxlength="4" placeholder="YYYY"
+          name="year" value={contact.birthday?.split("/")[2] || ""} onChange={handleChange}
+        />
+
+        <div className={styles.inputName}> Address... </div>
+        <input
+          className={styles.inputField}
+          placeholder="address"
+          name="address"
+          value={contact.address}
+          onChange={handleChange}
+        />
+      </>
+      : null }
       {isFormFilled ? null : (
         <p className={styles.requirements}>
           {" "}
