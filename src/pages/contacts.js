@@ -190,7 +190,7 @@ function Contacts({ setAccessToken }) {
       )}
       {showContactForm && (
         <div className='modal'>
-          <ContactForm handleSubmit={AddContact} contact={defaultContact} isUser={false}/>
+          <ContactForm handleSubmit={AddContact} contact={defaultContact} />
         </div>
       )}
       {groupAdd && (
