@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ContactCard from "../component/contact-card";
 import ContactInfo from "../component/contact-info";
 import ContactForm from "../component/contact-form";
@@ -21,6 +21,13 @@ const defaultContact = {
   email: '',
 };
 
+preload([`http://localhost:8000/contact`, {firstName:  'asc', lastName: 'asc'}],
+  ([url, token]) => fetchContacts(url, token),
+)
+preload([`http://localhost:8000/contact`, {firstName:  'desc', lastName: 'asc'}],
+  ([url, token]) => fetchContacts(url, token),
+)
+
 function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
@@ -28,6 +35,7 @@ function Contacts({ setAccessToken }) {
   const [groupAdd, setGroupAdd] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [order, setOrder] = useState({firstName: 'asc', lastName: 'asc'});
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
     [`http://localhost:8000/contact`, order],
@@ -91,19 +99,18 @@ function Contacts({ setAccessToken }) {
   const toggleSort = () => {
     if (order.firstName === 'asc') setOrder({firstName: 'desc', lastName: 'asc'});
     else setOrder({firstName: 'asc', lastName: 'asc'});
+    handleSearchResults(searchTerm);
   }
 
-  const handleSearchResults = (searchTerm) => {
-    if (searchTerm === "") {
+  const handleSearchResults = useCallback( (searchInput) => {
+    setSearchTerm(searchInput);
+    if (searchInput === "") {
       setFiltered(contactData);
     } else {
-    const search = searchTerm.toLowerCase();
-      const len = search.length
-      setFiltered(contactData.filter((contact) => contact.firstName.toLowerCase().substring(0, len) === search 
-      || contact.lastName.toLowerCase().substring(0, len) === search))
-      console.log(filtered)
+      const search = searchInput.toLowerCase();
+      setFiltered(contactData.filter((contact) => (contact.firstName + " " + contact.lastName).toLowerCase().includes(search)))
     }
-  };
+  }, [contactData]);
 
   async function AddContact(contact, didSubmit) {
     if (!didSubmit) {
@@ -145,7 +152,7 @@ function Contacts({ setAccessToken }) {
       <div className="contactcontainer">
         <div className="contact-controls">
           <div className="search-bar">
-            <SearchBar onSearchResults={handleSearchResults} />
+            <SearchBar handleSearchResults={handleSearchResults}/>
           </div>
           <button className="sortButton" onClick={toggleSort}>
             {order.firstName === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaDownAlt />}

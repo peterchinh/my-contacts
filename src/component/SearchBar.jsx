@@ -1,12 +1,15 @@
 import styles from "./SearchBar.module.css";
 import { useState, useEffect } from "react";
 
-const SearchBar = ({ onSearchResults }) => {
-
+const SearchBar = ({ handleSearchResults }) => {
+  const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (e) => {
-    console.log(e.target.value);
-    onSearchResults(e.target.value);
+    setSearchTerm(e.target.value);
   };
+
+  useEffect(() => {
+    handleSearchResults(searchTerm);
+  }, [searchTerm, handleSearchResults])
 
   return (
     <div className="Container">
