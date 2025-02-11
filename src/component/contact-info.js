@@ -10,6 +10,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
   contact = contact || defaultContact;
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingToGroup, setIsAddingToGroup] = useState(false);
+  const [groups, setGroups] = useState([]); // remove any delted contact from groups
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -92,6 +93,16 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
     }
 
     try {
+      const groups = await FindGroups();
+
+      for (const group of groups) {
+        console.log(group._id);
+        console.log(contact._id);
+        if (group.contacts.includes(contact._id)) {
+          console.log('deleted from group');
+          await removeFromGroup(contact._id, group._id);
+        }
+      }
       if (contact.image !== undefined) {
         const fileKey = contact.image.split('/').pop();
         await axios.delete(`http://localhost:8000/delete-image/${fileKey}`);
@@ -100,6 +111,22 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
       updateSite();
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  async function removeFromGroup(currentContact, group) {
+    // remvoes contact from group
+
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/group/${group}/remove`,
+        { contactId: currentContact },
+        { withCredentials: true },
+      );
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
     }
   }
 
