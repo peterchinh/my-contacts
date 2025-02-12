@@ -195,33 +195,25 @@ export default function ContactForm(props) {
   return (
     // Dynamic form depending on if User or if Contact
     <>
-        <>
-          <div className={styles.inputName}> First Name... </div>
-          <input
-            className={styles.inputField}
-            placeholder="first name"
-            name="firstName"
-            id="firstName"
-            value={contact.firstName}
-            onChange={handleChange}
-          />
+      <div className={styles.inputName}> First Name... </div>
+      <input className={styles.inputField} placeholder="first name"
+        name="firstName"
+        value={contact.firstName}
+        onChange={handleChange}
+      />
 
-          <div className={styles.inputName}> Last Name... </div>
-          <input
-            className={styles.inputField}
-            placeholder="last name"
-            name="lastName"
-            id="lastName"
-            value={contact.lastName}
-            onChange={handleChange}
-          />
-        </>
+      <div className={styles.inputName}> Last Name... </div>
+      <input className={styles.inputField} placeholder="last name"
+        name="lastName"
+        value={contact.lastName}
+        onChange={handleChange}
+      />
+
       <div className={styles.inputName}> Phone Number... </div>
       <input
         className={styles.inputField}
         placeholder="phone number"
         name="phone"
-        id="phone"
         value={contact.phone}
         onChange={handleChange}
       />
@@ -231,7 +223,6 @@ export default function ContactForm(props) {
         className={styles.inputField}
         placeholder="email"
         name="email"
-        id="email"
         value={contact.email}
         onChange={handleChange}
       />

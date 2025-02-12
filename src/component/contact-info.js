@@ -141,7 +141,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
         {isEditing
           ? (
             // Edit contact form
-            <ContactForm handleSubmit={EditContact} contact={contact} />
+            <ContactForm handleSubmit={EditContact} contact={contact} isUser={false}/>
           )
           : isAddingToGroup
           ? (
@@ -162,6 +162,8 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
               </h2>
               <p className={styles.info}>{'Email: ' + contact.email}</p>
               <p className={styles.info}>{'Phone: ' + contact.phone}</p>
+              <p className={styles.info}> {contact.birthday ? "Birthday: " + contact.birthday : "Birthday: "} </p>
+              <p className={styles.info}> {contact.address ? "Address: " + contact.address : "Address: "} </p>
               <input
                 className={styles.group}
                 type='button'
