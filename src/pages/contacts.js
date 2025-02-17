@@ -9,7 +9,7 @@ import axios from "axios";
 import noImage from "../assets/no_image.jpg";
 import useSWR, { preload } from "swr";
 import GroupForm from '../component/group-form';
-import { fetchContacts } from "../hooks/fetchContacts";
+import { fetcher } from "../hooks/fetcher";
 import Pins from "../component/contact-pins";
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -23,10 +23,10 @@ const defaultContact = {
 };
 
 preload([`http://localhost:8000/contact`, {firstName:  'asc', lastName: 'asc'}],
-  ([url, token]) => fetchContacts(url, token),
+  ([url, token]) => fetcher(url, token),
 )
 preload([`http://localhost:8000/contact`, {firstName:  'desc', lastName: 'asc'}],
-  ([url, token]) => fetchContacts(url, token),
+  ([url, token]) => fetcher(url, token),
 )
 
 function Contacts({ setAccessToken }) {
@@ -42,27 +42,25 @@ function Contacts({ setAccessToken }) {
 
   const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
     [`http://localhost:8000/contact/sorted`, order, params.groupId || ""],
-    ([url, order, groupId]) => fetchContacts(url, order, groupId),
+    ([url, order, groupId]) => fetcher(url, order, groupId),
   );
 
   const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
-    `http://localhost:8000/pins`,
-    fetchContacts,
+    [`http://localhost:8000/pins`, params.groupId || ""],
+    ([url, groupId]) => fetcher(url, order, groupId),
+  );
+  const { data: currGroupData, error: currGroupError } = useSWR(
+    params.groupId ? `http://localhost:8000/group/${params.groupId}` : null,
+    fetcher,
   );
 
   const toggleAdd = () => {
     setIsAdding(!isAdding);
   };
 
-  const fetchGroups = async (url) => {
-    const response = await axios.get(url, {
-      withCredentials: true,
-    });
-    return response.data
-  };
   const { data: groupData, error: groupError, mutate: groupMutate } = useSWR(
     `http://localhost:8000/group`,
-    fetchGroups,
+    fetcher,
   );
 
   async function AddGroup(group, didSubmit) {
@@ -144,7 +142,6 @@ function Contacts({ setAccessToken }) {
     console.log(contactData);
     setSelectedContact(contact);
   }
-
   return (
     <div className="contactpage">
       <NavBar
@@ -163,6 +160,9 @@ function Contacts({ setAccessToken }) {
           <button className="addcontact" onClick={toggleContactForm}>
             Add Contact
           </button>
+        </div>
+        <div className="groupname">
+          {currGroupData? currGroupData.groupName : ""}
         </div>
         <Pins cardClick={cardClick} contacts={pinData} />
         <div className="contactlist">
