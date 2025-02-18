@@ -15,6 +15,12 @@ const contactSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  birthday: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
