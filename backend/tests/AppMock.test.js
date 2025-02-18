@@ -21,29 +21,24 @@ Time:        3.483 s, estimated 4 s
 // Testing backend.js
 import { describe, expect, test, jest } from '@jest/globals';
 import express from "express";
-import app from "./backend.js";
+import app from "../backend.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "./user.js";
-import Contact from "./contact.js"
+import User from "../user.js";
+import Contact from "../contact.js"
 import request from "supertest";
+
+// Using a known test user's id, used later for generating valid tokens
+
+const testUser = {
+  _id: "6757f3664f07db55be11ca76",
+  email: "user@test.com",
+  password: await bcrypt.hash("hashpass1", 10),
+};
 
 
 
 describe("POST /users", () => {
-
-  const testUser = {
-    firstName: "Lebron",
-     lastName: "James",
-     email: "LebronJames@example.com",
-     password: "hashedPassword123",
-  };
-
-  jest.mock("./User");
-
-  beforeEach(async () => {
-    await User.deleteOne({ email: testUser.email});
-  });
 
   /* Need to mock the hash in /users */
   beforeEach(() =>  {
@@ -67,7 +62,6 @@ describe("POST /users", () => {
         code: 400,
         keyPattern: {email: 1}
     };
-
     jest.spyOn(User, "create").mockRejectedValue(mockError);
 
     const response = await request(app).post("/users").send("Not a user!");
@@ -93,7 +87,73 @@ describe("POST /users", () => {
   });
 });
 
-describe("PUT /contact:id", () => {
+describe ("GET /users", () => {
+  let refreshToken;
+
+  it("should return valid user data when given a valid id and token", async () => {
+    // We need to use a known test user's id to generate a valid refresh token
+    const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+    refreshToken = jwt.sign({ id: testUser._id.toString() }, secret, { expiresIn: "7d" });
+
+    const response = await request(app).get("/users").set("Cookie", `refreshToken=${refreshToken}`);
+    expect(response.body).toHaveProperty("_id", testUser._id.toString());
+  });
+
+  it("should return 404 User not found", async () => {
+    // We shall use a randomly generated _id to simulate searching a user that doesn't exist
+    const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+    refreshToken = jwt.sign({ id: "507f1f77bcf86cd799439011" }, secret, { expiresIn: "7d" });
+
+    const response = await request(app).get("/users").set("Cookie", `refreshToken=${refreshToken}`);
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("User not found");
+  });
+
+  it("should return 500 with an invalid token", async () => {
+    // Ex, an invalid ObjectID format will generate an invalid token.
+    const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+    refreshToken = jwt.sign({ id: "invalid-format-id"}, secret, {expiresIn: "7d"});
+
+    const response = await request(app).get("/users").set("Cookie", `refreshToken=${refreshToken}`);
+    expect(response.status).toBe(500);
+  });
+});
+
+describe("PUT /users/:id", () => {
+  it("should return 404 Contact not found", async () => {
+    jest.spyOn(User, "findByIdAndUpdate").mockResolvedValueOnce(false);
+    const response = await request(app).put("/users/anyID").send(testUser);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe("User not found");
+  });
+
+  it("should return 200 and updated user data", async () => {
+    jest.spyOn(User, "findByIdAndUpdate").mockResolvedValueOnce(testUser);
+    const response = await request(app).put("/users/validID").send(testUser);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(testUser);
+  });
+
+  it("should return 400", async () => {
+    jest.spyOn(User, "findByIdAndUpdate").mockRejectedValue({ code: 400 });
+    const response = await request(app).put("/users/invalidIdFormat");
+    expect(response.status).toBe(400);
+  });
+});
+
+describe("POST /users/login", () => {
+  it("should return 404 Email does not have account", async () => {
+    // Mocking not finding the user by email
+    jest.spyOn(User, "findOne").mockResolvedValueOnce(null);
+    const response = await request(app).post("/users/login").send(testUser);
+
+      console.log(response.body); // Debugging the actual response
+    expect(response.status).toBe(404);
+    expect(response.body.error).toEqual("Email does not have account");
+  });
+});
+
+describe("PUT /contact/:id", () => {
 
   const testContact = {
     firstName: "Lebron",
@@ -105,7 +165,7 @@ describe("PUT /contact:id", () => {
 
   it("should return 404 Contact not found", async () => {
     jest.spyOn(Contact, "findByIdAndUpdate").mockResolvedValueOnce(false);
-    const response = await request(app).put("/contact/60c72b2f9d1e4f1b8c7e38f2").send(testContact);
+    const response = await request(app).put("/contact/anyID").send(testContact);
     expect(response.status).toBe(404);
     expect(response.body.error).toBe("Contact not found");
   });
@@ -121,7 +181,7 @@ describe("PUT /contact:id", () => {
 
   it("should return 400", async () => {
     jest.spyOn(Contact, "findByIdAndUpdate").mockRejectedValue({ code: 400 });
-    const response = await request(app).put("/contact/invalididformat");
+    const response = await request(app).put("/contact/invalidIdFormat");
     expect(response.status).toBe(400);
   });
 });
@@ -129,7 +189,7 @@ describe("PUT /contact:id", () => {
 describe("DELETE /contact:id", () => {
   it("should return 404 Contact not found", async () => {
     jest.spyOn(Contact, "findByIdAndDelete").mockResolvedValueOnce(0);
-    const response = await request(app).delete("/contact/60c72b2f9d1e4f1b8c7e38f2");
+    const response = await request(app).delete("/contact/validID");
     expect(response.status).toBe(404);
     expect(response.body.error).toBe("Contact not found");
   });
@@ -143,7 +203,7 @@ describe("DELETE /contact:id", () => {
 
   it("should return 400", async () => {
     jest.spyOn(Contact, "findByIdAndDelete").mockRejectedValue({ code: 400 });
-    const response = await request(app).delete("/contact/invalididformat");
+    const response = await request(app).delete("/contact/invalidIdFormat");
     expect(response.status).toBe(400);
   });
 });

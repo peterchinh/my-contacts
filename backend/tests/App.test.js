@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import Contact from "./contact.js";
-import Group from "./group.js";
-import User from "./user.js";
+import Contact from "../contact.js";
+import Group from "../group.js";
+import User from "../user.js";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import dotenv from "dotenv";
 dotenv.config();
