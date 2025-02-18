@@ -45,7 +45,7 @@ export default function App() {
           path="/profile"
           element={
             <ProtectedRoute
-              element={<Profile setAccesstoken={setAccessToken} />}
+              element={<Profile setAccessToken={setAccessToken} />}
             />
           }
         />
