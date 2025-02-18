@@ -13,7 +13,6 @@ import { useNavigate, Link } from "react-router-dom";
 export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
   // Functions for adding group
   const [isAdding, setIsAdding] = useState(false);
-
   const toggleAdd = () => {
     setIsAdding(!isAdding);
   };
@@ -133,6 +132,8 @@ export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
                     toggleAdd();
 
                     // <GroupForm handleSubmit={AddGroup} />;
+                  } else {
+                    navigate(`/group/${group._id}`)
                   }
                 }} // Prevent click from bubbling
               >

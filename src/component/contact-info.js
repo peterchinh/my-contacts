@@ -20,6 +20,11 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
     setIsAddingToGroup(!isAddingToGroup);
   };
 
+  const submitGroup = () => {
+    toggleAddToGroup();
+    updateSite();
+  }
+
   async function EditContact(updatedContact, didSubmit) {
     if (!didSubmit) {
       toggleEdit();
@@ -147,7 +152,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
           ? (
             // Add to group form
             <AddToGroupForm
-              handleSubmit={toggleAddToGroup}
+              handleSubmit={submitGroup}
               contact={contact}
               FindGroups={FindGroups}
             />

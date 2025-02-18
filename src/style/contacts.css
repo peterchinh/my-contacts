@@ -91,3 +91,8 @@
   cursor: pointer;
   font-size: 2rem;
 }
+
+.groupname {
+  font-size: 48px;
+  color: black;
+}
