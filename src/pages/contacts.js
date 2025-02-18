@@ -22,10 +22,10 @@ const defaultContact = {
   email: '',
 };
 
-preload([`http://localhost:8000/contact`, {firstName:  'asc', lastName: 'asc'}],
+preload([`http://localhost:8000/contact/sorted`, {firstName:  'asc', lastName: 'asc'}],
   ([url, token]) => fetcher(url, token),
 )
-preload([`http://localhost:8000/contact`, {firstName:  'desc', lastName: 'asc'}],
+preload([`http://localhost:8000/contact/sorted`, {firstName:  'desc', lastName: 'asc'}],
   ([url, token]) => fetcher(url, token),
 )
 
