@@ -9,18 +9,25 @@ import { MdPerson, MdGroups, MdLogout } from "react-icons/md";
 import styles from "./navbar.module.css";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import useSWR from 'swr';
+import GroupForm from './group-form';
 
-export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
-  // Functions for adding group
-  const [isAdding, setIsAdding] = useState(false);
-
-  const toggleAdd = () => {
-    setIsAdding(!isAdding);
-  };
-
+export default function NavBar({ setAccessToken }) {
+  const [groupAdd, setGroupAdd] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const navigate = useNavigate();
+
+  const fetchGroups = async (url) => {
+    const response = await axios.get(url, {
+      withCredentials: true,
+    });
+    return response.data
+  };
+  const { data: groupData, error: groupError, mutate: groupMutate } = useSWR(
+    `http://localhost:8000/group`,
+    fetchGroups,
+  );
 
   const toggleNav = () => {
     setIsOpen(!isOpen); // Toggle main nav open state
@@ -117,7 +124,7 @@ export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
               isGroupOpen ? styles.subMenuOpen : styles.subMenuClosed
             }`}
           >
-            {[...groups, { groupName: '+ Add Group' }].map((group, index) => (
+            {[...groupData, { groupName: '+ Add Group' }].map((group, index) => (
               <div
                 key={index}
                 className={styles.subMenuItem}
@@ -126,13 +133,8 @@ export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  // console.log(index);
-                  // console.log(data.length + 1);
-                  if (index === (groups.length)) {
+                  if (index === (groupData.length)) {
                     setGroupAdd(true);
-                    toggleAdd();
-
-                    // <GroupForm handleSubmit={AddGroup} />;
                   }
                 }} // Prevent click from bubbling
               >
@@ -154,6 +156,11 @@ export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
           </span>
         </div>
       </div>
+      {groupAdd && (
+        <div className={styles.modal}>
+          <GroupForm setGroupAdd={setGroupAdd} groupMutate={groupMutate}/>
+        </div>
+      )}
     </nav>
   );
 }

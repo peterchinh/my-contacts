@@ -112,3 +112,20 @@
   max-height: 0;
   opacity: 0;
 }
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 336px;
+  height: full;
+  padding: 20px 10px;
+  border-radius: 10px;
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  background-color: #ffffff;
+  margin: auto;
+  color:#333;
+}

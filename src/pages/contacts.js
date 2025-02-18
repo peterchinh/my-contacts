@@ -32,7 +32,6 @@ function Contacts({ setAccessToken }) {
   const [selectedContact, setSelectedContact] = useState(null);
   const [showContactForm, setShowContactForm] = useState(null);
   const [filtered, setFiltered] = useState(null);
-  const [groupAdd, setGroupAdd] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [order, setOrder] = useState({firstName: 'asc', lastName: 'asc'});
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,45 +45,7 @@ function Contacts({ setAccessToken }) {
     `http://localhost:8000/pins`,
     fetchContacts,
   );
-
-  const toggleAdd = () => {
-    setIsAdding(!isAdding);
-  };
-
-  const fetchGroups = async (url) => {
-    const response = await axios.get(url, {
-      withCredentials: true,
-    });
-    return response.data
-  };
-  const { data: groupData, error: groupError, mutate: groupMutate } = useSWR(
-    `http://localhost:8000/group`,
-    fetchGroups,
-  );
-
-  async function AddGroup(group, didSubmit) {
-    console.log(group);
-    if (!didSubmit) {
-      setGroupAdd(false);
-      return;
-    }
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/group',
-        group,
-        { withCredentials: true },
-      );
-      setGroupAdd(false);
-      groupMutate();
-      return response;
-    } catch (error) {
-      console.log(error);
-      // Not handling errors at the moment
-      // toggleContactForm();
-      return false;
-    }
-  }
-
+  
   const cardClick = (contact) => {
     if (selectedContact === contact) {
       return;
@@ -146,8 +107,6 @@ function Contacts({ setAccessToken }) {
     <div className="contactpage">
       <NavBar
         setAccessToken={setAccessToken}
-        setGroupAdd={setGroupAdd}
-        groups={groupData}
       />
       <div className="contactcontainer">
         <div className="contact-controls">
@@ -191,11 +150,6 @@ function Contacts({ setAccessToken }) {
       {showContactForm && (
         <div className='modal'>
           <ContactForm handleSubmit={AddContact} contact={defaultContact} isUser={false}/>
-        </div>
-      )}
-      {groupAdd && (
-        <div className='modal'>
-          <GroupForm setGroupAdd={setGroupAdd} handleSubmit={AddGroup} />
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from './group-form.module.css';
+import axios from "axios";
 
-export default function GroupForm({ setGroupAdd, handleSubmit }) {
+export default function GroupForm({ setGroupAdd, groupMutate }) {
   const [group, setGroup] = useState({
     groupName: '',
   });
@@ -13,11 +14,29 @@ export default function GroupForm({ setGroupAdd, handleSubmit }) {
     });
     return;
   }
-  function submitForm(didSubmit) {
-    // setGroupAdd(false);
-    handleSubmit(group, didSubmit);
-    return;
-  }
+  
+  async function AddGroup(didSubmit) {
+    console.log(group);
+    if (!didSubmit) {
+      setGroupAdd(false);
+      return;
+    }
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/group',
+        group,
+        { withCredentials: true },
+      );
+      setGroupAdd(false);
+      groupMutate();
+      return response;
+    } catch (error) {
+      console.log(error);
+      // Not handling errors at the moment
+      // toggleContactForm();
+      return false;
+    }
+}
 
   return (
     <>
@@ -32,13 +51,13 @@ export default function GroupForm({ setGroupAdd, handleSubmit }) {
           className={styles.submit}
           type='submit'
           value='Submit'
-          onClick={() => submitForm(true)}
+          onClick={() => AddGroup(true)}
         />
         <input
           className={styles.cancel}
           type='button'
           value='Cancel'
-          onClick={() => submitForm(false)}
+          onClick={() => AddGroup(false)}
         />
       </div>
     </>
