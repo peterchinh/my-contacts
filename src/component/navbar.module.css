@@ -1,114 +1,114 @@
 .navbar {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align items to the start */
-  padding: 1rem;
-  background-color: #333;
-  color: white;
-  width: 50px; /* Thin vertical nav bar width */
-  height: 100vh;
-  transition: width 0.3s ease; /* Smooth transition for width */
-  position: relative;
-  left: 0;
-  top: 0;
-  overflow: hidden; /* ensures hidden items cannot be clicked */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    width: 50px; /* Thin vertical nav bar width */
+    height: 100vh;
+    transition: width 0.3s ease; /* Smooth transition for width */
+    position: relative;
+    left: 0;
+    top: 0;
+    overflow: hidden; /* ensures hidden items cannot be clicked */
 }
 
 .navbar.expanded {
-  width: 15%; /* Expanded width when active */
+    width: 15%; /* Expanded width when active */
 }
 
 .navMenu {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .navItem {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  align-items: center; /* Align text and button */
-  margin-top: 2rem;
-  position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center; /* Align text and button */
+    margin-top: 2rem;
+    position: relative;
 }
 
 .button {
-  background: none;
-  border: 0px;
-  color: white;
-  cursor: pointer;
-  font-size: 2rem;
+    background: none;
+    border: 0px;
+    color: white;
+    cursor: pointer;
+    font-size: 2rem;
 }
 
 .navText {
-  margin-left: 20px; /* Space between button and text */
-  margin-right: 20px;
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflow */
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease; /* Smooth transitions */
-  opacity: 0; /* Initially hidden */
-  cursor: default;
+    margin-left: 20px; /* Space between button and text */
+    margin-right: 20px;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow */
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease; /* Smooth transitions */
+    opacity: 0; /* Initially hidden */
+    cursor: default;
 }
 
 .navbar.expanded .navText {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .slideIn {
-  opacity: 1; /* Fully visible */
-  transform: translateX(0); /* Slide in */
+    opacity: 1; /* Fully visible */
+    transform: translateX(0); /* Slide in */
 }
 
 .slideOut {
-  opacity: 0; /* Hidden */
-  transform: translateX(-10px); /* Slide out to the left */
+    opacity: 0; /* Hidden */
+    transform: translateX(-10px); /* Slide out to the left */
 }
 
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .subMenu {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease;
-  opacity: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative; /* Change from absolute to relative */
-  width: 100%;
-  margin-top: 1rem; /* Add margin-top to create space between groups and submenu */
-  margin-left: 4rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Change from absolute to relative */
+    width: 100%;
+    margin-top: 1rem; /* Add margin-top to create space between groups and submenu */
+    margin-left: 4rem;
 }
 
 .subMenuOpen {
-  max-height: 200px;
-  opacity: 1;
-  transition:
-    max-height 0.3s ease,
-    opacity 0.3s ease;
+    max-height: 200px;
+    opacity: 1;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.3s ease;
 }
 
 .subMenuItem {
-  color: white;
-  padding: 0.5rem 0;
-  cursor: pointer;
-  opacity: 0; /* Start with hidden items */
-  animation: slideIn 0.3s forwards;
-  width: 100%;
+    color: white;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    opacity: 0; /* Start with hidden items */
+    animation: slideIn 0.3s forwards;
+    width: 100%;
 }
 
 .subMenuClosed {
-  max-height: 0;
-  opacity: 0;
+    max-height: 0;
+    opacity: 0;
 }

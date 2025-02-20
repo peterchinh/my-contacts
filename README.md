@@ -28,9 +28,9 @@ Product/Tech Spec: https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gU
 
 ## Style Guides
 
-- Before Committing:
-  - Run "npm run format"
-  - Run "npm run lint"
+-   Before Committing:
+    -   Run "npm run format"
+    -   Run "npm run lint"
 
 ## Coverage Report
 

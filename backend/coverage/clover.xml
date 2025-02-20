@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1733864925653" clover="3.2.0">
-  <project timestamp="1733864925653" name="All files">
+<coverage generated="1740026766939" clover="3.2.0">
+  <project timestamp="1740026766939" name="All files">
     <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="6" coveredelements="6" complexity="0" loc="6" ncloc="6" packages="1" files="3" classes="3"/>
-    <file name="contact.js" path="C:\Users\peter\OneDrive\Desktop\codes\308\contact\my-contacts\backend\contact.js">
+    <file name="contact.js" path="C:\Users\Peter\Desktop\code\contacts\my-contacts\backend\contact.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <line num="3" count="1" type="stmt"/>
-      <line num="36" count="1" type="stmt"/>
+      <line num="45" count="1" type="stmt"/>
     </file>
-    <file name="group.js" path="C:\Users\peter\OneDrive\Desktop\codes\308\contact\my-contacts\backend\group.js">
+    <file name="group.js" path="C:\Users\Peter\Desktop\code\contacts\my-contacts\backend\group.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <line num="3" count="1" type="stmt"/>
-      <line num="21" count="1" type="stmt"/>
+      <line num="19" count="1" type="stmt"/>
     </file>
-    <file name="user.js" path="C:\Users\peter\OneDrive\Desktop\codes\308\contact\my-contacts\backend\user.js">
+    <file name="user.js" path="C:\Users\Peter\Desktop\code\contacts\my-contacts\backend\user.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <line num="3" count="1" type="stmt"/>
-      <line num="24" count="1" type="stmt"/>
+      <line num="28" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>
