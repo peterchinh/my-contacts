@@ -8,7 +8,6 @@ import '../style/contacts.css'
 import axios from 'axios'
 import noImage from '../assets/no_image.jpg'
 import useSWR, { preload } from 'swr'
-import GroupForm from '../component/group-form'
 import { fetchContacts } from '../hooks/fetchContacts'
 import Pins from '../component/contact-pins'
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa'
@@ -23,14 +22,14 @@ const defaultContact = {
 
 preload(
     [
-        `${process.env.REACT_APP_BASE_URL}/contact`,
+        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
         { firstName: 'asc', lastName: 'asc' },
     ],
     ([url, token]) => fetchContacts(url, token)
 )
 preload(
     [
-        `${process.env.REACT_APP_BASE_URL}/contact`,
+        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
         { firstName: 'desc', lastName: 'asc' },
     ],
     ([url, token]) => fetchContacts(url, token)
@@ -40,7 +39,6 @@ function Contacts({ setAccessToken }) {
     const [selectedContact, setSelectedContact] = useState(null)
     const [showContactForm, setShowContactForm] = useState(null)
     const [filtered, setFiltered] = useState(null)
-    const [groupAdd, setGroupAdd] = useState(false)
     const [order, setOrder] = useState({ firstName: 'asc', lastName: 'asc' })
     const [searchTerm, setSearchTerm] = useState('')
 
@@ -53,40 +51,6 @@ function Contacts({ setAccessToken }) {
         `${process.env.REACT_APP_BASE_URL}/pins`,
         fetchContacts
     )
-
-    const fetchGroups = async (url) => {
-        const response = await axios.get(url, {
-            withCredentials: true,
-        })
-        return response.data
-    }
-    const { data: groupData, mutate: groupMutate } = useSWR(
-        `${process.env.REACT_APP_BASE_URL}/group`,
-        fetchGroups
-    )
-
-    async function AddGroup(group, didSubmit) {
-        console.log(group)
-        if (!didSubmit) {
-            setGroupAdd(false)
-            return
-        }
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_BASE_URL}/group`,
-                group,
-                { withCredentials: true }
-            )
-            setGroupAdd(false)
-            groupMutate()
-            return response
-        } catch (error) {
-            console.log(error)
-            // Not handling errors at the moment
-            // toggleContactForm();
-            return false
-        }
-    }
 
     const cardClick = (contact) => {
         if (selectedContact === contact) {
@@ -105,7 +69,7 @@ function Contacts({ setAccessToken }) {
         else setOrder({ firstName: 'asc', lastName: 'asc' })
         handleSearchResults(searchTerm)
     }
-
+    
     const handleSearchResults = useCallback(
         (searchInput) => {
             setSearchTerm(searchInput)
@@ -157,11 +121,7 @@ function Contacts({ setAccessToken }) {
 
     return (
         <div className="contactpage">
-            <NavBar
-                setAccessToken={setAccessToken}
-                setGroupAdd={setGroupAdd}
-                groups={groupData}
-            />
+            <NavBar setAccessToken={setAccessToken} />
             <div className="contactcontainer">
                 <div className="contact-controls">
                     <div className="search-bar">
@@ -218,14 +178,6 @@ function Contacts({ setAccessToken }) {
                         handleSubmit={AddContact}
                         contact={defaultContact}
                         isUser={false}
-                    />
-                </div>
-            )}
-            {groupAdd && (
-                <div className="modal">
-                    <GroupForm
-                        setGroupAdd={setGroupAdd}
-                        handleSubmit={AddGroup}
                     />
                 </div>
             )}
