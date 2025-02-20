@@ -25,7 +25,7 @@ export default function NavBar({ setAccessToken }) {
         return response.data
     }
     const { data: groupData, mutate: groupMutate } = useSWR(
-        `http://localhost:8000/group`,
+        `${process.env.REACT_APP_BASE_URL}/group`,
         fetchGroups
     )
 
@@ -45,7 +45,7 @@ export default function NavBar({ setAccessToken }) {
     const handleLogout = async () => {
         try {
             const response = await axios.post(
-                'http://localhost:8000/logout',
+                `${process.env.REACT_APP_BASE_URL}/logout`,
                 {},
                 { withCredentials: true }
             )

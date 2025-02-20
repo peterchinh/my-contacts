@@ -21,11 +21,17 @@ const defaultContact = {
 }
 
 preload(
-    [`http://localhost:8000/contact`, { firstName: 'asc', lastName: 'asc' }],
+    [
+        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
+        { firstName: 'asc', lastName: 'asc' },
+    ],
     ([url, token]) => fetchContacts(url, token)
 )
 preload(
-    [`http://localhost:8000/contact`, { firstName: 'desc', lastName: 'asc' }],
+    [
+        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
+        { firstName: 'desc', lastName: 'asc' },
+    ],
     ([url, token]) => fetchContacts(url, token)
 )
 
@@ -37,12 +43,12 @@ function Contacts({ setAccessToken }) {
     const [searchTerm, setSearchTerm] = useState('')
 
     const { data: contactData, mutate: mutateContact } = useSWR(
-        [`http://localhost:8000/contact/sorted`, order],
+        [`${process.env.REACT_APP_BASE_URL}/contact/sorted`, order],
         ([url, token]) => fetchContacts(url, token)
     )
 
     const { data: pinData, mutate: mutatePin } = useSWR(
-        `http://localhost:8000/pins`,
+        `${process.env.REACT_APP_BASE_URL}/pins`,
         fetchContacts
     )
 
@@ -63,7 +69,7 @@ function Contacts({ setAccessToken }) {
         else setOrder({ firstName: 'asc', lastName: 'asc' })
         handleSearchResults(searchTerm)
     }
-
+    
     const handleSearchResults = useCallback(
         (searchInput) => {
             setSearchTerm(searchInput)
@@ -90,7 +96,7 @@ function Contacts({ setAccessToken }) {
         }
         try {
             const response = await axios.post(
-                'http://localhost:8000/contact',
+                `${process.env.REACT_APP_BASE_URL}/contact`,
                 contact,
                 { withCredentials: true }
             )

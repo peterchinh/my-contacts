@@ -23,7 +23,7 @@ export default function GroupForm({ setGroupAdd, groupMutate }) {
         }
         try {
             const response = await axios.post(
-                'http://localhost:8000/group',
+                `${process.env.REACT_APP_BASE_URL}/group`,
                 group,
                 { withCredentials: true }
             )
