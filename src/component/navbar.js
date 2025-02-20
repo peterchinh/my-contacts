@@ -38,7 +38,7 @@ export default function NavBar({ setAccessToken, setGroupAdd, groups }) {
     const handleLogout = async () => {
         try {
             const response = await axios.post(
-                'http://localhost:8000/logout',
+                `${process.env.REACT_APP_BASE_URL}/logout`,
                 {},
                 { withCredentials: true }
             )

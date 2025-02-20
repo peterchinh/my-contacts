@@ -8,8 +8,10 @@ import useSWR from 'swr'
 function Profile({ setAccessToken }) {
     const fetcher = async (url) => {
         const [userResponse, contactsResponse] = await Promise.all([
-            axios.get('http://localhost:8000/users', { withCredentials: true }),
-            axios.get('http://localhost:8000/contact', {
+            axios.get(`${process.env.REACT_APP_BASE_URL}/users`, {
+                withCredentials: true,
+            }),
+            axios.get(`${process.env.REACT_APP_BASE_URL}/contact`, {
                 withCredentials: true,
             }),
         ])

@@ -28,7 +28,7 @@ export default function UserInfo(props) {
         try {
             console.log(user._id)
             const response = await axios.put(
-                `http://localhost:8000/users/${user._id}`,
+                `${process.env.REACT_APP_BASE_URL}/users/${user._id}`,
                 updatedTheUser
             )
             props.updateSite()
@@ -130,7 +130,7 @@ export default function UserInfo(props) {
                 confirm.style.display = 'none'
             }, 3000)
             const response = await axios.post(
-                `http://localhost:8000/contact`,
+                `${process.env.REACT_APP_BASE_URL}/contact`,
                 newContact,
                 { withCredentials: true }
             )

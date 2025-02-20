@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid'
 const app = express()
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: `${process.env.BASE_URL}`,
         credentials: true,
     })
 )
@@ -130,6 +130,7 @@ function generateRefreshToken(user) {
 
 app.post('/refresh', (req, res) => {
     const refreshToken = req.cookies.refreshToken
+    console.log(refreshToken)
     if (!refreshToken) {
         return res.status(401).json({ message: 'Unauthorized' })
     }

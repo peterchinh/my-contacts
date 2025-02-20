@@ -4,12 +4,11 @@ import axios from 'axios'
 export const useAuth = () => {
     const [accessToken, setAccessToken] = useState(null)
     const [loading, setLoading] = useState(true)
-
     useEffect(() => {
         const fetchAccessToken = async () => {
             try {
                 const response = await axios.post(
-                    'http://localhost:8000/refresh',
+                    `${process.env.REACT_APP_BASE_URL}/refresh`,
                     {},
                     { withCredentials: true }
                 )

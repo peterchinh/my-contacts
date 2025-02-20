@@ -32,7 +32,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
 
         try {
             const response = await axios.put(
-                `http://localhost:8000/contact/${contact._id}`,
+                `${process.env.REACT_APP_BASE_URL}/contact/${contact._id}`,
                 updatedTheContact
             )
             updateSite(response.data) // Render edits on site.
@@ -62,9 +62,12 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
         }
 
         try {
-            await axios.put(`http://localhost:8000/contact/${contact._id}`, {
-                pin: !contact.pin,
-            })
+            await axios.put(
+                `${process.env.REACT_APP_BASE_URL}/contact/${contact._id}`,
+                {
+                    pin: !contact.pin,
+                }
+            )
             updateSite()
         } catch (err) {
             console.error(err)
@@ -73,9 +76,12 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
 
     async function FindGroups() {
         try {
-            const groups = await axios.get(`http://localhost:8000/group`, {
-                withCredentials: true, // This ensures cookies (tokens) are sent
-            })
+            const groups = await axios.get(
+                `${process.env.REACT_APP_BASE_URL}/group`,
+                {
+                    withCredentials: true, // This ensures cookies (tokens) are sent
+                }
+            )
             return groups.data
         } catch (err) {
             console.error(err)
@@ -104,10 +110,12 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
             if (contact.image !== undefined) {
                 const fileKey = contact.image.split('/').pop()
                 await axios.delete(
-                    `http://localhost:8000/delete-image/${fileKey}`
+                    `${process.env.REACT_APP_BASE_URL}/delete-image/${fileKey}`
                 )
             }
-            await axios.delete(`http://localhost:8000/contact/${contact._id}`)
+            await axios.delete(
+                `${process.env.REACT_APP_BASE_URL}/contact/${contact._id}`
+            )
             updateSite()
         } catch (err) {
             console.error(err)
@@ -119,7 +127,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
 
         try {
             const response = await axios.put(
-                `http://localhost:8000/group/${group}/remove`,
+                `${process.env.REACT_APP_BASE_URL}/group/${group}/remove`,
                 { contactId: currentContact },
                 { withCredentials: true }
             )

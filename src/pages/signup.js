@@ -33,7 +33,7 @@ export default function Signup() {
     async function addUser(user) {
         try {
             const response = await axios.post(
-                'http://localhost:8000/users',
+                `${process.env.REACT_APP_BASE_URL}/users`,
                 user
             )
             return response

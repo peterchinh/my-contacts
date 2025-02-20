@@ -15,7 +15,7 @@ export default function Login({ setAccessToken }) {
     async function verifyUser(user) {
         try {
             const response = await axios.post(
-                'http://localhost:8000/users/login',
+                `${process.env.REACT_APP_BASE_URL}/users/login`,
                 user,
                 { withCredentials: true }
             )

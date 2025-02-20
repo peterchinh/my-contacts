@@ -22,11 +22,17 @@ const defaultContact = {
 }
 
 preload(
-    [`http://localhost:8000/contact`, { firstName: 'asc', lastName: 'asc' }],
+    [
+        `${process.env.REACT_APP_BASE_URL}/contact`,
+        { firstName: 'asc', lastName: 'asc' },
+    ],
     ([url, token]) => fetchContacts(url, token)
 )
 preload(
-    [`http://localhost:8000/contact`, { firstName: 'desc', lastName: 'asc' }],
+    [
+        `${process.env.REACT_APP_BASE_URL}/contact`,
+        { firstName: 'desc', lastName: 'asc' },
+    ],
     ([url, token]) => fetchContacts(url, token)
 )
 
@@ -39,12 +45,12 @@ function Contacts({ setAccessToken }) {
     const [searchTerm, setSearchTerm] = useState('')
 
     const { data: contactData, mutate: mutateContact } = useSWR(
-        [`http://localhost:8000/contact/sorted`, order],
+        [`${process.env.REACT_APP_BASE_URL}/contact/sorted`, order],
         ([url, token]) => fetchContacts(url, token)
     )
 
     const { data: pinData, mutate: mutatePin } = useSWR(
-        `http://localhost:8000/pins`,
+        `${process.env.REACT_APP_BASE_URL}/pins`,
         fetchContacts
     )
 
@@ -55,7 +61,7 @@ function Contacts({ setAccessToken }) {
         return response.data
     }
     const { data: groupData, mutate: groupMutate } = useSWR(
-        `http://localhost:8000/group`,
+        `${process.env.REACT_APP_BASE_URL}/group`,
         fetchGroups
     )
 
@@ -67,7 +73,7 @@ function Contacts({ setAccessToken }) {
         }
         try {
             const response = await axios.post(
-                'http://localhost:8000/group',
+                `${process.env.REACT_APP_BASE_URL}/group`,
                 group,
                 { withCredentials: true }
             )
@@ -126,7 +132,7 @@ function Contacts({ setAccessToken }) {
         }
         try {
             const response = await axios.post(
-                'http://localhost:8000/contact',
+                `${process.env.REACT_APP_BASE_URL}/contact`,
                 contact,
                 { withCredentials: true }
             )

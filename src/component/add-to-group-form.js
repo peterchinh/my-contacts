@@ -45,7 +45,7 @@ export default function AddToGroupForm({ handleSubmit, contact, FindGroups }) {
         console.log(group)
         try {
             const response = await axios.put(
-                `http://localhost:8000/group/${group}`,
+                `${process.env.REACT_APP_BASE_URL}/group/${group}`,
                 { newContact: currentContact }, // Send `newContact` in request body
                 { withCredentials: true }
             )
@@ -61,7 +61,7 @@ export default function AddToGroupForm({ handleSubmit, contact, FindGroups }) {
 
         try {
             const response = await axios.put(
-                `http://localhost:8000/group/${group}/remove`,
+                `${process.env.REACT_APP_BASE_URL}/group/${group}/remove`,
                 { contactId: currentContact },
                 { withCredentials: true }
             )

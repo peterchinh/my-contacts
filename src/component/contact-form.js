@@ -115,7 +115,7 @@ export default function ContactForm(props) {
                 const oldKey = props.contact.image.split('/').pop()
                 try {
                     await axios.delete(
-                        `http://localhost:8000/delete-image/${oldKey}`
+                        `${process.env.REACT_APP_BASE_URL}/delete-image/${oldKey}`
                     )
                     console.log('Old image deleted from S3')
                 } catch (error) {
@@ -124,16 +124,19 @@ export default function ContactForm(props) {
             }
 
             try {
-                const response = await fetch('http://localhost:8000/s3-url', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        filename: contact.image.name,
-                        filetype: contact.image.type,
-                    }),
-                })
+                const response = await fetch(
+                    `${process.env.REACT_APP_BASE_URL}/s3-url`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            filename: contact.image.name,
+                            filetype: contact.image.type,
+                        }),
+                    }
+                )
 
                 const { signedUrl, fileKey } = await response.json()
 
@@ -177,7 +180,7 @@ export default function ContactForm(props) {
         try {
             const fileKey = contact.image.split('/').pop()
             const response = await axios.delete(
-                `http://localhost:8000/delete-image/${fileKey}`
+                `${process.env.REACT_APP_BASE_URL}/delete-image/${fileKey}`
             )
             console.log('Image deleted successfully:', response.data)
             console.log('imagekey', fileKey)
