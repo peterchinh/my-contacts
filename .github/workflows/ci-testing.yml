@@ -22,6 +22,6 @@ jobs:
         node-version: 20
         cache: 'npm'
     - run: npm ci
-    - run: npm run -w express-backend lint
-    - run: npm run -w react-frontend lint
-    - run: npm run -w react-frontend build
+    - run: cd backend && npm run lint
+    - run: npm run lint
+    - run: npm run build
