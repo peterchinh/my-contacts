@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1739867667246" clover="3.2.0">
-  <project timestamp="1739867667246" name="All files">
-    <metrics statements="174" coveredstatements="127" conditionals="42" coveredconditionals="31" methods="26" coveredmethods="19" elements="242" coveredelements="177" complexity="0" loc="174" ncloc="174" packages="1" files="6" classes="6"/>
+<coverage generated="1739914377512" clover="3.2.0">
+  <project timestamp="1739914377512" name="All files">
+    <metrics statements="174" coveredstatements="131" conditionals="42" coveredconditionals="31" methods="26" coveredmethods="20" elements="242" coveredelements="182" complexity="0" loc="174" ncloc="174" packages="1" files="6" classes="6"/>
     <file name="amazons3.js" path="C:\Users\wctla\Project_Directory\my-contacts\backend\amazons3.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <line num="4" count="1" type="stmt"/>
       <line num="6" count="1" type="stmt"/>
     </file>
     <file name="backend.js" path="C:\Users\wctla\Project_Directory\my-contacts\backend\backend.js">
-      <metrics statements="159" coveredstatements="114" conditionals="42" coveredconditionals="31" methods="25" coveredmethods="18"/>
+      <metrics statements="159" coveredstatements="118" conditionals="42" coveredconditionals="31" methods="25" coveredmethods="19"/>
       <line num="15" count="1" type="stmt"/>
       <line num="16" count="1" type="stmt"/>
       <line num="22" count="1" type="stmt"/>
@@ -117,11 +117,11 @@
       <line num="239" count="1" type="stmt"/>
       <line num="241" count="2" type="stmt"/>
       <line num="245" count="1" type="stmt"/>
-      <line num="246" count="0" type="stmt"/>
-      <line num="247" count="0" type="stmt"/>
-      <line num="248" count="0" type="stmt"/>
+      <line num="246" count="2" type="stmt"/>
+      <line num="247" count="2" type="stmt"/>
+      <line num="248" count="2" type="stmt"/>
       <line num="249" count="0" type="stmt"/>
-      <line num="251" count="0" type="stmt"/>
+      <line num="251" count="2" type="stmt"/>
       <line num="255" count="1" type="stmt"/>
       <line num="256" count="0" type="stmt"/>
       <line num="257" count="0" type="stmt"/>

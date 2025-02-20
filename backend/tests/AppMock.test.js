@@ -374,3 +374,28 @@ describe("GET /group", () => {
     expect(response.body).toEqual({group: "randomGroup"});
   });
 });
+
+describe("POST /group", () => {
+  it("should return 200 and the new group", async () => {
+    jest.spyOn(Group, "create").mockResolvedValueOnce({group: "newGroup"});
+    // Nothing needs to be sent, but this is how the call would be made
+    const response = await request(app).post("/group")
+      .send({group: "newGroup"});
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({group: "randomGroup"});
+  });
+
+  it("should return 400 for other errors", async () => {
+    // Will mock a DB error
+    jest.spyOn(Group, "create").mockRejectedValueOnce(new Error("Database Error"));
+    const response = await request(app).post("/group").send({});
+    expect(response.status).toBe(400);
+    expect(response.body.error).toEqual("Database Error");
+  });
+});
+
+describe("PUT /group/:id", () => {
+  it("should return 404 Group not found", async () => {
+    jest.spyOn(Group, "findById")
+  });
+});
