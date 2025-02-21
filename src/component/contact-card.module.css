@@ -1,19 +1,10 @@
 .card {
-<<<<<<< HEAD
   width: 745px;
   height: 200px;
   margin: 25px;
   display: flex;
   align-items: center;
   position: relative; 
-=======
-    background-color: #dedede;
-    width: 745px;
-    height: 200px;
-    margin: 25px;
-    display: flex;
-    align-items: center;
->>>>>>> 6069671e7dae486b40954ced141c58163c4ac3dc
 }
 
 .name {

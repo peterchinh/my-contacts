@@ -27,28 +27,38 @@
 }
 
 .search-bar {
-    flex: 1; /* Makes the search bar take up remaining space */
-    max-width: calc(
-        100% - 200px
-    ); /* Optional: Prevents it from growing too large */
+  flex: 1; /* Makes the search bar take up remaining space */
 }
 
 .addcontact {
-    width: 200px;
-    z-index: 1; /* Ensures it sits in front of other elements */
-    padding: 20px 40px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 24px;
-    white-space: nowrap;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1.5px solid black;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
-.addcontact:hover {
-    background-color: #0000ff;
-    color: white;
+
+.horizontal, .vertical {
+  position: absolute;
+  background-color: black;
 }
+
+.horizontal {
+  width: 60%;
+  height: 4px;
+}
+
+.vertical {
+  width: 4px;
+  height: 60%;
+}
+
 
 .contactlist {
     max-height: 85vh;

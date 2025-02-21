@@ -1,3 +1,16 @@
+.SearchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.SearchIcon {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  color: #ffffff;
+}
+
 .SearchBar {
     height: 100%;
     width: 100%;

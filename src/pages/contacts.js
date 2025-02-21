@@ -1,3 +1,4 @@
+
 import React, { useCallback, useState } from 'react'
 import ContactCard from '../component/contact-card'
 import ContactInfo from '../component/contact-info'
@@ -134,8 +135,9 @@ function Contacts({ setAccessToken }) {
                             <FaSortAlphaDownAlt />
                         )}
                     </button>
-                    <button className="addcontact" onClick={toggleContactForm}>
-                        Add Contact
+                    <button class="addcontact" onClick = {toggleContactForm}>
+                      <div class="horizontal"></div>
+                      <div class="vertical"></div>
                     </button>
                 </div>
                 <Pins cardClick={cardClick} contacts={pinData} />
