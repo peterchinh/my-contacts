@@ -102,8 +102,10 @@ app.post('/users/login', async (req, res) => {
                 res.cookie('refreshToken', refreshToken, {
                     httpOnly: true,
                     secure: true, //Make true in production
-                    sameSite: 'none',
+                    sameSite: 'None',
                     maxAge: 7 * 24 * 60 * 60 * 1000,
+                    domain: 'lecontacts.azurewebsites.net',
+                    path: '/',
                 })
                 res.status(200).json({ accessToken })
             } else {
@@ -116,12 +118,13 @@ app.post('/users/login', async (req, res) => {
 })
 
 app.post('/logout', (req, res) => {
-    res.clearCookie('refreshToken', {
+    res.cookie('refreshToken', '', {
         httpOnly: true,
         secure: true,
-        sameSite: 'none',
-        domain: process.env.COOKIE_DOMAIN, // for production
+        sameSite: 'None',
+        domain: 'lecontacts.azurewebsites.net',
         path: '/',
+        expires: new Date(0), // This sets the cookie to expire immediately
     })
     res.status(200).json({ message: 'Logged out' })
 })
