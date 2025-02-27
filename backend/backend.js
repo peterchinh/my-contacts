@@ -121,7 +121,7 @@ app.post('/logout', (req, res) => {
         secure: true,
         sameSite: 'none',
         domain: process.env.COOKIE_DOMAIN, // for production
-        path: '/', 
+        path: '/',
     })
     res.status(200).json({ message: 'Logged out' })
 })
