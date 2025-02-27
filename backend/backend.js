@@ -116,7 +116,13 @@ app.post('/users/login', async (req, res) => {
 })
 
 app.post('/logout', (req, res) => {
-    res.clearCookie('refreshToken')
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        domain: process.env.COOKIE_DOMAIN, // for production
+        path: '/', 
+    })
     res.status(200).json({ message: 'Logged out' })
 })
 
@@ -130,7 +136,6 @@ function generateRefreshToken(user) {
 
 app.post('/refresh', (req, res) => {
     const refreshToken = req.cookies.refreshToken
-    console.log(refreshToken)
     if (!refreshToken) {
         return res.status(401).json({ message: 'Unauthorized' })
     }
