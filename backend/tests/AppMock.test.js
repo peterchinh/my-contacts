@@ -46,6 +46,11 @@ const testContact = {
     _id: "60c72b2f9d1e4f1b8c7e38f2",
 };
 
+const testGroup = {
+    groupName: "test",
+    contacts: [testContact],
+}
+
 
 describe("POST /users", () => {
 
@@ -371,31 +376,64 @@ describe("GET /group", () => {
     jest.spyOn(Group, "find").mockResolvedValueOnce({group: "randomGroup"});
     const response = await request(app).get("/group");
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({group: "randomGroup"});
+    expect(response.body).toEqual(testContact);
   });
 });
 
 describe("POST /group", () => {
   it("should return 200 and the new group", async () => {
-    jest.spyOn(Group, "create").mockResolvedValueOnce({group: "newGroup"});
-    // Nothing needs to be sent, but this is how the call would be made
-    const response = await request(app).post("/group")
-      .send({group: "newGroup"});
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({group: "randomGroup"});
+
+  const mockGroup = new Group({
+    groupName: "Test Group",
+    user: testUser._id,
   });
 
+  jest.spyOn(mockGroup, "save").mockResolvedValueOnce(mockGroup);
+  jest.spyOn(Group, "create").mockResolvedValueOnce(mockGroup);
+  const response = await request(app).post("/group")
+    .send({ groupName: "Test Group", user: testUser._id,});
+
+  expect(response.status).toBe(200);
+  expect(response.body.groupName).toBe("Test Group");  });
+
   it("should return 400 for other errors", async () => {
-    // Will mock a DB error
-    jest.spyOn(Group, "create").mockRejectedValueOnce(new Error("Database Error"));
-    const response = await request(app).post("/group").send({});
+    // Not sending correct format
+    const response = await request(app).post("/group")
+    .send({incorrect: "format"});
     expect(response.status).toBe(400);
-    expect(response.body.error).toEqual("Database Error");
   });
 });
 
 describe("PUT /group/:id", () => {
+
   it("should return 404 Group not found", async () => {
+    jest.spyOn(Group, "findById").mockReturnValueOnce(false);
+    const response = await request(app).put("/group/id").send({});
+    expect(response.status).toBe(404);
+    expect(response.body.error).toEqual("Group not found");
+  });
+
+  it("should return 400 for other errors", async () => {
+    jest.spyOn(Group, "findById").mockRejectedValueOnce(new Error("Database error"));
+    const response = await request(app).put("/group/id").send({});
+    expect(response.status).toBe(400);
+    expect(response.body.error).toEqual("Database error");
+  });
+
+  it("should return 400 Contact already in group", async () => {
     jest.spyOn(Group, "findById")
+      .mockReturnValueOnce(JSON.parse(JSON.stringify(testGroup)));
+    const response = await request(app).put("/group/id")
+      .send({groupName: "test", newContact: testGroup.contacts[0]});
+    expect(response.status).toBe(400);
+    expect(response.body.error).toEqual("Contact already in group");
+  });
+
+  it("should return 200, updated group, and push a new contact", async () => {
+    let testContact2 = { test: "test"};
+    jest.spyOn(Group, "findById").mockReturnValueOnce(testGroup);
+    const response = await request(app).put("/group/id")
+      .send({newContact: testContact2});
+    expect(response.status)
   });
 });

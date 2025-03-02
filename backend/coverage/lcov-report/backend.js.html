@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.75% </span>
+                <span class="strong">82.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>118/160</span>
+                <span class='fraction'>132/160</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.8% </span>
+                <span class="strong">88.09% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>31/42</span>
+                <span class='fraction'>37/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>19/25</span>
+                <span class='fraction'>20/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.21% </span>
+                <span class="strong">83.01% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>118/159</span>
+                <span class='fraction'>132/159</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -662,36 +662,36 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1013,36 +1013,36 @@ app.post("/group", async (req, res) =&gt; {
   try {
     const newGroup = new Group(req.body);
     await newGroup.save();
-<span class="cstat-no" title="statement not covered" >    res.status(200).json(newGroup);</span>
+    res.status(200).json(newGroup);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 &nbsp;
-app.put("/group/:id", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const groupId = <span class="cstat-no" title="statement not covered" >req.params.id;</span>
-    const { groupName, newContact } = <span class="cstat-no" title="statement not covered" >req.body;</span>
-    const group = <span class="cstat-no" title="statement not covered" >await Group.findById(groupId);</span>
+app.put("/group/:id", async (req, res) =&gt; {
+  try {
+    const groupId = req.params.id;
+    const { groupName, newContact } = req.body;
+    const group = await Group.findById(groupId);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!group) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(404).json({ error: "Group not found" });</span>
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (groupName) {</span>
-<span class="cstat-no" title="statement not covered" >      group.groupName = groupName;</span>
+    if (groupName) {
+      group.groupName = groupName;
     }
-<span class="cstat-no" title="statement not covered" >    if (newContact) {</span>
-<span class="cstat-no" title="statement not covered" >      if (!group.contacts.includes(newContact)) {</span>
-<span class="cstat-no" title="statement not covered" >        group.contacts.push(newContact);</span>
-      } else {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (newContact) {
+      if (!group.contacts.includes(newContact)) {
+        group.contacts.push(newContact);
+      } else <span class="missing-if-branch" title="else path not taken" >E</span>{
 <span class="cstat-no" title="statement not covered" >        return res.status(400).json({ error: "Contact already in group" });</span>
       }
     }
-    const updatedGroup = <span class="cstat-no" title="statement not covered" >await group.save();</span>
+    const updatedGroup = await group.save();
 <span class="cstat-no" title="statement not covered" >    res.status(200).json(updatedGroup);</span>
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    res.status(400).json({ error: err.message });</span>
+    res.status(400).json({ error: err.message });
   }
 });
 &nbsp;
@@ -1123,7 +1123,7 @@ export default app;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-18T21:32:57.477Z
+                at 2025-03-02T22:15:50.062Z
             </div>
         <script src="prettify.js"></script>
         <script>
