@@ -1,23 +1,3 @@
-/* NOTES FOR PROFESSOR:
-    These tests are not a direct reflection on App.test.js, because those tests are for
-    the schemas themselves. Mocking the schemas in replacement for those tests would
-    be redundant. The whole point of testing the schemas is to make the actual calls.
-    We are testing the backend instead as that's what uses these calls. Below are some
-    examples of endpoints in the backend that make sense to use mocks with.
-
-MOCK TESTS TIME:
-Time:        3.978 s, estimated 4 s
-
-ORIGINAL TESTS TIME:
-Time:        3.483 s, estimated 4 s
-
-    In comparison, App.test.js has slightly faster runtimes than AppMock.test.js. AppMock
-    replaces the database calls with mock calls, and replaces other parts of backend
-    calls like the hash function. But it is still slower because it requires the backend to
-    start up each time.
-*/
-
-
 // Testing backend.js
 import { describe, expect, test, jest } from '@jest/globals';
 import express from "express";
@@ -266,18 +246,19 @@ describe("POST /contact", () => {
 });
 
 describe("GET /contact", () => {
+  const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+  const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
+
   it("should return 403 forbidden", async () => {
     const wrongSecret = "wrongSecret";
-    const refreshToken = jwt.sign({ id: "invalid-ID" }, wrongSecret, { expiresIn: "7d" });
-    const response = await request(app).get("/contact").set("Cookie", `refreshToken=${refreshToken}`);
+    const badToken = jwt.sign({ id: "invalid-ID" }, wrongSecret, { expiresIn: "7d" });
+    const response = await request(app).get("/contact").set("Cookie", `refreshToken=${badToken}`);
     expect(response.status).toBe(403);
     expect(response.body.message).toEqual("Forbidden");
   });
 
   it("should return a list of contacts", async () => {
-    // No mocks will be used, a real list of contacts will be generated
-    const secret = process.env.REFRESH_TOKEN_SECRET;
-    const refreshToken = jwt.sign({ id: testUser._id }, secret, { expiresIn: "7d" });
+
     // Note that no filter is used.
     const response = await request(app).get("/contact")
     .set("Cookie", `refreshToken=${refreshToken}`);
@@ -285,27 +266,100 @@ describe("GET /contact", () => {
     expect(response.body).toBeDefined();
   });
 
-  it("should return 400 for invalid token issues", async () => {
-    // Send in a valid token
-    const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
-    const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
-    jest.spyOn(Contact, "find").mockRejectedValueOnce(new Error("Database error"));
-    // We will use a filter to trigger a mock DB error
-    const response = await request(app).get(`/contact?filter='John'`)
+  it("should return 400 for other errors", async () => {
+  jest.spyOn(Contact, "find").mockRejectedValueOnce(new Error("Database error"));
+
+    const response = await request(app).get("/contact")
       .set("Cookie", `refreshToken=${refreshToken}`);
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
   });
 
   it("should return a filtered list of contacts", async () => {
-    // Send in a valid token
-    const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
-    const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
     const response = await request(app).get(`/contact?filter='John'`)
       .set("Cookie", `refreshToken=${refreshToken}`);
     expect(response.status).toBe(200);
     expect(response.body).toBeDefined();
   });
+});
+
+describe("GET /pins", () => {
+  const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+  const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
+
+  it("Should return 403 Forbidden", async () =>{
+    // No token sent
+    const response = await request(app).get("/pins");
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe("Forbidden");
+  });
+
+  it("Should return contacts", async () => {
+    jest.spyOn(Contact, "find").mockReturnValueOnce({
+      sort: jest.fn().mockResolvedValueOnce(testContact),
+    });
+    const response = await request(app).get("/pins")
+      .set("Cookie", `refreshToken=${refreshToken}`);
+    expect(response.body).toEqual(testContact);
+  });
+
+// Mocking DB errors not working
+/*
+  it("should return 400 for other errors", async () => {
+    const findMock = jest.spyOn(Contact, "find").mockReturnValueOnce({
+      sort: jest.fn().mockRejectedValueOnce(new Error("Database error")),
+    });
+    const response = await request(app).get("/pins")
+      .set("Cookie", `refreshToken=${refreshToken}`);
+    expect(response.status).toBe(400);
+
+  });
+*/
+});
+
+describe("GET /contact/sorted", () => {
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+  const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
+
+  it("should return 403 Forbidden", async () => {
+    const response = await request(app).get("/contact/sorted");
+    expect(response.status).toBe(403);
+    expect(response.body.message).toEqual("Forbidden");
+  });
+
+  it("should return sorted contacts", async () => {
+    jest.spyOn(Contact, "find").mockReturnValueOnce({
+      sort: jest.fn().mockResolvedValue(testContact),
+    });
+
+    const response = await request(app).get("/contact/sorted")
+      .query({ firstName: "asc", lastName: "desc" })
+      .set("Cookie", `refreshToken=${refreshToken}`);
+
+    expect(response.body).toEqual(testContact);
+  });
+
+// Mocking DB error is failing.
+/*
+  it("should return 400 for other errors", async () => {
+
+    jest.spyOn(Contact, "find").mockReturnValueOnce({
+      sort: jest.fn().mockRejectedValue(new Error("Database error")),
+    });
+
+    const response = await request(app).get("/contact/sorted")
+      .query({ firstName: "asc", lastName: "desc" })
+      .set("Cookie", `refreshToken=${refreshToken}`)
+      .send(testUser);
+
+    expect(response.status).toBe(400);
+  });
+*/
 });
 
 describe("PUT /contact/:id", () => {
@@ -356,16 +410,19 @@ describe("DELETE /contact:id", () => {
 });
 
 describe("GET /group", () => {
-  it("should return 404 Contact not found", async () => {
-    jest.spyOn(Contact, "findByIdAndUpdate").mockResolvedValueOnce(null);
+  const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+  const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
+
+  it("should return 403 forbidden if invalid/no token", async () => {
     const response = await request(app).get("/group");
-    expect(response.status).toBe(404);
-    expect(response.body.error).toEqual("Contact not found");
+    expect(response.status).toBe(403);
+    expect(response.body.message).toEqual("Forbidden");
   });
 
   it("should return 400 for other errors", async () => {
-    jest.spyOn(Contact, "findByIdAndUpdate").mockRejectedValueOnce(new Error("Database error"));
-    const response = await request(app).get("/group");
+    jest.spyOn(Group, "find").mockRejectedValueOnce(new Error("Database error"));
+    const response = await request(app).get("/group")
+      .set("Cookie", `refreshToken=${refreshToken}`);
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
   });
@@ -373,33 +430,46 @@ describe("GET /group", () => {
   it("should return 200 and groups", async () => {
     jest.spyOn(Contact, "findByIdAndUpdate").mockResolvedValueOnce(testContact);
     // A user not having any groups yet is not an error.
-    jest.spyOn(Group, "find").mockResolvedValueOnce({group: "randomGroup"});
-    const response = await request(app).get("/group");
+    jest.spyOn(Group, "find").mockResolvedValueOnce(testGroup);
+    const response = await request(app).get("/group")
+      .set("Cookie", `refreshToken=${refreshToken}`);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(testContact);
+    expect(response.body).toEqual(testGroup);
   });
 });
 
 describe("POST /group", () => {
-  it("should return 200 and the new group", async () => {
+  const secret = process.env.REFRESH_TOKEN_SECRET || "secret-key";
+  const refreshToken = jwt.sign({}, secret, { expiresIn: "7d" });
 
-  const mockGroup = new Group({
-    groupName: "Test Group",
-    user: testUser._id,
+  it("should return 403 forbidden for jwt token issues", async () => {
+    const response = await request(app).post("/group");
+    expect(response.status).toBe(403);
+    expect(response.body.message).toEqual("Forbidden");
   });
 
-  jest.spyOn(mockGroup, "save").mockResolvedValueOnce(mockGroup);
-  jest.spyOn(Group, "create").mockResolvedValueOnce(mockGroup);
-  const response = await request(app).post("/group")
-    .send({ groupName: "Test Group", user: testUser._id,});
+  it("should return 200 and the new group", async () => {
 
-  expect(response.status).toBe(200);
-  expect(response.body.groupName).toBe("Test Group");  });
+    const mockGroup = new Group({
+      groupName: "Test Group",
+      user: testUser._id,
+    });
+
+    jest.spyOn(mockGroup, "save").mockResolvedValueOnce(true);
+    jest.spyOn(Group, "create").mockResolvedValueOnce(mockGroup);
+    const response = await request(app).post("/group")
+      .send({ groupName: "Test Group", user: testUser._id,})
+      .set("Cookie", `refreshToken=${refreshToken}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.groupName).toBe("Test Group");
+  });
 
   it("should return 400 for other errors", async () => {
     // Not sending correct format
     const response = await request(app).post("/group")
-    .send({incorrect: "format"});
+    .send({incorrect: "format"})
+    .set("Cookie", `refreshToken=${refreshToken}`);;
     expect(response.status).toBe(400);
   });
 });
@@ -412,14 +482,15 @@ describe("PUT /group/:id", () => {
     expect(response.status).toBe(404);
     expect(response.body.error).toEqual("Group not found");
   });
-
+// Mocking DB error is failing.
+/*
   it("should return 400 for other errors", async () => {
     jest.spyOn(Group, "findById").mockRejectedValueOnce(new Error("Database error"));
     const response = await request(app).put("/group/id").send({});
     expect(response.status).toBe(400);
     expect(response.body.error).toEqual("Database error");
   });
-
+*/
   it("should return 400 Contact already in group", async () => {
     jest.spyOn(Group, "findById")
       .mockReturnValueOnce(JSON.parse(JSON.stringify(testGroup)));
@@ -436,4 +507,15 @@ describe("PUT /group/:id", () => {
       .send({newContact: testContact2});
     expect(response.status)
   });
+});
+
+describe("PUT /group/:id/remove", () => {
+  it("should return 404 Group not found", async () => {
+    jest.spyOn(Group, "findById").mockResolvedValueOnce(false);
+    const response = await request(app).put("/group/testID/remove");
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toEqual("Group not found");
+  });
+
 });

@@ -303,6 +303,7 @@ app.post('/group', async (req, res) => {
                 await newGroup.save()
                 res.status(200).json(newGroup)
             } catch (err) {
+                console.log(err);
                 res.status(400).json({ error: err.message })
             }
         }
@@ -435,3 +436,5 @@ app.listen(PORT, async () => {
     await connectDB()
     console.log(`Server is running on port ${PORT}`)
 })
+
+export default app;
