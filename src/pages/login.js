@@ -100,18 +100,18 @@ export default function Login({ setAccessToken }) {
                     </div>
                 )}
 
-                <div className="login-links">
-                    <Link to="/forgot-password" className="link">
-                        Forgot password?
-                    </Link>
-                    <Link to="/signup" className="link">
-                        Don’t have an account? Sign up
-                    </Link>
-                </div>
-                <button type="submit" className="btn">
-                    Login
-                </button>
-            </form>
-        </div>
-    )
+            <div className="login-links">
+                <Link to="/forgot-password" className="link2">
+                    Forgot password?
+                </Link>
+                <Link to="/signup" className="link2">
+                Don’t have an account? Sign up
+                </Link>
+            </div>
+            <button type="submit" className="btn2">
+                Login
+            </button>
+        </form>
+    </div>
+  );
 }
