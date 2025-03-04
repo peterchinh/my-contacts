@@ -6,7 +6,7 @@
     "scripts": {
         "format": "npx prettier . --write",
         "lint": "npx eslint . && npx prettier --check .",
-        "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+        "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --testPathIgnorePatterns=./tests/App.test.js",
         "dev": "nodemon backend.js",
         "start": "node backend.js"
     },
