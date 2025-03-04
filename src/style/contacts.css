@@ -1,10 +1,10 @@
 .contactpage {
-    background-color: lightgray;
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    flex-direction: row;
-    overflow: hidden;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .main {
@@ -27,28 +27,49 @@
 }
 
 .search-bar {
-    flex: 1; /* Makes the search bar take up remaining space */
-    max-width: calc(
-        100% - 200px
-    ); /* Optional: Prevents it from growing too large */
+  flex: 1; /* Makes the search bar take up remaining space */
 }
 
 .addcontact {
-    width: 200px;
-    z-index: 1; /* Ensures it sits in front of other elements */
-    padding: 20px 40px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 24px;
-    white-space: nowrap;
+  position: relative;
+  margin-right: 15px;
+  margin-top: 10px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .addcontact:hover {
-    background-color: #0000ff;
-    color: white;
+  background: #552583;
+  color: #FDB927; 
+  transform: scale(1.1);
 }
+
+
+.horizontal {
+  position: absolute;
+  background-color: black;
+  width: 60%;
+  height: 4px;
+}
+
+.horizontal {
+  color: #FDB927
+}
+
+.vertical {
+  position: absolute;
+  background-color: black;
+  width: 4px;
+  height: 60%;
+}
+
 
 .contactlist {
     max-height: 85vh;
@@ -86,8 +107,22 @@
 
 .sortButton {
     background: none;
-    border: 0px;
     color: black;
-    cursor: pointer;
+    margin-right: 20px;
+    margin-top: 7px;
     font-size: 2rem;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 60px; 
+    height: 60px; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+}
+
+.sortButton:hover {
+  background: #552583;
+  color: #FDB927; 
+  transform: scale(1.1);
 }

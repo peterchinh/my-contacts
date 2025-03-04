@@ -1,27 +1,29 @@
-import styles from './SearchBar.module.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import styles from "./SearchBar.module.css";
+import { FaSearch } from "react-icons/fa"; // Import search icon
 
 const SearchBar = ({ handleSearchResults }) => {
-    const [searchTerm, setSearchTerm] = useState('')
-    const handleChange = (e) => {
-        setSearchTerm(e.target.value)
-    }
+  const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(() => {
-        handleSearchResults(searchTerm)
-    }, [searchTerm, handleSearchResults])
+  useEffect(() => {
+    handleSearchResults(searchTerm);
+  }, [searchTerm, handleSearchResults]);
 
-    return (
-        <div className="Container">
-            <input
-                className={styles.SearchBar}
-                id="input"
-                type="text"
-                placeholder="Search"
-                onChange={handleChange}
-            />
-        </div>
-    )
-}
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
-export default SearchBar
+  return (
+    <div className={styles.SearchContainer}>
+      <FaSearch className={styles.SearchIcon} />
+      <input
+        className={styles.SearchBar}
+        type="text"
+        placeholder="Search"
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
+
+export default SearchBar;
