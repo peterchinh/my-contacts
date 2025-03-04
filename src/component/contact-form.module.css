@@ -31,42 +31,130 @@
     color: black;
 }
 
+.imageContainer {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    margin-left: 5%;
+    flex-wrap: nowrap;
+    border-bottom: 2px solid purple;
+}
+
+.inputImageContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: none;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4%;
+    width: 100%;
+    border: none;
+}
+
+.birthdayContainer {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 4%;
+}
+
 .inputName {
+    font-size: 20px;
+    margin-left: 5%;
+    text-align: left;
+    font-weight: bold;
+}
+
+.inputImageName {
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.imageInputField {
+    padding: 8px 0;
     font-size: 18px;
-    float: left;
-    margin-left: 20px;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .inputField {
     type: text;
-    border-weight: 5px;
-    width: 80%;
-    padding: 8px 14px;
-    margin: 8px 0;
+    width: 90%;
+    padding: 8px 0;
+    margin-left: 5%;
+    margin-top: 0.75%;
     font-size: 18px;
+    border: none;
+    border-bottom: 2px solid purple;
+    
 }
-.birthdayField {
+
+.inputField:focus {
+    outline: none;
+    border-bottom: 2px solid #fed982;
+}
+.monthField {
     type: text;
-    border-weight: 5px;
     width: 10%;
     text-align: center;
     padding: 5px;
-    border-radius: 5px;
-    font-size: 16px;
-    margin: 0 5px;
+    font-size: 18px;
+    margin-left: 5%;
+    margin-top: 1.25%;
+    margin-right: 5px;
+    border: none;
+    border-bottom: 2px solid purple;
 }
+
+.dayField {
+    type: text;
+    width: 10%;
+    text-align: center;
+    padding: 5px;
+    font-size: 18px;
+    margin-top: 1.25%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: none;
+    border-bottom: 2px solid purple;
+}
+
 .yearField {
     type: text;
-    border-weight: 5px;
     width: 13%;
     text-align: center;
     padding: 5px;
-    border-radius: 5px;
-    font-size: 16px;
-    margin: 0 5px;
+    font-size: 18px;
+    margin-top: 1.25%;
+    margin-left: 5px;
+    border: none;
+    border-bottom: 2px solid purple;
 }
+
+
+.monthField:focus {
+    outline: none;
+    border-bottom: 2px solid #fed982;
+}
+
+.dayField:focus {
+    outline: none;
+    border-bottom: 2px solid #fed982;
+}
+
+.yearField:focus {
+    outline: none;
+    border-bottom: 2px solid #fed982;
+}
+
 .slash {
     font-size: 18px;
+    margin-top: 1.25%;
     font-weight: bold;
 }
 .requirements {
@@ -79,11 +167,10 @@
     color: black;
     text-decoration: none;
     display: inline-block;
-    font-size: 20px;
-    margin-left: 15px;
-    margin-top: 20px;
-    padding: 15px 15px;
+    font-size: 16px;
+    white-space: nowrap;
     transition-duration: 0.4s;
+    padding: 5px 10px;
 }
 .deleteImage:hover {
     background-color: #ffc107;
@@ -95,3 +182,11 @@
     align-items: center;
     width: 100%;
 }
+
+.centeredContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+

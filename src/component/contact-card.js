@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from './contact-card.module.css'
+import React from 'react';
+import styles from './contact-card.module.css';
 
 function ContactCard({ name, image }) {
   return (

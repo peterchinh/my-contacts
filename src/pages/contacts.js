@@ -70,7 +70,7 @@ function Contacts({ setAccessToken }) {
         else setOrder({ firstName: 'asc', lastName: 'asc' })
         handleSearchResults(searchTerm)
     }
-    
+
     const handleSearchResults = useCallback(
         (searchInput) => {
             setSearchTerm(searchInput)
