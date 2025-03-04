@@ -120,6 +120,10 @@ function Contacts({ setAccessToken }) {
         setSelectedContact(contact)
     }
 
+   // const toggleNav = () => {
+    //    setIsNavOpen(!isNavOpen);
+    //};
+
     return (
         <div className="contactpage">
             <NavBar setAccessToken={setAccessToken} />

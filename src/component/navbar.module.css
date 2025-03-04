@@ -1,42 +1,71 @@
 .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Align items to the start */
-    padding: 1rem;
-    background-color: #333;
-    color: white;
-    width: 50px; /* Thin vertical nav bar width */
-    height: 100vh;
-    transition: width 0.3s ease; /* Smooth transition for width */
     position: relative;
-    left: 0;
-    top: 0;
-    overflow: hidden; /* ensures hidden items cannot be clicked */
+}
+
+.menuButton {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    background: none;
+    font-size: 1.8rem;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 60px; 
+    height: 60px; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+    z-index: 2; 
+}
+
+.menuButton:hover {
+    background: #552583;
+    color: #FDB927; /* Makes the icon white when hovered */
+    transform: scale(1.1);
 }
 
 .navbar.expanded {
-    width: 15%; /* Expanded width when active */
+    width: 15%; 
 }
 
 .navMenu {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Start offscreen */
+    width: 225px;
+    height: 100vh;
+    background: rgba(215, 215, 215, 0.9); 
+    padding-top: 90px;
+    padding-left: 10px;
     display: flex;
     flex-direction: column;
-    position: relative;
+    gap: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease;
+    z-index: 1;
 }
 
+
+
+.show {
+    
+    display: flex; /* Show when menu is toggled */
+    left: 0; /* Slide in */
+}
+
+
 .navItem {
-    text-decoration: none;
-    color: inherit;
     display: flex;
-    align-items: center; /* Align text and button */
-    margin-top: 2rem;
-    position: relative;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
 }
 
 .button {
     background: none;
     border: 0px;
-    color: white;
+    color: black;
     cursor: pointer;
     font-size: 2rem;
 }

@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import styles from "./SearchBar.module.css";
 import { FaSearch } from "react-icons/fa"; // Import search icon
 
-const SearchBar = ({ onSearchResults }) => {
+const SearchBar = ({ handleSearchResults }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    onSearchResults(searchTerm);
-  }, [searchTerm, onSearchResults]);
+    handleSearchResults(searchTerm);
+  }, [searchTerm, handleSearchResults]);
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -19,7 +19,7 @@ const SearchBar = ({ onSearchResults }) => {
       <input
         className={styles.SearchBar}
         type="text"
-        placeholder="Search..."
+        placeholder="Search"
         onChange={handleChange}
       />
     </div>

@@ -1,5 +1,5 @@
 .contactpage {
-  background-color: white;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -32,29 +32,40 @@
 
 .addcontact {
   position: relative;
-  width: 50px;
-  height: 50px;
+  margin-right: 15px;
+  margin-top: 10px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
-  border: 1.5px solid black;
+  border: 2px solid black;
   border-radius: 50%;
   cursor: pointer;
 }
 
-
-.horizontal, .vertical {
-  position: absolute;
-  background-color: black;
+.addcontact:hover {
+  background: #552583;
+  color: #FDB927; 
+  transform: scale(1.1);
 }
 
+
 .horizontal {
+  position: absolute;
+  background-color: black;
   width: 60%;
   height: 4px;
 }
 
+.horizontal {
+  color: #FDB927
+}
+
 .vertical {
+  position: absolute;
+  background-color: black;
   width: 4px;
   height: 60%;
 }
@@ -96,8 +107,22 @@
 
 .sortButton {
     background: none;
-    border: 0px;
     color: black;
-    cursor: pointer;
+    margin-right: 20px;
+    margin-top: 7px;
     font-size: 2rem;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 60px; 
+    height: 60px; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+}
+
+.sortButton:hover {
+  background: #552583;
+  color: #FDB927; 
+  transform: scale(1.1);
 }
