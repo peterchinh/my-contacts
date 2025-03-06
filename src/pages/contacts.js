@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import ContactCard from "../component/contact-card";
 import ContactInfo from "../component/contact-info";
 import ContactForm from "../component/contact-form";
@@ -138,8 +138,9 @@ function Contacts({ setAccessToken }) {
                             <FaSortAlphaDownAlt />
                         )}
                     </button>
-                    <button className="addcontact" onClick={toggleContactForm}>
-                        Add Contact
+                    <button class="addcontact" onClick = {toggleContactForm}>
+                      <div class="horizontal"></div>
+                      <div class="vertical"></div>
                     </button>
                 </div>
                 <div className="groupname">
