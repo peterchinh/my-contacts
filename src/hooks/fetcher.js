@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 export const fetcher = async (url, order, groupId) => {
     const response = await axios.get(url, {

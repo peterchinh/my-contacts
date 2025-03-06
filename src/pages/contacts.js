@@ -16,193 +16,180 @@ import { useParams } from "react-router-dom";
 
 // Default contact to send to ContactForm
 const defaultContact = {
-  firstName: '',
-  lastName: '',
-  phone: '',
-  email: '',
-};
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+}
 
-preload([`http://localhost:8000/contact/sorted`, {firstName:  'asc', lastName: 'asc'}],
-  ([url, token]) => fetcher(url, token),
+preload(
+    [
+        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
+        { firstName: 'asc', lastName: 'asc' },
+    ],
+    ([url, token]) => fetcher(url, token)
 )
-preload([`http://localhost:8000/contact/sorted`, {firstName:  'desc', lastName: 'asc'}],
-  ([url, token]) => fetcher(url, token),
+preload(
+    [
+        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
+        { firstName: 'desc', lastName: 'asc' },
+    ],
+    ([url, token]) => fetcher(url, token)
 )
 
 function Contacts({ setAccessToken }) {
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [showContactForm, setShowContactForm] = useState(null);
-  const [filtered, setFiltered] = useState(null);
-  const [groupAdd, setGroupAdd] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const [order, setOrder] = useState({firstName: 'asc', lastName: 'asc'});
-  const [searchTerm, setSearchTerm] = useState("");
+    const [selectedContact, setSelectedContact] = useState(null)
+    const [showContactForm, setShowContactForm] = useState(null)
+    const [filtered, setFiltered] = useState(null)
+    const [order, setOrder] = useState({ firstName: 'asc', lastName: 'asc' })
+    const [searchTerm, setSearchTerm] = useState('')
+    const params = useParams();
+    const { data: contactData, mutate: mutateContact } = useSWR(
+        [`${process.env.REACT_APP_BASE_URL}/contact/sorted`, order, params.groupId || ""],
+        ([url, order, groupId]) => fetcher(url, order, groupId)  )
 
-  const params = useParams();
+    const { data: pinData, mutate: mutatePin } = useSWR(
+        [`${process.env.REACT_APP_BASE_URL}/pins`, params.groupId || ""],
+        ([url, groupId]) => fetcher(url, order, groupId),
+    )
+    const { data: currGroupData } = useSWR(
+      params.groupId ? `${process.env.REACT_APP_BASE_URL}/group/${params.groupId}` : null,
+      fetcher,
+    );
 
-  const { data: contactData, error: contactError, isLoading: contactLoading, mutate:  mutateContact } = useSWR(
-    [`http://localhost:8000/contact/sorted`, order, params.groupId || ""],
-    ([url, order, groupId]) => fetcher(url, order, groupId),
-  );
-
-  const { data: pinData, error: pinError, isLoading: pinLoading, mutate: mutatePin } = useSWR(
-    [`http://localhost:8000/pins`, params.groupId || ""],
-    ([url, groupId]) => fetcher(url, order, groupId),
-  );
-  const { data: currGroupData, error: currGroupError } = useSWR(
-    params.groupId ? `http://localhost:8000/group/${params.groupId}` : null,
-    fetcher,
-  );
-
-  const toggleAdd = () => {
-    setIsAdding(!isAdding);
-  };
-
-  const { data: groupData, error: groupError, mutate: groupMutate } = useSWR(
-    `http://localhost:8000/group`,
-    fetcher,
-  );
-
-  async function AddGroup(group, didSubmit) {
-    console.log(group);
-    if (!didSubmit) {
-      setGroupAdd(false);
-      return;
+    const cardClick = (contact) => {
+        if (selectedContact === contact) {
+            return
+        }
+        setSelectedContact(contact)
     }
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/group',
-        group,
-        { withCredentials: true },
-      );
-      setGroupAdd(false);
-      groupMutate();
-      return response;
-    } catch (error) {
-      console.log(error);
-      // Not handling errors at the moment
-      // toggleContactForm();
-      return false;
+
+    const toggleContactForm = () => {
+        setShowContactForm(!showContactForm)
     }
-  }
 
-  const cardClick = (contact) => {
-    if (selectedContact === contact) {
-      return;
+    const toggleSort = () => {
+        if (order.firstName === 'asc')
+            setOrder({ firstName: 'desc', lastName: 'asc' })
+        else setOrder({ firstName: 'asc', lastName: 'asc' })
+        handleSearchResults(searchTerm)
     }
-    setSelectedContact(contact);
-  };
 
-  const toggleContactForm = () => {
-    setShowContactForm(!showContactForm);
-  };
+    const handleSearchResults = useCallback(
+        (searchInput) => {
+            setSearchTerm(searchInput)
+            if (searchInput === '') {
+                setFiltered(contactData)
+            } else {
+                const search = searchInput.toLowerCase()
+                setFiltered(
+                    (contactData || []).filter((contact) =>
+                        (contact.firstName + ' ' + contact.lastName)
+                            .toLowerCase()
+                            .includes(search)
+                    )
+                )
+            }
+        },
+        [contactData]
+    )
 
-  const toggleSort = () => {
-    if (order.firstName === 'asc') setOrder({firstName: 'desc', lastName: 'asc'});
-    else setOrder({firstName: 'asc', lastName: 'asc'});
-    handleSearchResults(searchTerm);
-  }
-
-  const handleSearchResults = useCallback( (searchInput) => {
-    setSearchTerm(searchInput);
-    if (searchInput === "") {
-      setFiltered(contactData);
-    } else {
-      const search = searchInput.toLowerCase();
-      setFiltered((contactData || []).filter((contact) => (contact.firstName + " " + contact.lastName).toLowerCase().includes(search)))
+    async function AddContact(contact, didSubmit) {
+        if (!didSubmit) {
+            toggleContactForm()
+            return
+        }
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_BASE_URL}/contact`,
+                contact,
+                { withCredentials: true }
+            )
+            toggleContactForm()
+            mutateContact()
+            return response
+        } catch (error) {
+            console.log(error)
+            // Not handling errors at the moment
+            toggleContactForm()
+            return false
+        }
     }
-  }, [contactData]);
 
-  async function AddContact(contact, didSubmit) {
-    if (!didSubmit) {
-      toggleContactForm();
-      return;
+    // Updates site when Editing and Deleting.
+    function updateSite(contact) {
+        mutateContact()
+        mutatePin()
+        console.log(contactData)
+        setSelectedContact(contact)
     }
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/contact',
-        contact,
-        { withCredentials: true },
-      );
-      toggleContactForm();
-      mutateContact();
-      return response;
-    } catch (error) {
-      console.log(error);
-      // Not handling errors at the moment
-      toggleContactForm();
-      return false;
-    }
-  }
-
-  // Updates site when Editing and Deleting.
-  function updateSite(contact) {
-    mutateContact();
-    mutatePin();
-    console.log(contactData);
-    setSelectedContact(contact);
-  }
-  return (
-    <div className="contactpage">
-      <NavBar
-        setAccessToken={setAccessToken}
-        setGroupAdd={setGroupAdd}
-        groups={groupData}
-      />
-      <div className="contactcontainer">
-        <div className="contact-controls">
-          <div className="search-bar">
-            <SearchBar handleSearchResults={handleSearchResults}/>
-          </div>
-          <button className="sortButton" onClick={toggleSort}>
-            {order.firstName === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaDownAlt />}
-          </button>
-          <button className="addcontact" onClick={toggleContactForm}>
-            Add Contact
-          </button>
-        </div>
-        <div className="groupname">
+    return (
+        <div className="contactpage">
+            <NavBar setAccessToken={setAccessToken} />
+            <div className="contactcontainer">
+                <div className="contact-controls">
+                    <div className="search-bar">
+                        <SearchBar handleSearchResults={handleSearchResults} />
+                    </div>
+                    <button className="sortButton" onClick={toggleSort}>
+                        {order.firstName === 'asc' ? (
+                            <FaSortAlphaDown />
+                        ) : (
+                            <FaSortAlphaDownAlt />
+                        )}
+                    </button>
+                    <button className="addcontact" onClick={toggleContactForm}>
+                        Add Contact
+                    </button>
+                </div>
+                <div className="groupname">
           {currGroupData? currGroupData.groupName : ""}
         </div>
         <Pins cardClick={cardClick} contacts={pinData} />
-        <div className="contactlist">
-          
-          {contactData &&
-            (filtered ? filtered : contactData).map((contact, index) => (
-              <div
-                key={index}
-                className='contactCard'
-                onClick={() => cardClick(contact)}
-              >
-                <ContactCard
-                  name={contact.firstName + " " + contact.lastName}
-                  image={contact.image || noImage}
-                />
-              </div>
-            ))}
+                <div className="contactlist">
+                    {contactData &&
+                        (filtered ? filtered : contactData).map(
+                            (contact, index) => (
+                                <div
+                                    key={index}
+                                    className="contactCard"
+                                    onClick={() => cardClick(contact)}
+                                >
+                                    <ContactCard
+                                        name={
+                                            contact.firstName +
+                                            ' ' +
+                                            contact.lastName
+                                        }
+                                        image={contact.image || noImage}
+                                    />
+                                </div>
+                            )
+                        )}
+                </div>
+            </div>
+            {selectedContact && (
+                <div
+                    className={`contact-info ${selectedContact ? 'active' : ''}`}
+                >
+                    <ContactInfo
+                        contact={selectedContact}
+                        defaultContact={defaultContact}
+                        updateSite={updateSite}
+                    />
+                </div>
+            )}
+            {showContactForm && (
+                <div className="modal">
+                    <ContactForm
+                        handleSubmit={AddContact}
+                        contact={defaultContact}
+                        isUser={false}
+                    />
+                </div>
+            )}
         </div>
-      </div>
-      {selectedContact && (
-        <div className={`contact-info ${selectedContact ? "active" : ""}`}>
-          <ContactInfo
-            contact={selectedContact}
-            defaultContact={defaultContact}
-            updateSite={updateSite}
-          />
-        </div>
-      )}
-      {showContactForm && (
-        <div className='modal'>
-          <ContactForm handleSubmit={AddContact} contact={defaultContact} isUser={false}/>
-        </div>
-      )}
-      {groupAdd && (
-        <div className='modal'>
-          <GroupForm setGroupAdd={setGroupAdd} handleSubmit={AddGroup} />
-        </div>
-      )}
-    </div>
-  );
+    )
 }
 
-export default Contacts;
+export default Contacts

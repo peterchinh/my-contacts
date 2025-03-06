@@ -1,46 +1,65 @@
-import React, { useState } from 'react';
-import styles from './group-form.module.css';
+import React, { useState } from 'react'
+import styles from './group-form.module.css'
+import axios from 'axios'
 
-export default function GroupForm({ setGroupAdd, handleSubmit }) {
-  const [group, setGroup] = useState({
-    groupName: '',
-  });
+export default function GroupForm({ setGroupAdd, groupMutate }) {
+    const [group, setGroup] = useState({
+        groupName: '',
+    })
 
-  function handleChange(event) {
-    const groupName = event.target.value;
-    setGroup({
-      groupName: groupName,
-    });
-    return;
-  }
-  function submitForm(didSubmit) {
-    // setGroupAdd(false);
-    handleSubmit(group, didSubmit);
-    return;
-  }
+    function handleChange(event) {
+        const groupName = event.target.value
+        setGroup({
+            groupName: groupName,
+        })
+        return
+    }
 
-  return (
-    <>
-      <div className={styles.inputName}>Enter Name of Group</div>
-      <input
-        className={styles.inputField}
-        placeholder='Group Name'
-        onChange={handleChange}
-      />
-      <div>
-        <input
-          className={styles.submit}
-          type='submit'
-          value='Submit'
-          onClick={() => submitForm(true)}
-        />
-        <input
-          className={styles.cancel}
-          type='button'
-          value='Cancel'
-          onClick={() => submitForm(false)}
-        />
-      </div>
-    </>
-  );
+    async function AddGroup(didSubmit) {
+        console.log(group)
+        if (!didSubmit) {
+            setGroupAdd(false)
+            return
+        }
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_BASE_URL}/group`,
+                group,
+                { withCredentials: true }
+            )
+            setGroupAdd(false)
+            groupMutate()
+            return response
+        } catch (error) {
+            console.log(error)
+            // Not handling errors at the moment
+            // toggleContactForm();
+            return false
+        }
+    }
+
+    return (
+        <>
+            <div className={styles.inputName}>Enter Name of Group</div>
+            <input
+                className={styles.inputField}
+                placeholder="Group Name"
+                onChange={handleChange}
+            />
+            <div>
+                <input
+                    className={styles.submit}
+                    type="submit"
+                    value="Submit"
+                    onClick={() => AddGroup(true)}
+                />
+                <input
+                    className={styles.cancel}
+                    type="button"
+                    value="Cancel"
+                    onClick={() => AddGroup(false)}
+                />
+            </div>
+        </>
+    )
 }
