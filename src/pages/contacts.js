@@ -8,7 +8,6 @@ import "../style/contacts.css";
 import axios from "axios";
 import noImage from "../assets/no_image.jpg";
 import useSWR, { preload } from "swr";
-import GroupForm from '../component/group-form';
 import { fetcher } from "../hooks/fetcher";
 import Pins from "../component/contact-pins";
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
