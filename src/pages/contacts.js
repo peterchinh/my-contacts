@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ContactCard from "../component/contact-card";
 import ContactInfo from "../component/contact-info";
 import ContactForm from "../component/contact-form";
@@ -21,21 +21,6 @@ const defaultContact = {
     email: '',
 }
 
-preload(
-    [
-        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
-        { firstName: 'asc', lastName: 'asc' },
-    ],
-    ([url, token]) => fetcher(url, token)
-)
-preload(
-    [
-        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
-        { firstName: 'desc', lastName: 'asc' },
-    ],
-    ([url, token]) => fetcher(url, token)
-)
-
 function Contacts({ setAccessToken }) {
     const [selectedContact, setSelectedContact] = useState(null)
     const [showContactForm, setShowContactForm] = useState(null)
@@ -43,9 +28,23 @@ function Contacts({ setAccessToken }) {
     const [order, setOrder] = useState({ firstName: 'asc', lastName: 'asc' })
     const [searchTerm, setSearchTerm] = useState('')
     const params = useParams();
+    useEffect(() => {
+        preload(
+            [
+                `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
+                { firstName: 'desc', lastName: 'asc' },
+                params.groupId || ""
+            ],
+            ([url, order, groupId]) => fetcher(url, order, groupId)
+        )
+    }, [params.groupId]
+    )
+    
+
     const { data: contactData, mutate: mutateContact } = useSWR(
         [`${process.env.REACT_APP_BASE_URL}/contact/sorted`, order, params.groupId || ""],
-        ([url, order, groupId]) => fetcher(url, order, groupId)  )
+        ([url, order, groupId]) => fetcher(url, order, groupId)
+    )
 
     const { data: pinData, mutate: mutatePin } = useSWR(
         [`${process.env.REACT_APP_BASE_URL}/pins`, params.groupId || ""],
