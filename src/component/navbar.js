@@ -140,7 +140,9 @@ export default function NavBar({ setAccessToken }) {
                                         e.stopPropagation()
                                         if (index === groupData.length) {
                                             setGroupAdd(true)
-                                        }
+                                        } else {
+                    navigate(`/group/${group._id}`)
+                  }
                                     }} // Prevent click from bubbling
                                 >
                                     {group.groupName}

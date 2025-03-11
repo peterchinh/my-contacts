@@ -60,18 +60,23 @@ export default function App() {
                     }
                 />
 
-                {/* Redirect all other routes */}
-                <Route
-                    path="*"
-                    element={
-                        accessToken ? (
-                            <Navigate to="/contacts" replace />
-                        ) : (
-                            <Navigate to="/login" replace />
-                        )
-                    }
-                />
-            </Routes>
-        </BrowserRouter>
-    )
+        <Route
+          path='/group/:groupId'
+          element={
+            <ProtectedRoute
+              element={<Contacts setAccessToken={setAccessToken} />}
+            />
+          }
+        />
+
+        {/* Redirect all other routes */}
+        <Route
+          path='*'
+          element={accessToken
+            ? <Navigate to='/contacts' replace />
+            : <Navigate to='/login' replace />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }

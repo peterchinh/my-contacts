@@ -201,13 +201,19 @@ app.get('/pins', async (req, res) => {
         if (err) {
           return res.status(403).json({ message: 'Forbidden' });
         }
-        const contacts = await Contact.find({
-          user: user.id,
-          pin: true,
-        }).sort({
-          firstName: 'asc',
-          lastName: 'asc',
-        });
+        const groupId = req.query.groupId;
+        let contacts;
+        if (groupId) {
+          contacts = await Contact.find({ user: user.id, pin: true,  groups: { "$in" : [groupId]}}).sort({
+            firstName: 'asc',
+            lastName: 'asc',
+          });
+        } else {
+          contacts = await Contact.find({ user: user.id, pin: true }).sort({
+            firstName: 'asc',
+            lastName: 'asc',
+          });
+        }
         res.json(contacts);
       },
     );
@@ -228,10 +234,14 @@ app.get('/contact/sorted', async (req, res) => {
         }
         const firstOrder = req.query.firstName;
         const lastOrder = req.query.lastName;
-
-        const order = { firstName: firstOrder, lastName: lastOrder };
+        const order = {firstName: firstOrder, lastName: lastOrder}
+        const groupId = req.query.groupId;
         let contacts;
-        contacts = await Contact.find({ user: user.id }).sort(order);
+        if (groupId) {
+          contacts = await Contact.find({ user: user.id, groups: { "$in" : [groupId]} }).sort(order);
+        } else {
+          contacts = await Contact.find({ user: user.id }).sort(order);
+        }
         res.json(contacts);
       },
     );
@@ -288,6 +298,26 @@ app.get('/group', async (req, res) => {
   );
 });
 
+app.get('/group/:id', async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    async (err, user) => {
+      try {
+        if (err) {
+          return res.status(403).json({ message: 'Forbidden' });
+        }
+        const groupId = req.params.id;
+        const group = await Group.findOne({ user: user.id, _id: groupId });
+        res.json(group);
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
+    },
+  );
+});
+
 app.post('/group', async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   jwt.verify(
@@ -325,10 +355,9 @@ app.put('/group/:id', async (req, res) => {
     if (newContact) {
       if (!group.contacts.includes(newContact)) {
         group.contacts.push(newContact);
+        await Contact.updateOne({_id: newContact}, {$push: {groups: groupId}})
       } else {
-        return res
-          .status(400)
-          .json({ error: 'Contact already in group' });
+        return res.status(400).json({ error: 'Contact already in group' });
       }
     }
     const updatedGroup = await group.save();
@@ -357,11 +386,10 @@ app.put('/group/:id/remove', async (req, res) => {
     }
 
     // Remove the contact from the group's contacts array
-    group.contacts = group.contacts.filter(
-      (id) => id.toString() !== contactId,
-    );
-
+    group.contacts = group.contacts.filter((id) => id.toString() !== contactId);
+    
     const updatedGroup = await group.save();
+    await Contact.updateOne({_id: contactId}, {$pull: {groups: groupId}})
     res.status(200).json(updatedGroup);
   } catch (err) {
     res.status(400).json({ error: err.message });

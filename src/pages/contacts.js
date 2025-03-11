@@ -1,17 +1,17 @@
-
-import React, { useCallback, useState } from 'react'
-import ContactCard from '../component/contact-card'
-import ContactInfo from '../component/contact-info'
-import ContactForm from '../component/contact-form'
-import NavBar from '../component/navbar'
-import SearchBar from '../component/SearchBar'
-import '../style/contacts.css'
-import axios from 'axios'
-import noImage from '../assets/no_image.jpg'
-import useSWR, { preload } from 'swr'
-import { fetchContacts } from '../hooks/fetchContacts'
-import Pins from '../component/contact-pins'
-import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa'
+import React, { useCallback, useEffect, useState } from "react";
+import ContactCard from "../component/contact-card";
+import ContactInfo from "../component/contact-info";
+import ContactForm from "../component/contact-form";
+import NavBar from "../component/navbar";
+import SearchBar from "../component/SearchBar";
+import "../style/contacts.css";
+import axios from "axios";
+import noImage from "../assets/no_image.jpg";
+import useSWR, { preload } from "swr";
+import { fetcher } from "../hooks/fetcher";
+import Pins from "../component/contact-pins";
+import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 // Default contact to send to ContactForm
 const defaultContact = {
@@ -21,37 +21,39 @@ const defaultContact = {
     email: '',
 }
 
-preload(
-    [
-        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
-        { firstName: 'asc', lastName: 'asc' },
-    ],
-    ([url, token]) => fetchContacts(url, token)
-)
-preload(
-    [
-        `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
-        { firstName: 'desc', lastName: 'asc' },
-    ],
-    ([url, token]) => fetchContacts(url, token)
-)
-
 function Contacts({ setAccessToken }) {
     const [selectedContact, setSelectedContact] = useState(null)
     const [showContactForm, setShowContactForm] = useState(null)
     const [filtered, setFiltered] = useState(null)
     const [order, setOrder] = useState({ firstName: 'asc', lastName: 'asc' })
     const [searchTerm, setSearchTerm] = useState('')
+    const params = useParams();
+    useEffect(() => {
+        preload(
+            [
+                `${process.env.REACT_APP_BASE_URL}/contact/sorted`,
+                { firstName: 'desc', lastName: 'asc' },
+                params.groupId || ""
+            ],
+            ([url, order, groupId]) => fetcher(url, order, groupId)
+        )
+    }, [params.groupId]
+    )
+    
 
     const { data: contactData, mutate: mutateContact } = useSWR(
-        [`${process.env.REACT_APP_BASE_URL}/contact/sorted`, order],
-        ([url, token]) => fetchContacts(url, token)
+        [`${process.env.REACT_APP_BASE_URL}/contact/sorted`, order, params.groupId || ""],
+        ([url, order, groupId]) => fetcher(url, order, groupId)
     )
 
     const { data: pinData, mutate: mutatePin } = useSWR(
-        `${process.env.REACT_APP_BASE_URL}/pins`,
-        fetchContacts
+        [`${process.env.REACT_APP_BASE_URL}/pins`, params.groupId || ""],
+        ([url, groupId]) => fetcher(url, order, groupId),
     )
+    const { data: currGroupData } = useSWR(
+      params.groupId ? `${process.env.REACT_APP_BASE_URL}/group/${params.groupId}` : null,
+      fetcher,
+    );
 
     const cardClick = (contact) => {
         if (selectedContact === contact) {
@@ -119,11 +121,6 @@ function Contacts({ setAccessToken }) {
         console.log(contactData)
         setSelectedContact(contact)
     }
-
-   // const toggleNav = () => {
-    //    setIsNavOpen(!isNavOpen);
-    //};
-
     return (
         <div className="contactpage">
             <NavBar setAccessToken={setAccessToken} />
@@ -144,7 +141,10 @@ function Contacts({ setAccessToken }) {
                       <div class="vertical"></div>
                     </button>
                 </div>
-                <Pins cardClick={cardClick} contacts={pinData} />
+                <div className="groupname">
+          {currGroupData? currGroupData.groupName : ""}
+        </div>
+        <Pins cardClick={cardClick} contacts={pinData} />
                 <div className="contactlist">
                     {contactData &&
                         (filtered ? filtered : contactData).map(
