@@ -65,10 +65,12 @@ export default function NavBar({ setAccessToken }) {
 
     return (
         <nav className={`${styles.navbar} ${isOpen ? styles.expanded : ''}`}>
-            <button className={styles.button} onClick={toggleNav}>
+            <button className={styles.menuButton} onClick={toggleNav}>
                 <FaBars />
             </button>
-            <div className={`${styles.navMenu}`}>
+
+
+            <div className={`${styles.navMenu} ${isOpen ? styles.show : ''}`}>
                 <Link to="/profile" className={styles.navItem}>
                     <button className={styles.button}>
                         <MdPerson />
