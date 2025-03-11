@@ -205,128 +205,142 @@ export default function ContactForm(props) {
   return (
     // Dynamic form depending on if User or if Contact
     <>
-      <div className={styles.inputName}>First Name...</div>
-      <input
-        className={styles.inputField}
-        placeholder='first name'
-        name='firstName'
-        value={contact.firstName}
-        onChange={handleChange}
-      />
-
-      <div className={styles.inputName}>Last Name...</div>
-      <input
-        className={styles.inputField}
-        placeholder='last name'
-        name='lastName'
-        value={contact.lastName}
-        onChange={handleChange}
-      />
-
-      <div className={styles.inputName}>Phone Number...</div>
-      <input
-        className={styles.inputField}
-        placeholder='phone number'
-        name='phone'
-        value={contact.phone}
-        onChange={handleChange}
-      />
-
-      <div className={styles.inputName}>Email...</div>
-      <input
-        className={styles.inputField}
-        placeholder='email'
-        name='email'
-        value={contact.email}
-        onChange={handleChange}
-      />
-
-      {!props.isUser
-        ? (
-          <>
-            <div className={styles.inputName}>Birthday...</div>
+        <div className={styles.inputContainer}>
+            <div className={styles.inputName}> First Name </div>
             <input
-              className={styles.birthdayField}
-              type='text'
-              maxlength='2'
-              placeholder='MM'
-              name='month'
-              value={contact.birthday?.split('/')[0] || ''}
-              onChange={handleChange}
+                className={styles.inputField}
+                placeholder="first name"
+                name="firstName"
+                value={contact.firstName}
+                onChange={handleChange}
             />
-            <span className={styles.slash}>/</span>
-            <input
-              className={styles.birthdayField}
-              type='text'
-              maxlength='2'
-              placeholder='DD'
-              name='day'
-              value={contact.birthday?.split('/')[1] || ''}
-              onChange={handleChange}
-            />
-            <span className={styles.slash}>/</span>
-            <input
-              className={styles.yearField}
-              type='text'
-              maxlength='4'
-              placeholder='YYYY'
-              name='year'
-              value={contact.birthday?.split('/')[2] || ''}
-              onChange={handleChange}
-            />
-
-            <div className={styles.inputName}>Address...</div>
-            <input
-              className={styles.inputField}
-              placeholder='address'
-              name='address'
-              value={contact.address}
-              onChange={handleChange}
-            />
-          </>
-        )
-        : null}
-      {isFormFilled ? null : (
-        <p className={styles.requirements}>
-          {' '}
-          First Name & Full Phone Number Required{' '}
-        </p>
-      )}
-      <div className={styles.inputName}>Upload Image (Optional)</div>
-      <input
-        type='file'
-        accept='image/*'
-        name='image'
-        onChange={handleChange}
-        className={styles.inputField}
-      />
-      {isEditMode &&
-        contact.image &&
-        contact.image !== defaultimage &&
-        !hasImageChanged && (
-        <div className={styles.buttonRow}>
-          <button
-            className={styles.deleteImage}
-            onClick={handleDeleteImage}
-          >
-            Delete Image
-          </button>
         </div>
-      )}
-      <div className={styles.buttonRow}>
-        <input
-          className={styles.submit}
-          type='submit'
-          value='Submit'
-          onClick={() => submitForm(true)}
-        />
-        <input
-          className={styles.cancel}
-          type='button'
-          value='Cancel'
-          onClick={() => submitForm(false)}
-        />
-      </div>
+
+        <div className={styles.inputContainer}>
+            <div className={styles.inputName}> Last Name </div>
+            <input
+                className={styles.inputField}
+                placeholder="last name"
+                name="lastName"
+                value={contact.lastName}
+                onChange={handleChange}
+                />
+        </div>
+
+        <div className={styles.inputContainer}>
+            <div className={styles.inputName}> Phone Number </div>
+            <input
+                className={styles.inputField}
+                placeholder="phone number"
+                name="phone"
+                value={contact.phone}
+                onChange={handleChange}
+            />
+        </div>
+
+        <div className={styles.inputContainer}>
+            <div className={styles.inputName}> Email </div>
+            <input
+                className={styles.inputField}
+                placeholder="email"
+                name="email"
+                value={contact.email}
+                onChange={handleChange}
+            />
+        </div>
+
+        {!props.isUser ? (
+            <>
+                <div className={styles.inputName}> Birthday </div>
+                <div className={styles.birthdayContainer}>
+                    <input
+                        className={styles.monthField}
+                        type="text"
+                        maxlength="2"
+                        placeholder="MM"
+                        name="month"
+                        value={contact.birthday?.split('/')[0] || ''}
+                        onChange={handleChange}
+                    />
+                    <span className={styles.slash}>/</span>
+                    <input
+                        className={styles.dayField}
+                        type="text"
+                        maxlength="2"
+                        placeholder="DD"
+                        name="day"
+                        value={contact.birthday?.split('/')[1] || ''}
+                        onChange={handleChange}
+                    />
+                    <span className={styles.slash}>/</span>
+                    <input
+                        className={styles.yearField}
+                        type="text"
+                        maxlength="4"
+                        placeholder="YYYY"
+                        name="year"
+                        value={contact.birthday?.split('/')[2] || ''}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className={styles.inputContainer}>
+                    <div className={styles.inputName}> Address </div>
+                    <input
+                        className={styles.inputField}
+                        placeholder="address"
+                        name="address"
+                        value={contact.address}
+                        onChange={handleChange}
+                    />
+                </div>
+            </>
+        ) : null}
+        <div className={styles.imageContainer}>
+            <div className={styles.inputImageContainer}>
+                <div className={styles.inputImageName}> Change Image</div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    onChange={handleChange}
+                    className={styles.imageInputField}
+                />
+            </div>
+
+            {isEditMode &&
+            contact.image &&
+            contact.image !== defaultimage &&
+            !hasImageChanged && (
+                    <button
+                        className={styles.deleteImage}
+                        onClick={handleDeleteImage}
+                    >
+                        Delete Image
+                    </button>
+            )}
+        </div>
+
+        <div className={styles.centeredContainer}>
+        {isFormFilled ? null : (
+            <p className={styles.requirements}>
+                First Name & Full Phone Number Required
+            </p>
+        )}
+         </div>
+        <div className={styles.buttonRow}>
+            <input
+                className={styles.submit}
+                type="submit"
+                value="Submit"
+                onClick={() => submitForm(true)}
+            />
+            <input
+                className={styles.cancel}
+                type="button"
+                value="Cancel"
+                onClick={() => submitForm(false)}
+            />
+        </div>
     </>
-  );
+  )
 }
