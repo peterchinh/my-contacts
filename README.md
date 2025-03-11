@@ -1,10 +1,15 @@
 # My-Contacts
+CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Cheung, Peter Chinh
 
-Production: https://blue-sand-05b2e891e.4.azurestaticapps.net/
+## Links
 
-Figma prototype: https://www.figma.com/proto/CayfsuohC3qHYzCc9tb31n/Untitled?node-id=50-36&node-type=canvas&t=AjCr8W0f4a6Cwqp2-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=50%3A36&show-proto-sidebar=1
+- [Production](https://blue-sand-05b2e891e.4.azurestaticapps.net/)
+- [1st Figma Prototype](https://www.figma.com/proto/CayfsuohC3qHYzCc9tb31n/Untitled?node-id=50-36&node-type=canvas&t=AjCr8W0f4a6Cwqp2-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=50%3A36&show-proto-sidebar=1)
+- [2nd Figma Prototype](https://www.figma.com/design/66tjCFUn7XCtA4nlQL2exz/New-Contacts-Page?node-id=0-1&t=5DCrkdIxQSnKZdrb-1)
+- [Product/Tech Spec](https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gUD6_8N4YwTdhKBvHRqA/edit?usp=sharing)
+- [Final Presentation](https://docs.google.com/presentation/d/14xgVWtHq6PdL0rPft_zNXRgDijMIUDbUJsED5gj9-yU/edit?usp=sharing)
 
-Product/Tech Spec: https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gUD6_8N4YwTdhKBvHRqA/edit?usp=sharing
+## Setup
 
 ## Making Changes
 
@@ -34,6 +39,6 @@ Product/Tech Spec: https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gU
     -   Run "npm run format"
     -   Run "npm run lint"
 
-## Coverage Report
+## Testing/Coverage Report
 
 ![image](https://github.com/user-attachments/assets/2faa98d1-b4d7-4d9c-9a16-a5a990907a9c)
