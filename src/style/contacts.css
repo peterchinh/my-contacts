@@ -127,6 +127,9 @@
   transform: scale(1.1);
 }
 .groupname {
+  text-align: center;
   font-size: 48px;
   color: black;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
