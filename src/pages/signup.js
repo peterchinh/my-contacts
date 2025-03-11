@@ -60,7 +60,7 @@ export default function Signup() {
         addUser({
             firstName: firstName,
             lastName: lastName,
-            email: email,
+            email: email.toLowerCase(),
             password: password,
         }).then((result) => {
             if (result.status === 201) {
