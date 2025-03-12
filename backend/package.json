@@ -29,7 +29,8 @@
         "jest": "^29.7.0",
         "jsonwebtoken": "^9.0.2",
         "mongodb": "^6.10.0",
-        "mongoose": "^8.8.0"
+        "mongoose": "^8.8.0",
+        "supertest": "^7.0.0"
     },
     "devDependencies": {
         "@babel/plugin-transform-private-property-in-object": "^7.25.9",
