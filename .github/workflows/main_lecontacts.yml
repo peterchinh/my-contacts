@@ -15,6 +15,7 @@ jobs:
         env:
             MONGODB_URI: ${{ secrets.MONGODB_URI }}
             REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+            ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
         permissions:
             contents: read #This is required for actions/checkout
 
