@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default function ContactForm(props) {
   const [contact, setContact] = useState(props.contact);
-  const [originalContact, setOriginalContact] = useState(props.contact)
+  const originalContact = props.contact
   // const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [hasImageChanged, setHasImageChanged] = useState(false);
