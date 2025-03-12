@@ -71,21 +71,31 @@ app.get('/users', async (req, res) => {
 })
 
 app.put('/users/:id', async (req, res) => {
-    try {
-        const updatedUser = await User.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
             }
-        )
-        if (!updatedUser) {
-            return res.status(404).json({ error: 'User not found' })
+            try {
+                const updatedUser = await User.findByIdAndUpdate(
+                    req.params.id,
+                    req.body,
+                    {
+                        new: true,
+                    }
+                )
+                if (!updatedUser) {
+                    return res.status(404).json({ error: 'User not found' })
+                }
+                res.status(200).json(updatedUser)
+            } catch (err) {
+                res.status(400).json({ error: err.message })
+            }
         }
-        res.status(200).json(updatedUser)
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+    )
 })
 
 app.post('/users/login', async (req, res) => {
@@ -99,12 +109,19 @@ app.post('/users/login', async (req, res) => {
                 const accessToken = generateAccessToken({ id: user._id })
                 const refreshToken = generateRefreshToken({ id: user._id })
 
+                // res.cookie('refreshToken', refreshToken, {
+                //     httpOnly: true,
+                //     secure: true, //Make true in production
+                //     sameSite: 'None',
+                //     maxAge: 7 * 24 * 60 * 60 * 1000,
+                //     domain: 'lecontacts.azurewebsites.net',
+                //     path: '/',
+                // })
                 res.cookie('refreshToken', refreshToken, {
                     httpOnly: true,
-                    secure: true, //Make true in production
-                    sameSite: 'None',
+                    secure: false, //Make true in production
+                    sameSite: 'strict',
                     maxAge: 7 * 24 * 60 * 60 * 1000,
-                    domain: 'lecontacts.azurewebsites.net',
                     path: '/',
                 })
                 res.status(200).json({ accessToken })
@@ -118,11 +135,18 @@ app.post('/users/login', async (req, res) => {
 })
 
 app.post('/logout', (req, res) => {
+    // res.cookie('refreshToken', '', {
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: 'None',
+    //     domain: 'lecontacts.azurewebsites.net',
+    //     path: '/',
+    //     expires: new Date(0), // This sets the cookie to expire immediately
+    // })
     res.cookie('refreshToken', '', {
         httpOnly: true,
-        secure: true,
-        sameSite: 'None',
-        domain: 'lecontacts.azurewebsites.net',
+        secure: false,
+        sameSite: 'strict',
         path: '/',
         expires: new Date(0), // This sets the cookie to expire immediately
     })
@@ -157,6 +181,9 @@ app.post('/contact', async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
             try {
                 if (err) {
                     return res.status(403).json({ message: 'Forbidden' })
@@ -261,31 +288,55 @@ app.get('/contact/sorted', async (req, res) => {
 })
 
 app.put('/contact/:id', async (req, res) => {
-    try {
-        const updatedContact = await Contact.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        )
-        if (!updatedContact) {
-            return res.status(404).json({ error: 'Contact not found' })
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
+            try {
+                const updatedContact = await Contact.findByIdAndUpdate(
+                    req.params.id,
+                    req.body,
+                    { new: true }
+                )
+                if (!updatedContact) {
+                    return res.status(404).json({ error: 'Contact not found' })
+                }
+                res.status(200).json(updatedContact)
+            } catch (err) {
+                res.status(400).json({ error: err.message })
+            }
         }
-        res.status(200).json(updatedContact)
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+    )
 })
 
 app.delete('/contact/:id', async (req, res) => {
-    try {
-        const deletedContact = await Contact.findByIdAndDelete(req.params.id)
-        if (!deletedContact) {
-            return res.status(404).json({ error: 'Contact not found' })
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
+            try {
+                const deletedContact = await Contact.findByIdAndDelete(
+                    req.params.id
+                )
+                if (!deletedContact) {
+                    return res.status(404).json({ error: 'Contact not found' })
+                }
+                res.status(200).json({
+                    message: 'Contact deleted successfully',
+                })
+            } catch (err) {
+                res.status(400).json({ error: err.message })
+            }
         }
-        res.status(200).json({ message: 'Contact deleted successfully' })
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+    )
 })
 
 app.get('/group', async (req, res) => {
@@ -294,6 +345,9 @@ app.get('/group', async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
             try {
                 if (err) {
                     return res.status(403).json({ message: 'Forbidden' })
@@ -314,6 +368,9 @@ app.get('/group/:id', async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
             try {
                 if (err) {
                     return res.status(403).json({ message: 'Forbidden' })
@@ -337,6 +394,9 @@ app.post('/group', async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
             try {
                 if (err) {
                     return res.status(403).json({ message: 'Forbidden' })
@@ -353,70 +413,90 @@ app.post('/group', async (req, res) => {
 })
 
 app.put('/group/:id', async (req, res) => {
-    try {
-        const groupId = req.params.id
-        const { groupName, newContact } = req.body
-        const group = await Group.findById(groupId)
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
+            try {
+                const groupId = req.params.id
+                const { groupName, newContact } = req.body
+                const group = await Group.findById(groupId)
 
-        if (!group) {
-            return res.status(404).json({ error: 'Group not found' })
-        }
+                if (!group) {
+                    return res.status(404).json({ error: 'Group not found' })
+                }
 
-        if (groupName) {
-            group.groupName = groupName
-        }
-        if (newContact) {
-            if (!group.contacts.includes(newContact)) {
-                group.contacts.push(newContact)
-                await Contact.updateOne(
-                    { _id: newContact },
-                    { $push: { groups: groupId } }
-                )
-            } else {
-                return res
-                    .status(400)
-                    .json({ error: 'Contact already in group' })
+                if (groupName) {
+                    group.groupName = groupName
+                }
+                if (newContact) {
+                    if (!group.contacts.includes(newContact)) {
+                        group.contacts.push(newContact)
+                        await Contact.updateOne(
+                            { _id: newContact },
+                            { $push: { groups: groupId } }
+                        )
+                    } else {
+                        return res
+                            .status(400)
+                            .json({ error: 'Contact already in group' })
+                    }
+                }
+                const updatedGroup = await group.save()
+                res.status(200).json(updatedGroup)
+            } catch (err) {
+                res.status(400).json({ error: err.message })
             }
         }
-        const updatedGroup = await group.save()
-        res.status(200).json(updatedGroup)
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+    )
 })
 
 app.put('/group/:id/remove', async (req, res) => {
-    try {
-        const groupId = req.params.id
-        const { contactId } = req.body // Expecting `contactId` in the request body
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
+            try {
+                const groupId = req.params.id
+                const { contactId } = req.body // Expecting `contactId` in the request body
 
-        const group = await Group.findById(groupId)
+                const group = await Group.findById(groupId)
 
-        if (!group) {
-            return res.status(404).json({ error: 'Group not found' })
+                if (!group) {
+                    return res.status(404).json({ error: 'Group not found' })
+                }
+
+                // Check if the contact is actually in the group
+                if (!group.contacts.includes(contactId)) {
+                    return res
+                        .status(400)
+                        .json({ error: 'Contact is not in the group' })
+                }
+
+                // Remove the contact from the group's contacts array
+                group.contacts = group.contacts.filter(
+                    (id) => id.toString() !== contactId
+                )
+
+                const updatedGroup = await group.save()
+                await Contact.updateOne(
+                    { _id: contactId },
+                    { $pull: { groups: groupId } }
+                )
+                res.status(200).json(updatedGroup)
+            } catch (err) {
+                res.status(400).json({ error: err.message })
+            }
         }
-
-        // Check if the contact is actually in the group
-        if (!group.contacts.includes(contactId)) {
-            return res
-                .status(400)
-                .json({ error: 'Contact is not in the group' })
-        }
-
-        // Remove the contact from the group's contacts array
-        group.contacts = group.contacts.filter(
-            (id) => id.toString() !== contactId
-        )
-
-        const updatedGroup = await group.save()
-        await Contact.updateOne(
-            { _id: contactId },
-            { $pull: { groups: groupId } }
-        )
-        res.status(200).json(updatedGroup)
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+    )
 })
 
 app.post('/s3-url', async (req, res) => {

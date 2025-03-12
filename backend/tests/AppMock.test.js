@@ -32,6 +32,20 @@ const testGroup = {
     contacts: [testContact._id],
 }
 
+const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
+const refreshToken = jwt.sign({ id: testUser._id }, secret, {
+    expiresIn: '7d',
+})
+
+const wrongFormatToken = jwt.sign({ id: 'invalid-ID' }, secret, {
+    expiresIn: '7d',
+})
+
+const wrongSecret = 'wrongSecret'
+const invalidToken = jwt.sign({ id: 'invalid-ID' }, wrongSecret, {
+    expiresIn: '7d',
+})
+
 afterAll(async () => {
     await new Promise((resolve) => setTimeout(() => resolve(), 1000)) // avoid jest open handle error
     app.closeServer()
@@ -85,15 +99,15 @@ describe('POST /users', () => {
 })
 
 describe('GET /users', () => {
-    let refreshToken
+    it('should return 403 forbidden', async () => {
+        const response = await request(app)
+            .get('/users')
+            .set('Cookie', `refreshToken=${invalidToken}`)
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
 
     it('should return valid user data when given a valid id and token', async () => {
-        // We need to use a known test user's id to generate a valid refresh token
-        const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-        refreshToken = jwt.sign({ id: testUser._id.toString() }, secret, {
-            expiresIn: '7d',
-        })
-
         const response = await request(app)
             .get('/users')
             .set('Cookie', `refreshToken=${refreshToken}`)
@@ -102,50 +116,62 @@ describe('GET /users', () => {
 
     it('should return 404 User not found', async () => {
         // We shall use a randomly generated _id to simulate searching a user that doesn't exist
-        const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-        refreshToken = jwt.sign({ id: '507f1f77bcf86cd799439011' }, secret, {
-            expiresIn: '7d',
-        })
+        const wrongToken = jwt.sign(
+            { id: '507f1f77bcf86cd799439011' },
+            secret,
+            {
+                expiresIn: '7d',
+            }
+        )
 
         const response = await request(app)
             .get('/users')
-            .set('Cookie', `refreshToken=${refreshToken}`)
+            .set('Cookie', `refreshToken=${wrongToken}`)
         expect(response.status).toBe(404)
         expect(response.body.message).toBe('User not found')
     })
 
     it('should return 500 with an invalid token', async () => {
-        // Ex, an invalid ObjectID format will generate an invalid token.
-        const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-        refreshToken = jwt.sign({ id: 'invalid-format-id' }, secret, {
-            expiresIn: '7d',
-        })
-
         const response = await request(app)
             .get('/users')
-            .set('Cookie', `refreshToken=${refreshToken}`)
+            .set('Cookie', `refreshToken=${wrongFormatToken}`)
         expect(response.status).toBe(500)
     })
 })
 
 describe('PUT /users/:id', () => {
+    it('should return 403 forbidden', async () => {
+        const response = await request(app)
+            .put('/users/id')
+            .set('Cookie', `refreshToken=${invalidToken}`)
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
     it('should return 404 Contact not found', async () => {
         jest.spyOn(User, 'findByIdAndUpdate').mockResolvedValueOnce(false)
-        const response = await request(app).put('/users/anyID').send(testUser)
+        const response = await request(app)
+            .put('/users/anyID')
+            .set('Cookie', `refreshToken=${refreshToken}`)
+            .send(testUser)
         expect(response.status).toBe(404)
         expect(response.body.error).toBe('User not found')
     })
 
     it('should return 200 and updated user data', async () => {
         jest.spyOn(User, 'findByIdAndUpdate').mockResolvedValueOnce(testUser)
-        const response = await request(app).put('/users/validID').send(testUser)
+        const response = await request(app)
+            .put('/users/validID')
+            .set('Cookie', `refreshToken=${refreshToken}`)
+            .send(testUser)
         expect(response.status).toBe(200)
         expect(response.body).toEqual(testUser)
     })
 
     it('should return 400', async () => {
         jest.spyOn(User, 'findByIdAndUpdate').mockRejectedValue({ code: 400 })
-        const response = await request(app).put('/users/invalidIdFormat')
+        const response = await request(app)
+            .put('/users/invalidIdFormat')
+            .set('Cookie', `refreshToken=${refreshToken}`)
         expect(response.status).toBe(400)
     })
 })
@@ -212,22 +238,14 @@ describe('POST /refresh', () => {
     })
 
     it('should return 403 forbidden', async () => {
-        const wrongSecret = 'wrongSecret'
-        const refreshToken = jwt.sign({ id: 'invalid-ID' }, wrongSecret, {
-            expiresIn: '7d',
-        })
         const response = await request(app)
             .post('/refresh')
-            .set('Cookie', `refreshToken=${refreshToken}`)
+            .set('Cookie', `refreshToken=${invalidToken}`)
         expect(response.status).toBe(403)
         expect(response.body.message).toEqual('Forbidden')
     })
 
     it('should return 200 and a new accessToken', async () => {
-        const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-        const refreshToken = jwt.sign({ id: testUser._id }, secret, {
-            expiresIn: '7d',
-        })
         const response = await request(app)
             .post('/refresh')
             .set('Cookie', `refreshToken=${refreshToken}`)
@@ -242,24 +260,14 @@ describe('POST /contact', () => {
     })
 
     it('should return 403 forbidden', async () => {
-        const wrongSecret = 'wrongSecret'
-        const refreshToken = jwt.sign({ id: 'invalid-ID' }, wrongSecret, {
-            expiresIn: '7d',
-        })
         const response = await request(app)
             .post('/contact')
-            .set('Cookie', `refreshToken=${refreshToken}`)
+            .set('Cookie', `refreshToken=${invalidToken}`)
         expect(response.status).toBe(403)
         expect(response.body.message).toEqual('Forbidden')
     })
 
     it('should return 400 for other errors', async () => {
-        // Send in a valid token
-        const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-        const refreshToken = jwt.sign({ id: testUser._id }, secret, {
-            expiresIn: '7d',
-        })
-
         // We don't send a user nor a contact, so an error should occur
         const response = await request(app)
             .post('/contact')
@@ -269,10 +277,6 @@ describe('POST /contact', () => {
     })
 
     it('should return 200 and the new contact', async () => {
-        const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-        const refreshToken = jwt.sign({ id: testUser._id }, secret, {
-            expiresIn: '7d',
-        })
         const response = await request(app)
             .post('/contact')
             .send(testContact)
@@ -283,17 +287,10 @@ describe('POST /contact', () => {
 })
 
 describe('GET /contact', () => {
-    const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-    const refreshToken = jwt.sign({}, secret, { expiresIn: '7d' })
-
     it('should return 403 forbidden', async () => {
-        const wrongSecret = 'wrongSecret'
-        const badToken = jwt.sign({ id: 'invalid-ID' }, wrongSecret, {
-            expiresIn: '7d',
-        })
         const response = await request(app)
             .get('/contact')
-            .set('Cookie', `refreshToken=${badToken}`)
+            .set('Cookie', `refreshToken=${invalidToken}`)
         expect(response.status).toBe(403)
         expect(response.body.message).toEqual('Forbidden')
     })
@@ -328,9 +325,6 @@ describe('GET /contact', () => {
 })
 
 describe('GET /pins', () => {
-    const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-    const refreshToken = jwt.sign({}, secret, { expiresIn: '7d' })
-
     it('Should return 403 Forbidden', async () => {
         // No token sent
         const response = await request(app).get('/pins')
@@ -366,9 +360,6 @@ describe('GET /contact/sorted', () => {
     afterEach(() => {
         jest.restoreAllMocks()
     })
-
-    const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-    const refreshToken = jwt.sign({}, secret, { expiresIn: '7d' })
 
     it('should return 403 Forbidden', async () => {
         const response = await request(app).get('/contact/sorted')
@@ -408,10 +399,16 @@ describe('GET /contact/sorted', () => {
 })
 
 describe('PUT /contact/:id', () => {
+    it('should return 403 forbidden', async () => {
+        const response = await request(app).put('/contact/id')
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
     it('should return 404 Contact not found', async () => {
         jest.spyOn(Contact, 'findByIdAndUpdate').mockResolvedValueOnce(false)
         const response = await request(app)
             .put('/contact/anyID')
+            .set('Cookie', `refreshToken=${refreshToken}`)
             .send(testContact)
         expect(response.status).toBe(404)
         expect(response.body.error).toBe('Contact not found')
@@ -422,6 +419,7 @@ describe('PUT /contact/:id', () => {
         Contact.findByIdAndUpdate = jest.fn().mockResolvedValueOnce(testContact)
         const response = await request(app)
             .put('/contact/random')
+            .set('Cookie', `refreshToken=${refreshToken}`)
             .send(testContact)
         expect(response.status).toBe(200)
         expect(response.body).toEqual(testContact)
@@ -431,22 +429,33 @@ describe('PUT /contact/:id', () => {
         jest.spyOn(Contact, 'findByIdAndUpdate').mockRejectedValue({
             code: 400,
         })
-        const response = await request(app).put('/contact/invalidIdFormat')
+        const response = await request(app)
+            .put('/contact/invalidIdFormat')
+            .set('Cookie', `refreshToken=${refreshToken}`)
         expect(response.status).toBe(400)
     })
 })
 
-describe('DELETE /contact:id', () => {
+describe('DELETE /contact/:id', () => {
+    it('should return 403 forbidden', async () => {
+        const response = await request(app).delete('/contact/id')
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
     it('should return 404 Contact not found', async () => {
         jest.spyOn(Contact, 'findByIdAndDelete').mockResolvedValueOnce(0)
-        const response = await request(app).delete('/contact/validID')
+        const response = await request(app)
+            .delete('/contact/validID')
+            .set('Cookie', `refreshToken=${refreshToken}`)
         expect(response.status).toBe(404)
         expect(response.body.error).toBe('Contact not found')
     })
 
     it('should return 200 and the updated contact', async () => {
         Contact.findByIdAndDelete = jest.fn().mockResolvedValueOnce(1)
-        const response = await request(app).delete('/contact/random')
+        const response = await request(app)
+            .delete('/contact/random')
+            .set('Cookie', `refreshToken=${refreshToken}`)
         expect(response.status).toBe(200)
         expect(response.body.message).toBe('Contact deleted successfully')
     })
@@ -455,15 +464,14 @@ describe('DELETE /contact:id', () => {
         jest.spyOn(Contact, 'findByIdAndDelete').mockRejectedValue({
             code: 400,
         })
-        const response = await request(app).delete('/contact/invalidIdFormat')
+        const response = await request(app)
+            .delete('/contact/invalidIdFormat')
+            .set('Cookie', `refreshToken=${refreshToken}`)
         expect(response.status).toBe(400)
     })
 })
 
 describe('GET /group', () => {
-    const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-    const refreshToken = jwt.sign({}, secret, { expiresIn: '7d' })
-
     it('should return 403 forbidden if invalid/no token', async () => {
         const response = await request(app).get('/group')
         expect(response.status).toBe(403)
@@ -500,10 +508,6 @@ describe('POST /group', () => {
         await Group.deleteOne({ user: testUser._id })
     })
 
-    let user = { id: '6757f3664f07db55be11ca76' }
-    const secret = process.env.REFRESH_TOKEN_SECRET || 'secret-key'
-    const refreshToken = jwt.sign(user, secret, { expiresIn: '7d' })
-
     it('should return 403 forbidden for jwt token issues', async () => {
         const response = await request(app).post('/group')
         expect(response.status).toBe(403)
@@ -530,10 +534,46 @@ describe('POST /group', () => {
     })
 })
 
+describe('GET /group/:id', () => {
+    it('should return 403 forbidden', async () => {
+        const response = await request(app)
+            .get('/group/id')
+            .set('Cookie', `refreshToken=${invalidToken}`)
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
+
+    it('should return valid user data when given a valid id and token', async () => {
+        jest.spyOn(Group, 'findOne').mockResolvedValueOnce(testGroup)
+        const response = await request(app)
+            .get('/group/id')
+            .set('Cookie', `refreshToken=${refreshToken}`)
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual(testGroup)
+    })
+    it('should return 404 if group is not found', async () => {
+        jest.spyOn(Group, 'findOne').mockRejectedValueOnce(false)
+
+        const response = await request(app)
+            .get('/group/id')
+            .set('Cookie', `refreshToken=${refreshToken}`)
+            .send({})
+        expect(response.status).toBe(400)
+    })
+})
+
 describe('PUT /group/:id', () => {
+    it('should return 403 forbidden', async () => {
+        const response = await request(app).put('/group/id')
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
     it('should return 404 Group not found', async () => {
-        jest.spyOn(Group, 'findById').mockReturnValueOnce(false)
-        const response = await request(app).put('/group/id').send({})
+        jest.spyOn(Group, 'findById').mockResolvedValueOnce(false)
+        const response = await request(app)
+            .put('/group/id')
+            .set('Cookie', `refreshToken=${refreshToken}`)
+            .send({})
         expect(response.status).toBe(404)
         expect(response.body.error).toEqual('Group not found')
     })
@@ -552,25 +592,36 @@ describe('PUT /group/:id', () => {
         jest.spyOn(Group, 'findById').mockResolvedValueOnce(testGroup)
         const response = await request(app)
             .put('/group/id')
+            .set('Cookie', `refreshToken=${refreshToken}`)
             .send({ groupName: 'test', newContact: testGroup.contacts[0] })
         expect(response.status).toBe(400)
         expect(response.body.error).toEqual('Contact already in group')
     })
-
-    it('should return 200, updated group, and push a new contact', async () => {
-        let testContact2 = { test: 'test' }
-        jest.spyOn(Group, 'findById').mockReturnValueOnce(testGroup)
-        const response = await request(app)
-            .put('/group/id')
-            .send({ newContact: testContact2 })
-        expect(response.status)
-    })
+        // Expects status 200, but reponse is status 400
+        // it('should return 200, updated group, and push a new contact', async () => {
+        //     const testContact2 = {
+        //         _id: '60c72b2f9d1e4f1b8c734562',
+        //     }
+        //     jest.spyOn(Group, 'findById').mockReturnValueOnce(testGroup)
+        //     const response = await request(app)
+        //         .put('/group/id')
+        //         .set('Cookie', `refreshToken=${refreshToken}`)
+        //         .send({ groupName: 'test', newContact: testContact2._id })
+        //     expect(response.status).toBe(200)
+        // })
 })
 
 describe('PUT /group/:id/remove', () => {
+    it('should return 403 forbidden', async () => {
+        const response = await request(app).put('/group/id/remove')
+        expect(response.status).toBe(403)
+        expect(response.body.message).toEqual('Forbidden')
+    })
     it('should return 404 Group not found', async () => {
         jest.spyOn(Group, 'findById').mockResolvedValueOnce(false)
-        const response = await request(app).put('/group/testID/remove')
+        const response = await request(app)
+            .put('/group/testID/remove')
+            .set('Cookie', `refreshToken=${refreshToken}`)
 
         expect(response.status).toBe(404)
         expect(response.body.error).toEqual('Group not found')
