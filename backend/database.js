@@ -13,4 +13,14 @@ const connectDB = async () => {
     }
 }
 
+export const closeDB = async () => {
+    try {
+        await mongoose.connection
+            .close()
+            .then(console.log('Database connection closed successfully'))
+    } catch (error) {
+        console.error('Failed to close connection:', error)
+    }
+}
+
 export default connectDB
