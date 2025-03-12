@@ -28,7 +28,7 @@ jobs:
 
             - name: npm install, build, and test
               run: |
-                  echo "$EXAMPLE_MONGO"
+                  echo "${{ vars.EXAMPLE_MONGO }}"
                   npm install
                   npm run build --if-present
                   npm run test --if-present
