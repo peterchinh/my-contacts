@@ -48,15 +48,16 @@ CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Ch
 ## Testing/Coverage Report
 
 - Unit/Integration Tests
-      - Run "npm install supertest"
-      - Run "npm run test"
+    - "cd backend" 
+    - Run "npm install supertest"
+    - Run "npm run test"
   
 ![image](https://github.com/user-attachments/assets/2b82ee09-8b53-430c-9e08-802ff5a6c58a)
 
 - Acceptance Tests
-Backend needs to be running, or else one of the tests will fail.
     - Run "npm install cypress"
     - Run "npx cypress open" or "npx cypress run"
+    - Backend needs to be running, or else one of the tests will fail.
 
 ![image](https://github.com/user-attachments/assets/36c1629a-fe2a-4d22-bada-ece219df8863)
 
