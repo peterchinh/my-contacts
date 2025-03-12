@@ -10,6 +10,12 @@ CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Ch
 - [Final Presentation](https://docs.google.com/presentation/d/14xgVWtHq6PdL0rPft_zNXRgDijMIUDbUJsED5gj9-yU/edit?usp=sharing)
 
 ## Setup
+1. Prerequisites: Make sure npm, Node.js, and Git are installed
+2. Clone the project using "git clone https://github.com/peterchinh/my-contacts"
+3. Run "npm install"
+4. "cd backend" and create a .env file
+5. While still in the backend, run "npm run dev" to load the backend locally
+6. "cd ../" and run "npm start" to load the frontend
 
 ## Making Changes
 
@@ -40,5 +46,16 @@ CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Ch
     -   Run "npm run lint"
 
 ## Testing/Coverage Report
+- Unit/Integration Tests
+      - Run "npm install supertest"
+      - Run "npm run test"
+![image](https://github.com/user-attachments/assets/2b82ee09-8b53-430c-9e08-802ff5a6c58a)
 
-![image](https://github.com/user-attachments/assets/2faa98d1-b4d7-4d9c-9a16-a5a990907a9c)
+- Acceptance Tests
+Backend needs to be running, or else one of the tests will fail.
+    - Run "npm install cypress"
+    - Run "npx cypress open" or "npx cypress run"
+![image](https://github.com/user-attachments/assets/36c1629a-fe2a-4d22-bada-ece219df8863)
+
+
+
