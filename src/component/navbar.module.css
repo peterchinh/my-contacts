@@ -10,23 +10,23 @@
     font-size: 1.8rem;
     border: 2px solid black;
     border-radius: 50%;
-    width: 60px; 
-    height: 60px; 
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     cursor: pointer;
-    z-index: 2; 
+    z-index: 2;
 }
 
 .menuButton:hover {
     background: #552583;
-    color: #FDB927; /* Makes the icon white when hovered */
+    color: #fdb927;
     transform: scale(1.1);
 }
 
 .navbar.expanded {
-    width: 15%; 
+    width: 15%;
 }
 
 .navMenu {
@@ -35,7 +35,7 @@
     left: -250px; /* Start offscreen */
     width: 225px;
     height: 100vh;
-    background: rgba(215, 215, 215, 0.9); 
+    background: rgba(215, 215, 215, 0.9);
     padding-top: 90px;
     padding-left: 10px;
     display: flex;
@@ -46,20 +46,17 @@
     z-index: 1;
 }
 
-
-
 .show {
-    
     display: flex; /* Show when menu is toggled */
     left: 0; /* Slide in */
 }
-
 
 .navItem {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .button {
@@ -80,13 +77,26 @@
         opacity 0.3s ease; /* Smooth transitions */
     opacity: 0; /* Initially hidden */
     cursor: default;
+    margin-left: 20px; /* Space between button and text */
+    margin-right: 20px;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow */
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease; /* Smooth transitions */
+    opacity: 0; /* Initially hidden */
+    cursor: default;
+    color: black;
 }
 
 .navbar.expanded .navText {
     cursor: pointer;
+    cursor: pointer;
 }
 
 .slideIn {
+    opacity: 1; /* Fully visible */
+    transform: translateX(0); /* Slide in */
     opacity: 1; /* Fully visible */
     transform: translateX(0); /* Slide in */
 }
@@ -94,9 +104,19 @@
 .slideOut {
     opacity: 0; /* Hidden */
     transform: translateX(-10px); /* Slide out to the left */
+    opacity: 0; /* Hidden */
+    transform: translateX(-10px); /* Slide out to the left */
 }
 
 @keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
     from {
         opacity: 0;
         transform: translateY(-10px);
@@ -118,14 +138,35 @@
     width: 100%;
     margin-top: 1rem; /* Add margin-top to create space between groups and submenu */
     margin-left: 4rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Change from absolute to relative */
+    width: 100%;
+    margin-top: 1rem; /* Add margin-top to create space between groups and submenu */
+    margin-left: 4rem;
 }
 
 .subMenuOpen {
     max-height: 200px;
     opacity: 1;
+    overflow-y: auto;
+    /* overflow-y: hidden; */
     transition:
         max-height 0.3s ease,
         opacity 0.3s ease;
+}
+
+.subMenuOpen::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
+}
+
+.subMenuOpen {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 .subMenuItem {
@@ -138,6 +179,8 @@
 }
 
 .subMenuClosed {
+    max-height: 0;
+    opacity: 0;
     max-height: 0;
     opacity: 0;
 }
