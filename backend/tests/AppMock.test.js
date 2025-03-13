@@ -304,16 +304,17 @@ describe('GET /contact', () => {
         expect(response.body).toBeDefined()
     })
 
-    /* Mocking Database error is failing
-  it("should return 400 for other errors", async () => {
-  jest.spyOn(Contact, "find").mockRejectedValueOnce(new Error("Database error"));
+    it('should return 400 for other errors', async () => {
+        jest.spyOn(Contact, 'find').mockRejectedValueOnce(
+            new Error('Database error')
+        )
 
-    const response = await request(app).get("/contact")
-      .set("Cookie", `refreshToken=${refreshToken}`);
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBeDefined();
-  });
-*/
+        const response = await request(app)
+            .get('/contact')
+            .set('Cookie', `refreshToken=${refreshToken}`)
+        expect(response.status).toBe(400)
+        expect(response.body.error).toBeDefined()
+    })
 
     it('should return a filtered list of contacts', async () => {
         const response = await request(app)
@@ -342,18 +343,13 @@ describe('GET /pins', () => {
         expect(response.body).toEqual(testContact)
     })
 
-    // Mocking DB errors not working
-    /*
-  it("should return 400 for other errors", async () => {
-    const findMock = jest.spyOn(Contact, "find").mockReturnValueOnce({
-      sort: jest.fn().mockRejectedValueOnce(new Error("Database error")),
-    });
-    const response = await request(app).get("/pins")
-      .set("Cookie", `refreshToken=${refreshToken}`);
-    expect(response.status).toBe(400);
-
-  });
-*/
+    it('should return 400 with invalid user id in token', async () => {
+        const response = await request(app)
+            .get('/pins')
+            .set('Cookie', `refreshToken=${wrongFormatToken}`)
+        expect(response.status).toBe(400)
+        expect(response.body).toBeDefined()
+    })
 })
 
 describe('GET /contact/sorted', () => {
@@ -597,18 +593,18 @@ describe('PUT /group/:id', () => {
         expect(response.status).toBe(400)
         expect(response.body.error).toEqual('Contact already in group')
     })
-        // Expects status 200, but reponse is status 400
-        // it('should return 200, updated group, and push a new contact', async () => {
-        //     const testContact2 = {
-        //         _id: '60c72b2f9d1e4f1b8c734562',
-        //     }
-        //     jest.spyOn(Group, 'findById').mockReturnValueOnce(testGroup)
-        //     const response = await request(app)
-        //         .put('/group/id')
-        //         .set('Cookie', `refreshToken=${refreshToken}`)
-        //         .send({ groupName: 'test', newContact: testContact2._id })
-        //     expect(response.status).toBe(200)
-        // })
+    // Expects status 200, but reponse is status 400
+    // it('should return 200, updated group, and push a new contact', async () => {
+    //     const testContact2 = {
+    //         _id: '60c72b2f9d1e4f1b8c734562',
+    //     }
+    //     jest.spyOn(Group, 'findById').mockReturnValueOnce(testGroup)
+    //     const response = await request(app)
+    //         .put('/group/id')
+    //         .set('Cookie', `refreshToken=${refreshToken}`)
+    //         .send({ groupName: 'test', newContact: testContact2._id })
+    //     expect(response.status).toBe(200)
+    // })
 })
 
 describe('PUT /group/:id/remove', () => {
