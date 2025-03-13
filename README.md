@@ -60,7 +60,6 @@ CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Ch
 
 ![image](https://github.com/user-attachments/assets/098c0db5-7975-446c-a1ed-da665005275f)
 
-
 -   Acceptance Tests
     -   Run "npm install cypress"
     -   Run "npx cypress open" or "npx cypress run"
