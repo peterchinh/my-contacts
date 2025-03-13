@@ -23,6 +23,8 @@ dotenv.config()
 app.use(express.json())
 app.use(cookieParser())
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 app.post('/users', async (req, res) => {
     try {
         const {
@@ -111,13 +113,14 @@ app.post('/users/login', async (req, res) => {
 
                 res.cookie('refreshToken', refreshToken, {
                     httpOnly: true,
-                    secure: true, //Make true in production
-                    sameSite: 'None',
+                    secure: isProduction, //Make true in production
+                    sameSite: isProduction ? 'None' : 'Lax',
                     maxAge: 7 * 24 * 60 * 60 * 1000,
-                    domain: 'lecontacts.azurewebsites.net',
+                    domain: isProduction
+                        ? 'lecontacts.azurewebsites.net'
+                        : undefined,
                     path: '/',
                 })
-
                 res.status(200).json({ accessToken })
             } else {
                 res.status(400).json({ error: 'Incorrect Password' })
@@ -131,9 +134,9 @@ app.post('/users/login', async (req, res) => {
 app.post('/logout', (req, res) => {
     res.cookie('refreshToken', '', {
         httpOnly: true,
-        secure: true,
-        sameSite: 'None',
-        domain: 'lecontacts.azurewebsites.net',
+        secure: isProduction,
+        sameSite: isProduction ? 'None' : 'Lax',
+        domain: isProduction ? 'lecontacts.azurewebsites.net' : undefined,
         path: '/',
         expires: new Date(0), // This sets the cookie to expire immediately
     })
