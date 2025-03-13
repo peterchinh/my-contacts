@@ -50,28 +50,15 @@
     color: white;
     cursor: pointer;
 }
-.copyShare {
+.popupButton {
     color: black;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    padding: 10px 10px;
+    padding: 9px 9px;
     transition-duration: 0.4s;
 }
-.copyShare:hover {
-    background-color: #3b8132;
-    color: white;
-    cursor: pointer;
-}
-.inputShare {
-    color: black;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    padding: 10px 10px;
-    transition-duration: 0.4s;
-}
-.inputShare:hover {
+.popupButton:hover {
     background-color: #3b8132;
     color: white;
     cursor: pointer;
