@@ -9,8 +9,14 @@ export default function ContactForm(props) {
   // const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [hasImageChanged, setHasImageChanged] = useState(false);
-  const isFormFilled = contact.phone && contact.phone.length === 14 &&
-    contact.firstName;
+  let isFormFilled;
+  if(props.isUser){
+    isFormFilled = contact.phone && contact.phone.length === 14 &&
+      contact.firstName && contact.email.includes("@");
+  } else {
+   isFormFilled = contact.phone && contact.phone.length === 14 &&
+      contact.firstName
+  }
 
   useEffect(() => {
     if (props.contact && props.contact._id) {
@@ -322,9 +328,15 @@ export default function ContactForm(props) {
 
         <div className={styles.centeredContainer}>
         {isFormFilled ? null : (
+            props.isUser ? (
             <p className={styles.requirements}>
-                First Name & Full Phone Number Required
+                First Name, Full Phone Number and Email (@ symbol) Required.
             </p>
+            ) : (
+            <p className={styles.requirements}>
+               First Name & Full Phone Number Required
+            </p>
+            )
         )}
          </div>
         <div className={styles.buttonRow}>
