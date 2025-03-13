@@ -70,6 +70,10 @@ export default function UserInfo(props) {
     setShowPopup(!showPopup);
   }
 
+  function toggleViewShareCode() {
+    setActiveForm(activeForm === 'viewShareCode' ? null : 'viewShareCode');
+  }
+
   function parseShareCode(shareCode) {
     const lines = shareCode.split('\n');
     const contact = {};
@@ -200,7 +204,7 @@ export default function UserInfo(props) {
                 {showPopup && (
                   <div className={styles.popup}>
                     <input
-                      className={styles.copyShare}
+                      className={styles.popupButton}
                       type='button'
                       value='Copy Share Code'
                       onClick={() => {
@@ -209,7 +213,7 @@ export default function UserInfo(props) {
                       }}
                     />
                     <input
-                      className={styles.inputShare}
+                      className={styles.popupButton}
                       type='button'
                       value='Input Share Code'
                       onClick={() => {
@@ -217,8 +221,17 @@ export default function UserInfo(props) {
                         togglePopup();
                       }}
                     />
+                    <input
+                     className={styles.popupButton}
+                     type='button'
+                     value='View Share Code'
+                     onClick={() => {
+                       toggleViewShareCode();
+                       togglePopup();
+                     }}
+                    />
                   </div>
-                )}
+                  )}
               </div>
             </div>
           </div>
@@ -270,6 +283,27 @@ export default function UserInfo(props) {
                       />
                     </div>
                   </div>
+                )}
+                {activeForm === 'viewShareCode' && (
+                 <div>
+                 <pre style={{ fontSize: "20px", fontWeight: "bold" }}>
+                   {`firstName=${user.firstName} \n lastName=${user.lastName}
+                   phone=${user.phone} \n email=${user.email} \n image=${user.image}`
+                   .split("\n").map(line => line.trim()).join("\n")}
+                 </pre>
+                <input
+                   type='button'
+                   value='Copy'
+                   onClick={() => {CopyShareCode();}}
+                   className={styles.submitShareButton}
+                 />
+                 <input
+                   type='button'
+                   value='Cancel'
+                   onClick={toggleViewShareCode}
+                   className={styles.cancelShareButton}
+                 />
+                 </div>
                 )}
               </div>
             </>
