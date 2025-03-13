@@ -175,9 +175,6 @@ app.post('/contact', async (req, res) => {
                 return res.status(403).json({ message: 'Forbidden' })
             }
             try {
-                if (err) {
-                    return res.status(403).json({ message: 'Forbidden' })
-                }
                 req.body.user = user.id
                 const newContact = new Contact(req.body)
                 await newContact.save()
@@ -190,34 +187,34 @@ app.post('/contact', async (req, res) => {
 })
 
 app.get('/contact', async (req, res) => {
-    try {
-        const refreshToken = req.cookies.refreshToken
-        jwt.verify(
-            refreshToken,
-            process.env.REFRESH_TOKEN_SECRET,
-            async (err, user) => {
-                if (err) {
-                    return res.status(403).json({ message: 'Forbidden' })
-                }
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
+            try {
                 const contacts = await Contact.find({ user: user.id })
                 res.json(contacts)
+            } catch (err) {
+                res.status(400).json({ error: err.message })
             }
-        )
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+        }
+    )
 })
 
 app.get('/pins', async (req, res) => {
-    try {
-        const refreshToken = req.cookies.refreshToken
-        jwt.verify(
-            refreshToken,
-            process.env.REFRESH_TOKEN_SECRET,
-            async (err, user) => {
-                if (err) {
-                    return res.status(403).json({ message: 'Forbidden' })
-                }
+    const refreshToken = req.cookies.refreshToken
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Forbidden' })
+            }
+            try {
                 const groupId = req.query.groupId
                 let contacts
                 if (groupId) {
@@ -239,11 +236,11 @@ app.get('/pins', async (req, res) => {
                     })
                 }
                 res.json(contacts)
+            } catch (err) {
+                res.status(400).json({ error: err.message })
             }
-        )
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
+        }
+    )
 })
 
 app.get('/contact/sorted', async (req, res) => {
@@ -339,9 +336,6 @@ app.get('/group', async (req, res) => {
                 return res.status(403).json({ message: 'Forbidden' })
             }
             try {
-                if (err) {
-                    return res.status(403).json({ message: 'Forbidden' })
-                }
                 req.body.user = user.id
                 const groups = await Group.find({ user: user.id })
                 res.json(groups)
@@ -362,9 +356,6 @@ app.get('/group/:id', async (req, res) => {
                 return res.status(403).json({ message: 'Forbidden' })
             }
             try {
-                if (err) {
-                    return res.status(403).json({ message: 'Forbidden' })
-                }
                 const groupId = req.params.id
                 const group = await Group.findOne({
                     user: user.id,
@@ -388,9 +379,6 @@ app.post('/group', async (req, res) => {
                 return res.status(403).json({ message: 'Forbidden' })
             }
             try {
-                if (err) {
-                    return res.status(403).json({ message: 'Forbidden' })
-                }
                 req.body.user = user.id
                 const newGroup = new Group(req.body)
                 await newGroup.save()
