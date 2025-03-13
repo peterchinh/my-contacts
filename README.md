@@ -2,6 +2,10 @@
 
 CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Cheung, Peter Chinh
 
+[![Build and deploy Node.js app to Azure Web App - lecontacts](https://github.com/peterchinh/my-contacts/actions/workflows/main_lecontacts.yml/badge.svg)](https://github.com/peterchinh/my-contacts/actions/workflows/main_lecontacts.yml)
+[![Azure Static Web Apps CI/CD](https://github.com/peterchinh/my-contacts/actions/workflows/azure-static-web-apps-blue-sand-05b2e891e.yml/badge.svg)](https://github.com/peterchinh/my-contacts/actions/workflows/azure-static-web-apps-blue-sand-05b2e891e.yml)
+[![Node.js CI](https://github.com/peterchinh/my-contacts/actions/workflows/ci-testing.yml/badge.svg)](https://github.com/peterchinh/my-contacts/actions/workflows/ci-testing.yml)
+
 ## Links
 
 -   [Production](https://blue-sand-05b2e891e.4.azurestaticapps.net/)
