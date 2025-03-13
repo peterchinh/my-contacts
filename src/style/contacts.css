@@ -1,10 +1,10 @@
 .contactpage {
-  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  flex-direction: row;
-  overflow: hidden;
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: row;
+    overflow: hidden;
 }
 
 .main {
@@ -27,49 +27,47 @@
 }
 
 .search-bar {
-  flex: 1; /* Makes the search bar take up remaining space */
+    flex: 1; /* Makes the search bar take up remaining space */
 }
 
 .addcontact {
-  position: relative;
-  margin-right: 15px;
-  margin-top: 10px;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 50%;
-  cursor: pointer;
+    position: relative;
+    margin-right: 15px;
+    margin-top: 10px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .addcontact:hover {
-  background: #552583;
-  color: #FDB927; 
-  transform: scale(1.1);
-}
-
-
-.horizontal {
-  position: absolute;
-  background-color: black;
-  width: 60%;
-  height: 4px;
+    background: #552583;
+    color: #fdb927;
+    transform: scale(1.1);
 }
 
 .horizontal {
-  color: #FDB927
+    position: absolute;
+    background-color: black;
+    width: 60%;
+    height: 4px;
+}
+
+.horizontal {
+    color: #fdb927;
 }
 
 .vertical {
-  position: absolute;
-  background-color: black;
-  width: 4px;
-  height: 60%;
+    position: absolute;
+    background-color: black;
+    width: 4px;
+    height: 60%;
 }
-
 
 .contactlist {
     max-height: 85vh;
@@ -113,23 +111,23 @@
     font-size: 2rem;
     border: 2px solid black;
     border-radius: 50%;
-    width: 60px; 
-    height: 60px; 
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     cursor: pointer;
 }
 
 .sortButton:hover {
-  background: #552583;
-  color: #FDB927; 
-  transform: scale(1.1);
+    background: #552583;
+    color: #fdb927;
+    transform: scale(1.1);
 }
 .groupname {
-  text-align: center;
-  font-size: 48px;
-  color: black;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+    text-align: center;
+    font-size: 48px;
+    color: black;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }

@@ -91,7 +91,6 @@
     font-size: 18px;
     border: none;
     border-bottom: 2px solid purple;
-    
 }
 
 .inputField:focus {
@@ -135,7 +134,6 @@
     border: none;
     border-bottom: 2px solid purple;
 }
-
 
 .monthField:focus {
     outline: none;
@@ -189,4 +187,3 @@
     align-items: center;
     width: 100%;
 }
-

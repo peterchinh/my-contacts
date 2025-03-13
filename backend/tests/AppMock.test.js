@@ -1,6 +1,5 @@
 // Testing backend.js
-import { describe, expect, test, jest } from '@jest/globals'
-import express from 'express'
+import { describe, expect, jest } from '@jest/globals'
 import app from '../backend.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'

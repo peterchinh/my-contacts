@@ -44,6 +44,9 @@
         "extends": [
             "react-app",
             "react-app/jest"
+        ],
+        "ignorePatterns": [
+            "**/cypress/**"
         ]
     },
     "browserslist": {

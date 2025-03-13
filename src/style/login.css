@@ -19,10 +19,10 @@
 }
 
 .crown-image {
-  align-items:center;
-  width: 125px;  
-  height: auto;
-  margin: -1rem 0rem -1rem 0rem;
+    align-items: center;
+    width: 125px;
+    height: auto;
+    margin: -1rem 0rem -1rem 0rem;
 }
 
 .login h1 {
@@ -63,7 +63,6 @@
     background-color: #ffffff;
 }
 
-
 .error-message {
     color: red;
     font-size: 0.875rem;
@@ -71,19 +70,19 @@
 }
 
 .btn2 {
-  width: 100%;
-  padding: 12px;
-  background: #552583;
-  color: white;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    background: #552583;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 .btn2:hover {
-  background-color: #FDB927;
+    background-color: #fdb927;
 }
 
 .login-links {
@@ -92,13 +91,13 @@
 }
 
 .link2 {
-  display: block;
-  color: #552583;
-  text-decoration: none;
-  margin-top: 0.5rem;
-  transition: color 0.3s;
+    display: block;
+    color: #552583;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    transition: color 0.3s;
 }
 
 .link2:hover {
-  color: #FDB927;
+    color: #fdb927;
 }

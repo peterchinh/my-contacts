@@ -69,7 +69,6 @@ export default function NavBar({ setAccessToken }) {
                 <FaBars />
             </button>
 
-
             <div className={`${styles.navMenu} ${isOpen ? styles.show : ''}`}>
                 <Link to="/profile" className={styles.navItem}>
                     <button className={styles.button}>
@@ -141,8 +140,8 @@ export default function NavBar({ setAccessToken }) {
                                         if (index === groupData.length) {
                                             setGroupAdd(true)
                                         } else {
-                    navigate(`/group/${group._id}`)
-                  }
+                                            navigate(`/group/${group._id}`)
+                                        }
                                     }} // Prevent click from bubbling
                                 >
                                     {group.groupName}
