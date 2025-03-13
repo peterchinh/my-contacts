@@ -1,13 +1,13 @@
-import "../style/login.css";
-import crown from "../assets/crown.png";
-import { MdMail, MdVpnKey } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
+import '../style/login.css';
+import crown from '../assets/crown.png';
+import { MdMail, MdVpnKey } from 'react-icons/md';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Login({ setAccessToken }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function Login({ setAccessToken }) {
   async function verifyUser(user) {
     try {
       const response = await axios.post(
-        "http://localhost:8000/users/login",
+        `${process.env.REACT_APP_BASE_URL}/users/login`,
         user,
         { withCredentials: true },
       );
@@ -29,7 +29,7 @@ export default function Login({ setAccessToken }) {
         };
       }
       console.error(error);
-      return { status: 500, error: "An unexpected error occurred" };
+      return { status: 500, error: 'An unexpected error occurred' };
     }
   }
   const handleSubmit = (e) => {
@@ -41,16 +41,16 @@ export default function Login({ setAccessToken }) {
       password: password,
     }).then((result) => {
       if (result.status === 200) {
-        console.log("Log in successful!");
+        console.log('Log in successful!');
         setAccessToken(result.data);
-        navigate("/");
+        navigate('/');
       } else {
         // Display the error message
-        console.error("Error:", result.error);
-        if (result.error === "Email does not have an account") {
+        console.error('Error:', result.error);
+        if (result.error === 'Email does not have an account') {
           setEmailError(true);
         }
-        if (result.error === "Incorrect Password") {
+        if (result.error === 'Incorrect Password') {
           setPasswordError(true);
         }
       }
@@ -58,57 +58,57 @@ export default function Login({ setAccessToken }) {
   };
 
   return (
-    <div className="container">
-      <form className="login" onSubmit={handleSubmit}>
+    <div className='container'>
+      <form className='login' onSubmit={handleSubmit}>
         <h1>Welcome</h1>
-        <img src={crown} alt="Crown" className="crown-image" />
-        <div className="input-container">
-          <MdMail className="icon" />
+        <img src={crown} alt='Crown' className='crown-image' />
+        <div className='input-container'>
+          <MdMail className='icon' />
           <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            type='email'
+            placeholder='Email'
+            onChange={(e) => setEmail(e.target.value.toLowerCase())}
             required
             style={{
-              borderColor: emailError ? "red" : "initial",
+              borderColor: emailError ? 'red' : 'initial',
             }}
           />
         </div>
 
         {emailError && (
-          <div className="error-message" style={{ color: "red" }}>
+          <div className='error-message' style={{ color: 'red' }}>
             Email does not have an account
           </div>
         )}
 
-        <div className="input-container">
-          <MdVpnKey className="icon" />
+        <div className='input-container'>
+          <MdVpnKey className='icon' />
           <input
-            type="password"
-            placeholder="Password"
+            type='password'
+            placeholder='Password'
             onChange={(e) => setPassword(e.target.value)}
             required
             style={{
-              borderColor: passwordError ? "red" : "initial",
+              borderColor: passwordError ? 'red' : 'initial',
             }}
           />
         </div>
 
         {passwordError && (
-          <div className="error-message" style={{ color: "red" }}>
+          <div className='error-message' style={{ color: 'red' }}>
             Incorrect password
           </div>
         )}
 
-        <div className="login-links">
-          <Link to="/forgot-password" className="link">
+        <div className='login-links'>
+          <Link to='/forgot-password' className='link2'>
             Forgot password?
           </Link>
-          <Link to="/signup" className="link">
+          <Link to='/signup' className='link2'>
             Don’t have an account? Sign up
           </Link>
         </div>
-        <button type="submit" className="btn">
+        <button type='submit' className='btn2'>
           Login
         </button>
       </form>

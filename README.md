@@ -1,8 +1,21 @@
 # My-Contacts
+CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Cheung, Peter Chinh
 
-Figma prototype: https://www.figma.com/proto/CayfsuohC3qHYzCc9tb31n/Untitled?node-id=50-36&node-type=canvas&t=AjCr8W0f4a6Cwqp2-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=50%3A36&show-proto-sidebar=1
+## Links
 
-Product/Tech Spec: https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gUD6_8N4YwTdhKBvHRqA/edit?usp=sharing
+- [Production](https://blue-sand-05b2e891e.4.azurestaticapps.net/)
+- [1st Figma Prototype](https://www.figma.com/proto/CayfsuohC3qHYzCc9tb31n/Untitled?node-id=50-36&node-type=canvas&t=AjCr8W0f4a6Cwqp2-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=50%3A36&show-proto-sidebar=1)
+- [2nd Figma Prototype](https://www.figma.com/design/66tjCFUn7XCtA4nlQL2exz/New-Contacts-Page?node-id=0-1&t=5DCrkdIxQSnKZdrb-1)
+- [Product/Tech Spec](https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gUD6_8N4YwTdhKBvHRqA/edit?usp=sharing)
+- [Final Presentation](https://docs.google.com/presentation/d/14xgVWtHq6PdL0rPft_zNXRgDijMIUDbUJsED5gj9-yU/edit?usp=sharing)
+
+## Setup
+1. Prerequisites: Make sure npm, Node.js, and Git are installed
+2. Clone the project using "git clone https://github.com/peterchinh/my-contacts"
+3. Run "npm install"
+4. "cd backend" and create a .env file
+5. While still in the backend, run "npm run dev" to load the backend locally
+6. "cd ../" and run "npm start" to load the frontend
 
 ## Making Changes
 
@@ -28,10 +41,25 @@ Product/Tech Spec: https://docs.google.com/document/d/1YyBJFXjlZsVTPF59bxI-Ql8gU
 
 ## Style Guides
 
-- Before Committing:
-  - Run "npm run format"
-  - Run "npm run lint"
+-   Before Committing:
+    -   Run "npm run format"
+    -   Run "npm run lint"
 
-## Coverage Report
+## Testing/Coverage Report
 
-![image](https://github.com/user-attachments/assets/2faa98d1-b4d7-4d9c-9a16-a5a990907a9c)
+- Unit/Integration Tests
+    - "cd backend" 
+    - Run "npm install supertest"
+    - Run "npm run test"
+  
+![image](https://github.com/user-attachments/assets/2b82ee09-8b53-430c-9e08-802ff5a6c58a)
+
+- Acceptance Tests
+    - Run "npm install cypress"
+    - Run "npx cypress open" or "npx cypress run"
+    - Backend needs to be running, or else one of the tests will fail.
+
+![image](https://github.com/user-attachments/assets/36c1629a-fe2a-4d22-bada-ece219df8863)
+
+
+

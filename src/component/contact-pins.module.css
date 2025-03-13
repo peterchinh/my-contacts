@@ -4,23 +4,23 @@
     height: 100%;
     max-height: 200px;
     margin: 0 auto;
-  }
-.hidden {
-  height: 0;
 }
-  .pinImage {
-    width: 160px;
-    height: 160px;
+.hidden {
+    height: 0;
+}
+.pinImage {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ccc;
     display: block;
     margin: 0 auto;
-  }
+}
 
-  .contactName {
+.contactName {
     font-size: 14px;
     text-align: center;
     margin-top: 8px;
     color: #333;
-  }
+}

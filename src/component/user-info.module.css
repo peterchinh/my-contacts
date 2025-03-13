@@ -1,201 +1,187 @@
 .profileContainer {
-  width: 70%;
-  height: 85%;
-  display: flex;
-  justify-content: center;
-  padding: 15px;
-  box-sizing: border-box;
+    width: 70%;
+    height: 85%;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    box-sizing: border-box;
 }
 .profileCard {
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  transition: transform 0.3s ease-in-out;
-  border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+    border: 1px solid black;
 }
 .profileInfo {
-  text-align: center;
-  font-size: 20px;
-  font-family: "Open Sans", sans-serif;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
 }
 .profileName {
-  margin: 20px 0;
-  font-size: 38px;
+    margin: 20px 0;
+    font-size: 38px;
 }
 .image {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid black;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid black;
 }
 .edit {
-  border: 2px solid #0000ff; /* Blue */
-  border-radius: 10px;
-  color: black;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  margin-right: 20px;
-  padding: 15px 15px;
-  transition-duration: 0.4s;
+    border: 2px solid #0000ff; /* Blue */
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-right: 20px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
 }
 .edit:hover {
-  background-color: #0000ff;
-  color: white;
-  cursor: pointer;
+    background-color: #0000ff;
+    color: white;
+    cursor: pointer;
 }
-.copyShare {
-  color: black;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  padding: 10px 10px;
-  transition-duration: 0.4s;
+.popupButton {
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    padding: 9px 9px;
+    transition-duration: 0.4s;
 }
-.copyShare:hover {
-  background-color: #3B8132;
-  color: white;
-  cursor: pointer;
-}
-.inputShare {
-  color: black;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  padding: 10px 10px;
-  transition-duration: 0.4s;
-}
-.inputShare:hover {
-  background-color: #3B8132;
-  color: white;
-  cursor: pointer;
+.popupButton:hover {
+    background-color: #3b8132;
+    color: white;
+    cursor: pointer;
 }
 .inputFormContainer {
-  margin-top: auto;
-  padding: 10px;
-  width: 40%;
-  height: 100%;
-  border-radius: 10px;
+    margin-top: auto;
+    padding: 10px;
+    width: 40%;
+    height: 100%;
+    border-radius: 10px;
 }
 .inputForm {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 .inputForm textarea {
-  margin-bottom: 10px;
-  padding: 10px;
-  height: 75%;
-  resize: none;
-  font-size: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 75%;
+    resize: none;
+    font-size: 20px;
 }
 .submitShareButton {
-  border: 2px solid #24a0ed; /* Light Blue */
-  background-color: #24a0ed;
-  border-radius: 10px;
-  color: white;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  margin-top: 20px;
-  margin-right: 25px;
-  padding: 15px 15px;
-  transition-duration: 0.4s;
+    border: 2px solid #24a0ed; /* Light Blue */
+    background-color: #24a0ed;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-right: 25px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
 }
 .submitShareButton:hover {
-  background-color: #0000ff;
-  color: white;
-  cursor: pointer;
+    background-color: #0000ff;
+    color: white;
+    cursor: pointer;
 }
 .cancelShareButton {
-  border: 2px solid #ff6865;
-  background-color: #ff6865;
-  border-radius: 10px;
-  color: white;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  margin-top: 20px;
-  padding: 15px 15px;
-  transition-duration: 0.4s;
+    border: 2px solid #ff6865;
+    background-color: #ff6865;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin-top: 20px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
 }
 .cancelShareButton:hover {
-  background-color: #ff0000;
-  color: white;
-  cursor: pointer;
+    background-color: #ff0000;
+    color: white;
+    cursor: pointer;
 }
 
 .shareButton {
-  border: 2px solid #3B8132; /* green */
-  border-radius: 10px;
-  color: black;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  padding: 15px 15px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-
+    border: 2px solid #3b8132; /* green */
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    padding: 15px 15px;
+    transition-duration: 0.4s;
+    cursor: pointer;
 }
 .popup {
-  border-radius: 10px;
-  background-color: lightblue;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
+    border-radius: 10px;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
 }
 .profileContent {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
 }
 .leftSide {
-  flex: 1;
-  display: flex;
-  padding: 25px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #fed982; /* old color: fff8dc, lakers color: fdb927, new color: midway point */
-  border-radius: 10px;
+    flex: 1;
+    display: flex;
+    padding: 25px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fed982; /* old color: fff8dc, lakers color: fdb927, new color: midway point */
+    border-radius: 10px;
 }
 .rightSide {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto;
 }
 
 .splitLine {
-  width: 7px;
-  background-color: purple;
-  margin: 0 20px;
-  height: 100%;
+    width: 7px;
+    background-color: purple;
+    margin: 0 20px;
+    height: 100%;
 }
 
 .buttonRow {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .confirmText {
-  display: none;
+    display: none;
 }
 
 .textContainer {
-  height: 30px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

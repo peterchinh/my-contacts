@@ -1,5 +1,5 @@
 .contactpage {
-  background-color: lightgray;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -8,86 +8,128 @@
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .contactcontainer {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .contact-controls {
-  display: flex;
-  align-items: center; /* Vertically aligns items */
-  justify-content: space-between; /* Pushes items to edges of the row */
-  margin-bottom: 10px; /* Add some spacing below */
+    display: flex;
+    align-items: center; /* Vertically aligns items */
+    justify-content: space-between; /* Pushes items to edges of the row */
+    margin-bottom: 10px; /* Add some spacing below */
 }
 
 .search-bar {
   flex: 1; /* Makes the search bar take up remaining space */
-  max-width: calc(
-    100% - 200px
-  ); /* Optional: Prevents it from growing too large */
 }
 
 .addcontact {
-  width: 200px;
-  z-index: 1; /* Ensures it sits in front of other elements */
-  padding: 20px 40px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 24px;
-  white-space: nowrap;
+  position: relative;
+  margin-right: 15px;
+  margin-top: 10px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .addcontact:hover {
-  background-color: #0000ff;
-  color: white;
+  background: #552583;
+  color: #FDB927; 
+  transform: scale(1.1);
 }
 
+
+.horizontal {
+  position: absolute;
+  background-color: black;
+  width: 60%;
+  height: 4px;
+}
+
+.horizontal {
+  color: #FDB927
+}
+
+.vertical {
+  position: absolute;
+  background-color: black;
+  width: 4px;
+  height: 60%;
+}
+
+
 .contactlist {
-  max-height: 85vh;
-  overflow-y: auto;
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 .contact-info {
-  width: 0%; /* Hidden by default */
-  background-color: white;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: width 0.3s ease; /* Slide in effect */
-  display: none;
+    width: 0%; /* Hidden by default */
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.3s ease; /* Slide in effect */
+    display: none;
 }
 
 .contact-info.active {
-  width: 33%; /* Adjust to desired width */
+    width: 33%; /* Adjust to desired width */
 }
 
 .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: 336px;
-  height: full;
-  padding: 20px 10px;
-  border-radius: 10px;
-  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  background-color: #ffffff;
-  margin: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 336px;
+    height: full;
+    padding: 20px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    background-color: #ffffff;
+    margin: auto;
 }
 
 .sortButton {
-  background: none;
-  border: 0px;
+    background: none;
+    color: black;
+    margin-right: 20px;
+    margin-top: 7px;
+    font-size: 2rem;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 60px; 
+    height: 60px; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+}
+
+.sortButton:hover {
+  background: #552583;
+  color: #FDB927; 
+  transform: scale(1.1);
+}
+.groupname {
+  text-align: center;
+  font-size: 48px;
   color: black;
-  cursor: pointer;
-  font-size: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
