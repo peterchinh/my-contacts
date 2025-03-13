@@ -131,6 +131,7 @@ export default function ContactInfo({ contact, defaultContact, updateSite }) {
                 { contactId: currentContact },
                 { withCredentials: true }
             )
+            updateSite()
             return response
         } catch (error) {
             console.error(error)
