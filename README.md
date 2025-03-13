@@ -54,7 +54,8 @@ CSC 308/309 - LeContacts by William Last, Colin Bruins, Diego Nieves, Jeffrey Ch
     -   Run "npm install supertest"
     -   Run "npm run test"
 
-![image](https://github.com/user-attachments/assets/2b82ee09-8b53-430c-9e08-802ff5a6c58a)
+![image](https://github.com/user-attachments/assets/098c0db5-7975-446c-a1ed-da665005275f)
+
 
 -   Acceptance Tests
     -   Run "npm install cypress"
