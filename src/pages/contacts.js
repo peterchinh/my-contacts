@@ -140,9 +140,9 @@ function Contacts({ setAccessToken }) {
                             <FaSortAlphaDownAlt />
                         )}
                     </button>
-                    <button class="addcontact" onClick={toggleContactForm}>
-                        <div class="horizontal"></div>
-                        <div class="vertical"></div>
+                    <button className="addcontact" onClick={toggleContactForm}>
+                        <div className="horizontal"></div>
+                        <div className="vertical"></div>
                     </button>
                 </div>
                 <div className="groupname">
